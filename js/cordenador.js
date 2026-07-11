@@ -40,7 +40,12 @@ document.addEventListener('DOMContentLoaded', () =>{
     configurarPesquisa();
 });
 
-/*BOTÃO DE FAVORITO DOS CARDS */
+
+
+
+/*MANIPULAÇÕES DE DOM: BOTÕES, MODAL, REVEAL, MESSAGENS NO TOPO */
+
+   /*BOTÃO DE FAVORITO DOS CARDS */
 const grid = document.getElementById('grid');
     grid.addEventListener('click', (e) => {
     if(e.target.classList.contains('favorite')){
@@ -48,22 +53,32 @@ const grid = document.getElementById('grid');
     };
 });
 
-/*ABRIR E FECHAR O MODAL DIALOG DO MENU */
-const modal = document.getElementById('meuModal');
-const btnAbrir = document.getElementById('bar');
-const btnFechar = document.getElementById('btn-fechar');
+const modalFav = document.getElementById('dialog-favorite');
+const btnAbrirFav = document.getElementById('btn-favorite');
+const btnFecharFav = document.getElementById('btn-fechar-fav');
 
-btnAbrir.addEventListener('click', () => {
-    modal.showModal()
+btnAbrirFav.addEventListener('click', () =>{
+    modalFav.showModal();
+})
+btnFecharFav.addEventListener('click', () => {
+    modalFav.close();
+})
+
+   /*ABRIR E FECHAR O MODAL DIALOG DO MENU */
+const modalMenu = document.getElementById('meuModal');
+const btnAbrirMenu = document.getElementById('bar');
+const btnFecharMenu = document.getElementById('btn-fechar');
+
+btnAbrirMenu.addEventListener('click', () => {
+    modalMenu.showModal()
 });
-btnFechar.addEventListener('click', () => {
-    modal.close()
+btnFecharMenu.addEventListener('click', () => {
+    modalMenu.close()
 })
 
 
 
-
-
+   /* MENSAGENS NO TOPO*/
 // Seleciona todas as mensagens
 const messages = document.querySelectorAll('.message');
 let currentIndex = 0;

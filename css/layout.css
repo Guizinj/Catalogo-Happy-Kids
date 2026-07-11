@@ -145,7 +145,7 @@ header{
 
 
 
-dialog {
+.dialog-menu {
     border: none;
     outline: none;
     padding: 0;
@@ -164,29 +164,92 @@ dialog {
     display .5s allow-discrete,
     overlay .5s allow-discrete;
 }
-dialog[open] {
+.dialog-menu[open] {
     opacity: 1;
     transform: translateX(0);
 }
 @starting-style {
-    dialog[open] {
+    .dialog-menu[open] {
         opacity: 0;
         transform: translateX(-100%);
     }
 }
-dialog::backdrop {
+.dialog-menu::backdrop {
     background-color: #0000001f;
     transition: opacity .5s ease;
     opacity: 0;
 }
-dialog[open]::backdrop {
+.dialog-menu[open]::backdrop {
     opacity: 1;
 }
 @starting-style {
-    dialog[open]::backdrop {
+    .dialog-menu[open]::backdrop {
         opacity: 0;
     }
 }
+
+
+.dialog-favorite {
+    border: none;
+    outline: none;
+    padding: 0;
+    width: 85%;
+    height: 100%;
+    max-height: 100%;
+    top: 0;
+    margin: 0;
+    right: 0;
+    left: auto;
+
+    opacity: 0;
+    transform: translateX(100%);
+    
+    transition: opacity .5s ease, 
+    transform .5s ease,
+    display .5s allow-discrete,
+    overlay .5s allow-discrete;
+}
+.dialog-favorite[open] {
+    opacity: 1;
+    transform: translateX(0);
+}
+@starting-style {
+    .dialog-favorite[open] {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+.dialog-favorite::backdrop {
+    background-color: #0000001f;
+    transition: opacity .5s ease;
+    opacity: 0;
+}
+.dialog-favorite[open]::backdrop {
+    opacity: 1;
+}
+@starting-style {
+    .dialog-favorite[open]::backdrop {
+        opacity: 0;
+    }
+}
+.modal-favorite{
+    display: flex;
+    flex-direction: column;
+
+}
+.header-favorite{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    padding: 30px 20px;
+    background-color: var(--logo-laranja);
+}
+
+
+
+
+
 
 
 .modal{
@@ -213,7 +276,7 @@ dialog[open]::backdrop {
     border: none;
 }
 .btn-fechar {
-    color: rgb(219, 219, 219);
+    color: var(--logo-azul);
     position: absolute;
     top: 20px;
     right: 15px;
@@ -238,14 +301,12 @@ dialog[open]::backdrop {
     align-items: center;
 }
 .modal-filtro-magico h1{
-    font-family: Arial, Helvetica, sans-serif;
     color: rgb(24, 24, 24);
     text-align: center;
     padding: 15px 10px;
     font-size: 1.3rem;
 }
 .modal-filtro-magico p{
-    font-family:var(--titulo);
     text-align:center;
     width: 80%;
     color: rgb(32, 32, 32);

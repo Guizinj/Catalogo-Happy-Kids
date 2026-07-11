@@ -21,3 +21,9 @@ img {
   display: block;
   margin: 0 auto;
 }
+.titulos {
+    font-family: var(--fonte-titulos);
+}
+p {
+    font-family: var(--fonte-textos);
+}

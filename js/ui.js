@@ -19,13 +19,3 @@ export function renderizarProdutos (listaDeProdutos) {
         `;
     });
 };
-
-
-
-
-
-
-
-
-
-

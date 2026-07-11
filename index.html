@@ -56,7 +56,7 @@
         </section>
     </div>
 
-    <dialog id="meuModal">
+    <dialog class="dialog-menu" id="meuModal">
         <div class="modal">
             <header class="modal-topo">
                 <a href="#"><img class="img-modal" src="nav.png" alt="Logo Happy Kids"></a>
@@ -66,7 +66,7 @@
 
             <section class="modal-filtro-magico">
                 <div class="info">
-                    <h1><span>Filtro mágico de presentes</span></h1>
+                    <h1 class="titulos"><span>Filtro mágico de presentes</span></h1>
                     <p>Descubra opções sob medida para cada criança.</p>
                 </div>
             <form id="formFiltro">
@@ -104,7 +104,7 @@
             </section>
         </div>    
             <section class="modal-categorias">
-                <h2>Todas as categorias</h2>
+                <h2 class="titulos">Todas as categorias</h2>
                 <ul class="lista-modal-categoria">
                     <li class="item-categoria-modal"></li>
                     <li class="item-categoria-modal"></li>
@@ -113,6 +113,17 @@
                     <li class="item-categoria-modal"></li>
                 </ul>
             </section>
+    </dialog>
+
+    <dialog class="dialog-favorite" id="dialog-favorite">
+        <div class="modal-favorite">
+            <div class="header-favorite">
+                <h2 class="titulos">Meus Favoritos</h2>
+                <button id="btn-fechar-fav" style="background-color: transparent;"><span class="material-symbols-outlined btn-fechar-fav">close</span></button>
+            </div>
+            <div class="lista-favorite"></div>
+            <div class="footer-favorite"></div>
+        </div>
     </dialog>
 
     <script type="module" src="js/cordenador.js"></script>
