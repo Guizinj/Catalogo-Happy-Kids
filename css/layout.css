@@ -153,10 +153,10 @@ dialog{
     opacity: 0;
     transform: translateX(-100%);
 
-    transition: opacity .5s ease, 
+    transition: opacity .1s ease, 
     transform .5s ease,
     display .5s allow-discrete,
-    overlay .5s allow-discrete;
+    overlay .0s allow-discrete;
 }
 dialog[open]{
     opacity: 1;
