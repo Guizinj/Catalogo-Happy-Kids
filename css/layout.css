@@ -194,7 +194,7 @@ dialog[open]::backdrop {
     flex-direction: column;
     align-items: center;
     background-color: white;
-    width: 100%;
+    margin: 0 auto;
 }
 .modal-topo{
     background-color: var(--logo-laranja);
@@ -225,6 +225,8 @@ dialog[open]::backdrop {
 
 
 .modal-filtro-magico{
+    display: flex;
+    flex-direction: column;
     background-color: var(--logo-verde);
     border-radius: 20px;
     padding: 15px 0px;
