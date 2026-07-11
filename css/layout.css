@@ -200,7 +200,7 @@ dialog[open]::backdrop {
     background-color: var(--logo-laranja);
     width: 100%;
     padding: 15px 45px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     border-bottom-left-radius:10px;
     border-bottom-right-radius:10px;
     border: none;
@@ -264,7 +264,7 @@ dialog[open]::backdrop {
   font-family: 'Montserrat', sans-serif;
   color: #333333; 
   background-color: #ffffff; 
-  border: none;
+  border: 1px solid var(--logo-laranja);
   border-radius: 15px; 
   box-sizing: border-box;
   cursor: pointer;
@@ -273,7 +273,7 @@ dialog[open]::backdrop {
   -moz-appearance: none;
 }
 .select-campo:focus {
-  outline: 2px solid var(--logo-laranja);
+  outline: 1px solid var(--logo-laranja);
 }
 .select-grupo::after {
   content: "";
