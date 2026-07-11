@@ -225,6 +225,8 @@ dialog[open]::backdrop {
 
 
 .modal-filtro-magico{
+    width: 85%;
+    margin: 0 auto;
     background-color: var(--logo-azul);
     border-radius: 20px;
     padding: 10px 0px;
