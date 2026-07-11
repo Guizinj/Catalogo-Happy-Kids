@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () =>{
     configurarPesquisa();
 });
 
+/*BOTÃO DE FAVORITO DOS CARDS */
 const grid = document.getElementById('grid');
     grid.addEventListener('click', (e) => {
     if(e.target.classList.contains('favorite')){
@@ -47,6 +48,7 @@ const grid = document.getElementById('grid');
     };
 });
 
+/*ABRIR E FECHAR O MODAL DIALOG DO MENU */
 const modal = document.getElementById('meuModal');
 const btnAbrir = document.getElementById('bar');
 const btnFechar = document.getElementById('btn-fechar');
