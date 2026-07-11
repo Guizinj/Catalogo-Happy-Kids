@@ -39,7 +39,9 @@ header{
     border: 1px solid rgba(128, 128, 128, 0.486);
     padding: 5px 10px;
     margin-bottom: 15px;
-
+}
+#campo-lupa{
+    font-size: 16px;
 }
 .btn-header{
     border: none;
