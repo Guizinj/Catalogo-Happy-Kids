@@ -14,7 +14,7 @@ header{
     text-align: center;
     display: block;
     padding: 5px;
-    background-color: var(--padrao);
+    background-color: var(--logo-laranja);
     font-size: 0.9rem;
     color: rgb(255, 255, 255);
 }
@@ -46,7 +46,7 @@ header{
 .btn-header{
     border: none;
     background: none;
-    color: var(--padrao);
+    color: var(--logo-laranja);
     cursor: pointer;
 }
 .btn-header .btn-nav{
@@ -108,7 +108,7 @@ header{
     font-family: system-ui, -apple-system, sans-serif;
     font-size: 1.15rem;
     font-weight: 800; 
-    color: var(--padrao);
+    color: var(--logo-laranja);
     margin-bottom: 15px;
 }
 .card-produto .preco-antigo{
@@ -142,6 +142,9 @@ header{
 .favoritado{
     font-variation-settings:'FILL' 1;
 }
+
+
+
 dialog {
     border: none;
     outline: none;
@@ -153,45 +156,39 @@ dialog {
     margin: 0;
     left: 0;
 
-    
     opacity: 0;
     transform: translateX(-100%);
     
-   
     transition: opacity .5s ease, 
-                transform .5s ease,
-                display .5s allow-discrete,
-                overlay .5s allow-discrete;
+    transform .5s ease,
+    display .5s allow-discrete,
+    overlay .5s allow-discrete;
 }
-
-
 dialog[open] {
     opacity: 1;
     transform: translateX(0);
 }
-
 @starting-style {
     dialog[open] {
         opacity: 0;
         transform: translateX(-100%);
     }
 }
-
 dialog::backdrop {
     background-color: #0000001f;
     transition: opacity .5s ease;
     opacity: 0;
 }
-
 dialog[open]::backdrop {
     opacity: 1;
 }
-
 @starting-style {
     dialog[open]::backdrop {
         opacity: 0;
     }
 }
+
+
 .modal{
     display: flex;
     flex-direction: column;
@@ -200,18 +197,21 @@ dialog[open]::backdrop {
     width: 100%;
 }
 .modal-topo{
-    background-color: var(--padrao);
+    background-color: var(--logo-laranja);
     width: 100%;
-    padding: 30px 50px;
+    padding: 15px 45px;
+    margin-bottom: 30px;
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
 }
 .modal-topo h1{
     color: white;
 }
 .btn-fechar {
-    color: white;
+    color: rgb(219, 219, 219);
     position: absolute;
-    top: 30px;
-    right: 20px;
+    top: 20px;
+    right: 15px;
     z-index: 10;
     cursor: pointer;
    
@@ -219,29 +219,41 @@ dialog[open]::backdrop {
 
 
 
-
-
-
-
-
-
-
-#formFiltro {
-  background-color: #80aac2;
-  width: 100%;
-  min-width: 300px;
-  padding: 30px 24px;
-  border-radius: 20px;
-  box-sizing: border-box;
-  font-family: 'Montserrat', sans-serif;
+.modal-filtro-magico{
+    background-color: var(--logo-verde);
+    border-radius: 20px;
+    padding: 15px 0px;
 }
-
+.info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.modal-filtro-magico h1{
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(24, 24, 24);
+    text-align: center;
+    padding: 15px 10px;
+    font-size: 1.3rem;
+}
+.modal-filtro-magico p{
+    font-family:var(--titulo);
+    text-align:center;
+    width: 80%;
+    color: rgb(32, 32, 32);
+}
+#formFiltro {
+    width: 100%;
+    min-width: 300px;
+    padding: 10px 24px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
 .select-grupo {
   margin-bottom: 16px;
   position: relative; 
 }
-
-
 .select-campo {
   width: 100%;
   padding: 14px 20px;
@@ -253,19 +265,13 @@ dialog[open]::backdrop {
   border-radius: 15px; 
   box-sizing: border-box;
   cursor: pointer;
-  
-  /* Remove as setas padrão de todos os navegadores */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
-
-/* Estilo visual quando o usuário clica ou navega no campo */
 .select-campo:focus {
-  outline: 2px solid var(--padrao);
+  outline: 2px solid var(--logo-laranja);
 }
-
-/* Criando a seta customizada em formato de "V" fino */
 .select-grupo::after {
   content: "";
   position: absolute;
@@ -274,16 +280,13 @@ dialog[open]::backdrop {
   transform: translateY(-50%);
   width: 12px;
   height: 7px;
-  background-color: #333333; /* Cor da setinha */
-  /* Recorta o bloco no formato exato de uma seta para baixo */
+  background-color: #333333;
   clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-  pointer-events: none; /* Garante que clicar na seta ainda abra o menu */
+  pointer-events: none; 
 }
-
-
 .botao-buscar {
   width: 100%;
-  background-color: #358ec9;
+  background-color: var(--logo-azul);
   color: #ffffff; 
   font-size: 16px;
   font-weight: 700; 
@@ -294,8 +297,6 @@ dialog[open]::backdrop {
   margin-top: 8px;
   cursor: pointer;
 }
-
-/* Efeito visual ao passar o mouse no botão */
 .botao-buscar:hover {
     background-color: #358ec99f ;
 }
