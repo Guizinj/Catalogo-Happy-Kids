@@ -225,12 +225,10 @@ dialog[open]::backdrop {
 
 
 .modal-filtro-magico{
-    display: flex;
-    flex-direction: column;
-    background-color: var(--logo-verde);
+    background-color: var(--logo-azul);
     border-radius: 20px;
-    padding: 15px 0px;
-    margin: 0 auto;
+    padding: 10px 0px;
+    margin-bottom: 30px;
 }
 .info{
     display: flex;
@@ -251,12 +249,7 @@ dialog[open]::backdrop {
     color: rgb(32, 32, 32);
 }
 #formFiltro {
-    width: 100%;
-    min-width: 300px;
-    padding: 10px 24px;
-    border-radius: 20px;
-    box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+  padding: 20px;
 }
 .select-grupo {
   margin-bottom: 16px;
@@ -294,7 +287,7 @@ dialog[open]::backdrop {
 }
 .botao-buscar {
   width: 100%;
-  background-color: var(--logo-azul);
+  background-color: var(--logo-laranja);
   color: #ffffff; 
   font-size: 16px;
   font-weight: 700; 
@@ -306,5 +299,6 @@ dialog[open]::backdrop {
   cursor: pointer;
 }
 .botao-buscar:hover {
-    background-color: #358ec99f ;
+    background-color: #f38e00f3
 }
+
