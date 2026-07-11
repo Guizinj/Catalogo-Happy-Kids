@@ -13,10 +13,14 @@ header{
     width: 100%;
     text-align: center;
     display: block;
-    padding: 5px;
+    padding: 10px;
     background-color: var(--padrao);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     color: rgb(255, 255, 255);
+}
+.img-logo{
+    width: 65%;
+    cursor: pointer;
 }
 .nav-bar{
     padding: 5px 20px;
@@ -25,7 +29,6 @@ header{
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
-   
 }
 .buscar{
     width: 250px;
@@ -59,7 +62,7 @@ header{
 
 .grid-produtos {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(calc(50% - 8px), 250px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(calc(50% - 8px), 200px), 1fr));
     gap: 15px;
     padding: 10px 5px;
 }
@@ -67,6 +70,7 @@ header{
 
 
 .card-produto {
+    height: 400px;
     background-color: #ffffff;
     border-radius: 16px; 
     padding: 12px;
@@ -79,11 +83,11 @@ header{
     position: relative;
     transition: transform .2s;
 }
-.card-produto img {
+.card-produto .img-card {
     width: 100%;
-    height: 130px; 
+    height: 200px; 
     object-fit: contain;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
 }
 .card-produto h3 {
     font-family: system-ui, -apple-system, sans-serif;
@@ -124,17 +128,53 @@ header{
     cursor: pointer;
     transition: transform 0.2s ease, opacity 0.2s ease;
 }
+.btn-header .favorite{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 30px;
+}
+.btn-header .favorite:active{
+    font-variation-settings:'FILL' 1;
+}
+.favoritado{
+    font-variation-settings:'FILL' 1;
+}
+
+dialog{
+    border: none;
+    outline: none;
+    padding: 0;
+    width: 85%;
+    height: 100%;
+
+    opacity: 0;
+    transform: translateX(-100%);
+
+    transition: opacity .5s ease, 
+    transform .5s ease,
+    display .5s allow-discrete,
+    overlay .5s allow-discrete;
+}
+dialog[open]{
+    opacity: 1;
+    transform: translateX(0);
+}
+@starting-style{
+    dialog[open]{
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+}
+dialog::backdrop{
+    background-color: #0000001f;
+}
 .modal{
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: center;
     background-color: white;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 85%;
-    height: 100vh;
-    z-index: 6;
+    width: 100%;
 }
 .modal-topo{
     background-color: var(--padrao);
@@ -147,9 +187,10 @@ header{
 .btn-fechar {
     color: white;
     position: absolute;
-    top: 20px;
+    top: 30px;
     right: 20px;
     z-index: 10;
+    cursor: pointer;
    
 }
 

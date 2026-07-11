@@ -38,5 +38,25 @@ function configurarPesquisa() {
 document.addEventListener('DOMContentLoaded', () =>{
     iniciarLoja();
     configurarPesquisa();
-
 });
+
+const grid = document.getElementById('grid');
+    grid.addEventListener('click', (e) => {
+    if(e.target.classList.contains('favorite')){
+    e.target.classList.toggle('favoritado')
+    };
+});
+
+const modal = document.getElementById('meuModal');
+const btnAbrir = document.getElementById('bar');
+const btnFechar = document.getElementById('btn-fechar');
+
+btnAbrir.addEventListener('click', () => {
+    modal.showModal()
+});
+btnFechar.addEventListener('click', () => {
+    modal.close()
+})
+
+
+
