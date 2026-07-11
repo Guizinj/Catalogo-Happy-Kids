@@ -7,3 +7,41 @@
 .card-produto:hover{
     transform: scale(1.02);
 }
+
+
+
+/* Estilo da barra principal no topo */
+.top-banner {
+  position: relative;
+  width: 100%;
+  height: 30px; /* Altura da barra */
+  color: #fff; /* Cor do texto */
+  overflow: hidden; /* Corta tudo que sair da barra */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+/* Estilo padrão das mensagens */
+.message {
+  position: absolute;
+  /* Estado padrão: escondida do lado ESQUERDO */
+  transform: translateX(-100vw); 
+  opacity: 0;
+  /* Duração da animação: 0.5 segundos (rápido) */
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Quando a mensagem está visível (Parada no meio) */
+.message.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Quando a mensagem está saindo (Indo para a DIREITA) */
+.message.exit {
+  transform: translateX(100vw);
+  opacity: 0;
+}
