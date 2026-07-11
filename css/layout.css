@@ -203,9 +203,14 @@ dialog[open]::backdrop {
     margin-bottom: 30px;
     border-bottom-left-radius:10px;
     border-bottom-right-radius:10px;
+    border: none;
 }
-.modal-topo h1{
-    color: white;
+.modal-topo a{
+    border: none;
+    outline: none;
+}
+.img-modal{
+    border: none;
 }
 .btn-fechar {
     color: rgb(219, 219, 219);
@@ -223,6 +228,7 @@ dialog[open]::backdrop {
     background-color: var(--logo-verde);
     border-radius: 20px;
     padding: 15px 0px;
+    margin: 0 auto;
 }
 .info{
     display: flex;

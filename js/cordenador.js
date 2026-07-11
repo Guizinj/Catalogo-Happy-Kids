@@ -64,12 +64,6 @@ btnFechar.addEventListener('click', () => {
 
 
 
-
-
-
-
-
-
 // Seleciona todas as mensagens
 const messages = document.querySelectorAll('.message');
 let currentIndex = 0;
@@ -100,4 +94,3 @@ function trocarMensagem() {
 
 // 3. Fica repetindo esse ciclo infinitamente
 setInterval(trocarMensagem, tempoLeitura + tempoAnimacao);
-
