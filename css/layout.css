@@ -1,0 +1,237 @@
+header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+.topo{
+    font-family: monospace;
+    width: 100%;
+    text-align: center;
+    display: block;
+    padding: 5px;
+    background-color: var(--padrao);
+    font-size: 0.8rem;
+    color: rgb(255, 255, 255);
+}
+.nav-bar{
+    padding: 5px 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+   
+}
+.buscar{
+    width: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 20px;
+    border: 1px solid rgba(128, 128, 128, 0.486);
+    padding: 5px 10px;
+    margin-bottom: 15px;
+
+}
+.btn-header{
+    border: none;
+    background: none;
+    color: var(--padrao);
+    cursor: pointer;
+}
+.btn-header .btn-nav{
+    font-size: 2rem;
+}
+.conteudo{
+    padding: 5px 10px;
+}
+.principal {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+
+
+.grid-produtos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(calc(50% - 8px), 250px), 1fr));
+    gap: 15px;
+    padding: 10px 5px;
+}
+
+
+
+.card-produto {
+    background-color: #ffffff;
+    border-radius: 16px; 
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    justify-content: space-between;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(59, 59, 59, 0.144);
+    position: relative;
+    transition: transform .2s;
+}
+.card-produto img {
+    width: 100%;
+    height: 130px; 
+    object-fit: contain;
+    margin-bottom: 12px;
+}
+.card-produto h3 {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #444444; 
+    margin-bottom: 8px;
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2rem;
+}
+.card-produto .preco {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800; 
+    color: var(--padrao);
+    margin-bottom: 15px;
+}
+.card-produto .preco-antigo{
+    font-size: 0.8rem;
+    color: #7a7979;
+    text-decoration: line-through;
+    margin-bottom: 0px;
+   
+}
+.card-produto .btn-comprar {
+    width: 80%;
+    margin: 0 auto;
+    padding: 10px 0;
+    background-color: var(--padrao);
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: bold;
+    border-radius: 50px; 
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.modal{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 85%;
+    height: 100vh;
+    z-index: 6;
+}
+.modal-topo{
+    background-color: var(--padrao);
+    width: 100%;
+    padding: 30px 50px;
+}
+.modal-topo h1{
+    color: white;
+}
+.btn-fechar {
+    color: white;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+   
+}
+
+
+
+
+
+
+
+
+
+
+#formFiltro {
+  background-color: #80aac2;
+  width: 100%;
+  min-width: 300px;
+  padding: 30px 24px;
+  border-radius: 20px;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.select-grupo {
+  margin-bottom: 16px;
+  position: relative; 
+}
+
+
+.select-campo {
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 15px;
+  font-family: 'Montserrat', sans-serif;
+  color: #333333; 
+  background-color: #ffffff; 
+  border: none;
+  border-radius: 15px; 
+  box-sizing: border-box;
+  cursor: pointer;
+  
+  /* Remove as setas padrão de todos os navegadores */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Estilo visual quando o usuário clica ou navega no campo */
+.select-campo:focus {
+  outline: 2px solid var(--padrao);
+}
+
+/* Criando a seta customizada em formato de "V" fino */
+.select-grupo::after {
+  content: "";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 7px;
+  background-color: #333333; /* Cor da setinha */
+  /* Recorta o bloco no formato exato de uma seta para baixo */
+  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  pointer-events: none; /* Garante que clicar na seta ainda abra o menu */
+}
+
+
+.botao-buscar {
+  width: 100%;
+  background-color: #358ec9;
+  color: #ffffff; 
+  font-size: 16px;
+  font-weight: 700; 
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  border-radius: 30px; 
+  padding: 14px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+/* Efeito visual ao passar o mouse no botão */
+.botao-buscar:hover {
+    background-color: #358ec99f ;
+}

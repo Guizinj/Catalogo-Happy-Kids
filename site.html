@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Brinquedos</title>
+    <link rel="stylesheet" href="css/teste.cs">
+    <link rel="stylesheet" href="css/root.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/animacao.css">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <header>
+        <div class="topo">
+            <h3>Happy Kids</h3>
+        </div>
+        <div class="nav-bar">
+            <button class="btn-header" id="bar"><span class="material-symbols-outlined btn-nav">menu</span></button>
+            
+            <div class="logo">
+                <img src="/imagens/logo_happy_kids_horizontal.png" alt="Logo Happy Kids">
+            </div>
+
+            <div class="favorito">
+                <button class="btn-header" id="btn-carrinho"><span class="material-symbols-outlined btn-nav">favorite</span></button>
+            </div>
+        </div>
+        <div class="buscar">
+            <input type="text" name="" id="campo-lupa"
+            placeholder="Encontre seu brinquedo aqui...">
+            <button class="btn-header" id="lupa"><span class="material-symbols-outlined">search</span></button>
+        </div>
+    </header>
+
+
+    <div class="principal">
+        <section class="categorias">
+            <div class="lista-categorias"></div>
+        </section>
+
+        <section class="idade-recomendada">
+            <div class="lista-idade"></div>
+        </section>
+
+        <section class="conteudo">
+            <div class="grid-produtos" id="grid"></div>
+        </section>
+    </div>
+
+    <div class="modal">
+        <header class="modal-topo">
+            <h1>Happy kids</h1>
+        </header>
+
+        <button style="background-color: transparent;"><span class="material-symbols-outlined btn-fechar">close</span></button>
+
+        <section class="modal-filtro-magico">
+
+
+        <form id="formFiltro">
+        
+        
+            <div class="select-grupo">
+                <select name="idade" class="select-campo" required>
+                <option value="" disabled selected hidden>Qual idade</option>
+                <option value="0-1">0 a 1 ano</option>
+                <option value="2-3">2 a 3 anos</option>
+                <option value="4-5">4 a 5 anos</option>
+                <option value="6+">6 anos ou mais</option>
+                </select>
+            </div>
+
+            
+            <div class="select-grupo">
+                <select name="para_quem" class="select-campo" required>
+                <option value="" disabled selected hidden>Para quem</option>
+                <option value="Ambos">Ambos</option>
+                <option value="menino">Menino</option>
+                <option value="menina">Menina</option>
+                </select>
+            </div>
+
+            
+            <div class="select-grupo">
+                <select name="preco" class="select-campo" required>
+                <option value="" disabled selected hidden>Faixa de preço</option>
+                <option value="ate-50">Até R$ 50</option>
+                <option value="50-100">R$ 50 a R$ 100</option>
+                <option value="100-200">R$ 100 a R$ 200</option>
+                <option value="200+">Acima de R$ 200</option>
+                </select>
+            </div>
+
+            <button type="submit" class="botao-buscar">Buscar brinquedo</button>
+        </form>
+
+
+        </section>
+        <section class="modal-categorias">
+            <ul class="lista-modal-categoria">
+                <li class="item-categoria-modal"></li>
+                <li class="item-categoria-modal"></li>
+                <li class="item-categoria-modal"></li>
+                <li class="item-categoria-modal"></li>
+                <li class="item-categoria-modal"></li>
+            </ul>
+        </section>
+    </div>
+
+    <script type="module" src="js/cordenador.js"></script>
+</body>
+</html>

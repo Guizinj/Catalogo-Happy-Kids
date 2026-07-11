@@ -1,0 +1,23 @@
+* {
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+}
+body{
+    -webkit-font-smoothing: antialiased; 
+    -moz-osx-font-smoothing: grayscale;
+}
+button, input {
+    -webkit-tap-highlight-color: transparent;
+    border: none;
+    outline: none; 
+}
+ul, ol {
+    list-style: none; 
+}
+img {
+  width: 70%;
+  height: 100%;
+  display: block;
+  margin: 0 auto;
+}
