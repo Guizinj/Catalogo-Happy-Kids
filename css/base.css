@@ -27,3 +27,6 @@ img {
 p {
     font-family: var(--fonte-textos);
 }
+h1, h2, h3 {
+    font-family: var(--fonte-titulos);
+}

@@ -66,7 +66,7 @@ btnFecharFav.addEventListener('click', () => {
 
    /*ABRIR E FECHAR O MODAL DIALOG DO MENU */
 const modalMenu = document.getElementById('meuModal');
-const btnAbrirMenu = document.getElementById('bar');
+const btnAbrirMenu = document.getElementById('btn-cta');
 const btnFecharMenu = document.getElementById('btn-fechar');
 
 btnAbrirMenu.addEventListener('click', () => {

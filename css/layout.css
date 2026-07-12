@@ -59,6 +59,25 @@ header{
     max-width: 1200px;
     margin: 0 auto;
 }
+.btn-cta{
+    display: block;
+    margin: 0 auto;
+    padding: 12px 30px;
+    font-family: var(--fonte-titulos);
+    font-size: 1rem;
+    background-color: var(--logo-laranja);
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.322);
+    margin-bottom: 5px;
+
+}
+.h2-cta{
+    margin-top: 10px;
+    text-align: center;
+    color: #5e5c5c;
+}
 
 
 
@@ -161,7 +180,7 @@ body:has(dialog[open]){
     bottom: 0;
 
     opacity: 0;
-    transform: translateX(-100%);
+    transform: translateY(+100%);
     
     transition: opacity .5s ease, 
     transform .5s ease,
@@ -170,12 +189,12 @@ body:has(dialog[open]){
 }
 .dialog-menu[open] {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
 }
 @starting-style {
     .dialog-menu[open] {
         opacity: 0;
-        transform: translateX(-100%);
+        transform: translateY(+100%);
     }
 }
 .dialog-menu::backdrop {
@@ -337,7 +356,7 @@ body:has(dialog[open]){
   font-family: 'Montserrat', sans-serif;
   color: #333333; 
   background-color: #ffffff; 
-  border: 1px solid var(--logo-rosa);
+  border: 1px solid var(--logo-laranja);
   border-radius: 15px; 
   box-sizing: border-box;
   cursor: pointer;
@@ -346,7 +365,7 @@ body:has(dialog[open]){
   -moz-appearance: none;
 }
 .select-campo:focus {
-  outline: 1px solid var(--logo-rosa);
+  outline: 1px solid var(--logo-laranja);
 }
 .select-grupo::after {
   content: "";
@@ -377,3 +396,70 @@ body:has(dialog[open]){
     background-color: #f38e00f3
 }
 
+
+
+
+
+
+
+
+
+
+/* Container Geral da Seção */
+.categorias {
+    background-color: #ffffff; /* Cinza de fundo da imagem */
+    padding: 20px 0;
+    text-align: center;
+}
+
+.titulos.h2-cta {
+    font-family: var(--fonte-titulos);
+    font-size: var(--text-h2);
+    margin-bottom: 20px;
+    color: #252525;
+}
+
+/* =======================================================
+   O CONTAINER DA ROLAGEM (A MÃE)
+   ======================================================= */
+.carrosel-categorias {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 10px 20px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    
+    /* Remove as barras de rolagem */
+    scrollbar-width: none; /* Firefox */
+}
+
+.carrosel-categorias::-webkit-scrollbar {
+    display: none; /* Chrome, Safari e Edge */
+}
+
+/* =======================================================
+   OS ITENS DO CARROSSEL (OS FILHOS)
+   ======================================================= */
+.item-categoria {
+    flex-shrink: 0; /* Impede o flexbox de amassar o círculo */
+    width: 80px;
+    height: 80px;
+    background-color: var(--logo-laranja);
+    border-radius: 50%; /* Faz virar a bolinha da foto */
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.item-categoria p {
+    font-family: var(--fonte-textos);
+    font-size: 0.90rem;
+    font-weight: var(--font-weight-bold);
+    color: white;
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+}
