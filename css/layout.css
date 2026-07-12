@@ -80,7 +80,7 @@ header{
     flex-direction: column;
     align-items: flex-start; 
     justify-content: space-between;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.20);
     border: 1px solid rgba(59, 59, 59, 0.144);
     position: relative;
     transition: transform .2s;
@@ -245,6 +245,9 @@ header{
     padding: 30px 20px;
     background-color: var(--logo-laranja);
 }
+.btn-fechar-fav{
+    color: white;
+}
 
 
 
@@ -262,7 +265,7 @@ header{
 .modal-topo{
     background-color: var(--logo-laranja);
     width: 100%;
-    padding: 15px 45px;
+    padding: 25px 45px;
     margin-bottom: 20px;
     border-bottom-left-radius:10px;
     border-bottom-right-radius:10px;
@@ -276,7 +279,7 @@ header{
     border: none;
 }
 .btn-fechar {
-    color: var(--logo-azul);
+    color: white;
     position: absolute;
     top: 20px;
     right: 15px;
@@ -325,7 +328,7 @@ header{
   font-family: 'Montserrat', sans-serif;
   color: #333333; 
   background-color: #ffffff; 
-  border: 1px solid var(--logo-laranja);
+  border: 1px solid var(--logo-rosa);
   border-radius: 15px; 
   box-sizing: border-box;
   cursor: pointer;
@@ -334,7 +337,7 @@ header{
   -moz-appearance: none;
 }
 .select-campo:focus {
-  outline: 1px solid var(--logo-laranja);
+  outline: 1px solid var(--logo-rosa);
 }
 .select-grupo::after {
   content: "";
