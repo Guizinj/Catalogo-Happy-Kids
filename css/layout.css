@@ -72,7 +72,7 @@ header{
 
 
 .card-produto {
-    height: 400px;
+    height: auto;
     background-color: #ffffff;
     border-radius: 16px; 
     padding: 12px;
