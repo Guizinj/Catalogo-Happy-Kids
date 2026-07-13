@@ -63,7 +63,6 @@ function configurarPesquisa() {
 
 
 /*======= ABRIR MODAL DE CADA PRODUTO =======*/
-// 1. A função (a receita) fica isolada e definida uma única vez
 function configurarModalProduto() {
     const grid = document.getElementById('grid');
     const modalProduto = document.getElementById('modal-produto');
@@ -93,8 +92,12 @@ function configurarModalProduto() {
                 nomeModal.textContent = produtoSelecionado.nome;
                 precoModal.textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
                 
+                if(produtoSelecionado.preco > 100){
                 const valorParcela = (produtoSelecionado.preco / 10).toFixed(2);
                 parcelaModal.textContent = `ou até 10x de R$ ${valorParcela} sem juros`;
+                } else {
+                parcelaModal.textContent = ''; 
+                };
                 
                 descricaoModal.textContent = produtoSelecionado.descricao || "Descrição não informada.";
 
