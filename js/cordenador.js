@@ -96,7 +96,7 @@ function configurarModalProduto() {
                 const valorParcela = (produtoSelecionado.preco / 10).toFixed(2);
                 parcelaModal.textContent = `ou até 10x de R$ ${valorParcela} sem juros`;
                 } else {
-                parcelaModal.textContent = ''; 
+                parcelaModal.textContent = 'pagamento avista'; 
                 };
                 
                 descricaoModal.textContent = produtoSelecionado.descricao || "Descrição não informada.";
