@@ -67,7 +67,7 @@ header{
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 10px;
-    color: var(--logo-verde);
+    color: var(--logo-laranja);
 }
 .btn-cta{
     display: block;
@@ -75,7 +75,7 @@ header{
     padding: 15px 30px;
     font-family: var(--fonte-titulos);
     font-size: 1rem;
-    background-color: var(--logo-verde);
+    background-color: var(--logo-laranja);
     color: white;
     border-radius: 30px;
     cursor: pointer;
@@ -88,7 +88,7 @@ header{
 @keyframes pulsar {
   0% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 var(--logo-verde);
+    box-shadow: 0 0 0 0 var(--logo-laranja);
   }
   
   70% {
@@ -108,7 +108,7 @@ header{
 .h1-cta{
     margin: 20px 0px;
     text-align: center;
-    color: #292929;
+    color: #3d3d3d;
 }
 
 
