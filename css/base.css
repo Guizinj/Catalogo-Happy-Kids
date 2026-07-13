@@ -15,6 +15,7 @@ button, input {
     -webkit-tap-highlight-color: transparent;
     border: none;
     outline: none; 
+    cursor: pointer;
 }
 ul, ol {
     list-style: none; 

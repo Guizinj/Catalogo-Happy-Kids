@@ -17,12 +17,12 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
 }
-
 .carrosel-categorias::-webkit-scrollbar {
     display: none; 
 }
-
-
+.btn-categoria{
+    background-color: transparent;
+}
 .item-categoria {
     flex-shrink: 0; 
     width: 70px;
@@ -35,7 +35,6 @@
     justify-content: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
-
 .item-categoria p {
     font-family: var(--fonte-textos);
     font-size: 0.80rem;
