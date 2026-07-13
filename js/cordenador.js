@@ -138,7 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /*MANIPULAÇÕES DE DOM: BOTÕES, MODAL, REVEAL, MESSAGENS NO TOPO */
-
    /*BOTÃO DE FAVORITO DOS CARDS */
 const grid = document.getElementById('grid');
     grid.addEventListener('click', (e) => {
