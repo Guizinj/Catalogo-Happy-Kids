@@ -1,0 +1,40 @@
+.info-cta{
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    font-family: var(--fonte-titulos);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--logo-verde);
+}
+.btn-cta{
+    display: block;
+    margin: 0 auto;
+    padding: 15px 30px;
+    font-family: var(--fonte-titulos);
+    font-size: 1rem;
+    background-color: var(--logo-verde);
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.322);
+    margin-bottom: 5px;
+    animation: pulsar 1.5s infinite;
+}
+@keyframes pulsar {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--logo-laranja);
+  }
+  
+  70% {
+    transform: scale(1.03); /* Leve aumento no tamanho */
+    box-shadow: 0 0 0 15px rgba(0, 123, 255, 0); /* Sombra expandida e transparente */
+  }
+  
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+  }
+}

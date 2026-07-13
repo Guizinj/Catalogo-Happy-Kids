@@ -1,3 +1,43 @@
+header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+.btn-header{
+    border: none;
+    background: none;
+    color: var(--logo-laranja);
+    cursor: pointer;
+}
+.btn-header .btn-nav{
+    font-size: 2rem;
+}
+.img-logo{
+    width: 65%;
+    cursor: pointer;
+}
+.nav-bar{
+    padding: 5px 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}.topo{
+    font-family: monospace;
+    width: 100%;
+    text-align: center;
+    display: block;
+    padding: 5px;
+    background-color: var(--logo-laranja);
+    font-size: 0.9rem;
+    color: rgb(255, 255, 255);
+}
 .card-produto .btn-comprar:active {
     opacity: 0.8;
 }
@@ -7,9 +47,6 @@
 .card-produto:hover{
     transform: scale(1.02);
 }
-
-
-
 /* Estilo da barra principal no topo */
 .top-banner {
   position: relative;
@@ -23,7 +60,6 @@
   font-family: sans-serif;
   font-weight: bold;
 }
-
 /* Estilo padrão das mensagens */
 .message {
   position: absolute;
@@ -33,13 +69,11 @@
   /* Duração da animação: 0.5 segundos (rápido) */
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 }
-
 /* Quando a mensagem está visível (Parada no meio) */
 .message.active {
   transform: translateX(0);
   opacity: 1;
 }
-
 /* Quando a mensagem está saindo (Indo para a DIREITA) */
 .message.exit {
   transform: translateX(100vw);

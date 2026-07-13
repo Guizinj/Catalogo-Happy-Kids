@@ -1,0 +1,62 @@
+
+.dialog-favorite {
+    border: none;
+    outline: none;
+    padding: 0;
+    width: 85%;
+    height: 100%;
+    max-height: 100%;
+    top: 0;
+    margin: 0;
+    right: 0;
+    left: auto;
+
+    opacity: 0;
+    transform: translateX(100%);
+    
+    transition: opacity .5s ease, 
+    transform .5s ease,
+    display .5s allow-discrete,
+    overlay .5s allow-discrete;
+}
+.dialog-favorite[open] {
+    opacity: 1;
+    transform: translateX(0);
+}
+@starting-style {
+    .dialog-favorite[open] {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+.dialog-favorite::backdrop {
+    background-color: #00000048;
+    transition: opacity .5s ease;
+    opacity: 0;
+}
+.dialog-favorite[open]::backdrop {
+    opacity: 1;
+}
+@starting-style {
+    .dialog-favorite[open]::backdrop {
+        opacity: 0;
+    }
+}
+.modal-favorite{
+    display: flex;
+    flex-direction: column;
+
+}
+.header-favorite{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    padding: 30px 20px;
+    background-color: var(--logo-laranja);
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+}
+.btn-fechar-fav{
+    color: black;
+}

@@ -1,0 +1,47 @@
+.categorias {
+    background-color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+}
+.h1-cat{
+    margin: 20px 0px;
+    text-align: center;
+    color: #3d3d3d;
+}
+.carrosel-categorias {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 10px 20px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.carrosel-categorias::-webkit-scrollbar {
+    display: none; 
+}
+
+
+.item-categoria {
+    flex-shrink: 0; 
+    width: 70px;
+    height: 70px;
+    background-color: var(--logo-laranja);
+    border-radius: 50%; 
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.item-categoria p {
+    font-family: var(--fonte-textos);
+    font-size: 0.80rem;
+    font-weight: var(--font-weight-bold);
+    color: white;
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+}
