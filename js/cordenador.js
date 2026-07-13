@@ -33,9 +33,13 @@ function configurarPesquisa() {
         })
     }
 
-    btnLupa.addEventListener('click', () => {
-        modalMenu.close();
+
+    const formPesquisa = document.getElementById('form-pesquisa');
+
+    formPesquisa.addEventListener('submit', (e) => {
+        e.preventDefault();
         executarBusca();
+        modalMenu.close();
     });
 
     /* campoLupa.addEventListener('input', () =>{

@@ -6,6 +6,7 @@
     border-radius: 5px;
     padding: 10px 10px;
     background-color: white;
+    cursor: text;
 }
 .material-symbols-outlined.lupa{
     font-size: 30px;
@@ -13,4 +14,11 @@
 #campo-lupa{
     font-size: 16px;
     width: 80%;
+    cursor: text;
+}
+#form-pesquisa {
+    display: contents;
+    margin: 0;
+    padding: 0;
+    border: none;
 }
