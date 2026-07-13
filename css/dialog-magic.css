@@ -1,15 +1,19 @@
 .dialog-magic {
     border: none;
     outline: none;
-    padding: 0;
-    width: 100%;
-    height: 100%;
+    padding: 0px;
+    border-radius: 20px;
+
+    width: 80%;
+    height: 80%;
     max-height: none;
     max-width: none;
+
     top: 0;
     margin: 0;
     left: 0;
     bottom: 0;
+    margin: auto;
 
     opacity: 0;
     transform: translateY(+100%);
@@ -30,7 +34,7 @@
     }
 }
 .dialog-magic::backdrop {
-    background-color: #0000001f;
+    background-color: #0000004b;
     transition: opacity .5s ease;
     opacity: 0;
 }
@@ -47,7 +51,7 @@
     flex-direction: column;
     align-items: center;
     background-color: white;
-    margin: 0 auto;
+    margin: auto;
 }
 .modal-topo{
     background-color: var(--logo-verde);
@@ -79,11 +83,10 @@
 }
 .modal-filtro-magico{
     width: 85%;
-    margin: 0 auto;
+    margin: auto;
     background-color: var(--logo-azul);
     border-radius: 20px;
     padding: 10px 0px;
-    margin-bottom: 30px;
 }
 .info{
     display: flex;
@@ -153,4 +156,10 @@
 }
 .botao-buscar:hover {
     background-color: #f38e00f3
+}
+#footer-magic{
+    font-family: var(--fonte-titulos);
+    margin-top: 30px;
+    color: var(--logo-verde);
+    font-weight: 800;
 }
