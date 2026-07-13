@@ -25,12 +25,12 @@
 @keyframes pulsar {
   0% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 var(--logo-laranja);
+    box-shadow: 0 0 0 0 var(--logo-verde);
   }
   
   70% {
     transform: scale(1.03); /* Leve aumento no tamanho */
-    box-shadow: 0 0 0 15px rgba(0, 123, 255, 0); /* Sombra expandida e transparente */
+    box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); /* Sombra expandida e transparente */
   }
   
   100% {
