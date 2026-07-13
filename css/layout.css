@@ -67,7 +67,7 @@ header{
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 10px;
-    color: var(--logo-laranja);
+    color: var(--logo-verde);
 }
 .btn-cta{
     display: block;
@@ -75,7 +75,7 @@ header{
     padding: 15px 30px;
     font-family: var(--fonte-titulos);
     font-size: 1rem;
-    background-color: var(--logo-laranja);
+    background-color: var(--logo-verde);
     color: white;
     border-radius: 30px;
     cursor: pointer;
