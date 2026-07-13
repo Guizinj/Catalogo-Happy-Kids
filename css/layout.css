@@ -59,24 +59,56 @@ header{
     max-width: 1200px;
     margin: 0 auto;
 }
+.info-cta{
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    font-family: var(--fonte-titulos);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--logo-verde);
+}
 .btn-cta{
     display: block;
     margin: 0 auto;
-    padding: 12px 30px;
+    padding: 15px 30px;
     font-family: var(--fonte-titulos);
     font-size: 1rem;
-    background-color: var(--logo-laranja);
+    background-color: var(--logo-verde);
     color: white;
     border-radius: 30px;
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.322);
     margin-bottom: 5px;
-
+    animation: pulsar 1.5s infinite;
 }
-.h2-cta{
-    margin-top: 10px;
+
+
+@keyframes pulsar {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 var(--logo-verde);
+  }
+  
+  70% {
+    transform: scale(1.03); /* Leve aumento no tamanho */
+    box-shadow: 0 0 0 15px rgba(0, 123, 255, 0); /* Sombra expandida e transparente */
+  }
+  
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+  }
+}
+
+
+
+
+.h1-cta{
+    margin: 20px 0px;
     text-align: center;
-    color: #5e5c5c;
+    color: #292929;
 }
 
 
@@ -166,7 +198,7 @@ header{
 body:has(dialog[open]){
     overflow: hidden;
 }
-.dialog-menu {
+.dialog-magic {
     border: none;
     outline: none;
     padding: 0;
@@ -187,26 +219,26 @@ body:has(dialog[open]){
     display .5s allow-discrete,
     overlay .5s allow-discrete;
 }
-.dialog-menu[open] {
+.dialog-magic[open] {
     opacity: 1;
     transform: translateY(0);
 }
 @starting-style {
-    .dialog-menu[open] {
+    .dialog-magic[open] {
         opacity: 0;
         transform: translateY(+100%);
     }
 }
-.dialog-menu::backdrop {
+.dialog-magic::backdrop {
     background-color: #0000001f;
     transition: opacity .5s ease;
     opacity: 0;
 }
-.dialog-menu[open]::backdrop {
+.dialog-magic[open]::backdrop {
     opacity: 1;
 }
 @starting-style {
-    .dialog-menu[open]::backdrop {
+    .dialog-magic[open]::backdrop {
         opacity: 0;
     }
 }
@@ -407,18 +439,10 @@ body:has(dialog[open]){
 
 /* Container Geral da Seção */
 .categorias {
-    background-color: #ffffff; /* Cinza de fundo da imagem */
+    background-color: #ffffff;
     padding: 20px 0;
     text-align: center;
 }
-
-.titulos.h2-cta {
-    font-family: var(--fonte-titulos);
-    font-size: var(--text-h2);
-    margin-bottom: 20px;
-    color: #252525;
-}
-
 /* =======================================================
    O CONTAINER DA ROLAGEM (A MÃE)
    ======================================================= */
@@ -429,13 +453,11 @@ body:has(dialog[open]){
     padding: 10px 20px;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    
-    /* Remove as barras de rolagem */
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
 }
 
 .carrosel-categorias::-webkit-scrollbar {
-    display: none; /* Chrome, Safari e Edge */
+    display: none; 
 }
 
 /* =======================================================
@@ -443,8 +465,8 @@ body:has(dialog[open]){
    ======================================================= */
 .item-categoria {
     flex-shrink: 0; /* Impede o flexbox de amassar o círculo */
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     background-color: var(--logo-laranja);
     border-radius: 50%; /* Faz virar a bolinha da foto */
     
@@ -456,7 +478,7 @@ body:has(dialog[open]){
 
 .item-categoria p {
     font-family: var(--fonte-textos);
-    font-size: 0.90rem;
+    font-size: 0.80rem;
     font-weight: var(--font-weight-bold);
     color: white;
     margin: 0;

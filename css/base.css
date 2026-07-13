@@ -2,10 +2,12 @@
     box-sizing: border-box;
     padding: 0px;
     margin: 0px;
+    scrollbar-width: none
 }
 body{
     -webkit-font-smoothing: antialiased; 
     -moz-osx-font-smoothing: grayscale;
+    ;
 }
 button, input {
     -webkit-tap-highlight-color: transparent;
@@ -28,5 +30,6 @@ p {
     font-family: var(--fonte-textos);
 }
 h1, h2, h3 {
+    text-align: center;
     font-family: var(--fonte-titulos);
 }
