@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/dialog-magic.css">
     <link rel="stylesheet" href="css/dialog-favorite.css">
     <link rel="stylesheet" href="css/dialog-menu.css">
+    <link rel="stylesheet" href="css/dialog-produto.css">
     <link rel="stylesheet" href="css/root.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/produtos.css">
@@ -193,6 +194,33 @@
                 </ul>
             </section>
         </div>
+    </dialog>
+
+    <dialog id="modal-produto" class="dialog-produto">
+    <div class="modal-produto-container">
+        <button id="btn-fechar-modal" class="btn-fechar">&times;</button>
+        
+        <div class="modal-produto-conteudo">
+            <div class="modal-produto-esquerda">
+                <img id="modal-img" src="" alt="Imagem do produto">
+            </div>
+            
+            <div class="modal-produto-direita">
+                <h2 id="modal-nome">Nome do Produto</h2>
+                <p id="modal-preco" class="preco">R$ 0,00</p>
+                <p id="modal-parcela" class="modal-parcelamento">ou até 10x sem juros</p>
+                
+                <div class="modal-descricao-secao">
+                    <h4>Descrição do Produto</h4>
+                    <p id="modal-descricao">Esta é uma descrição detalhada do produto. Aqui você pode incluir especificações técnicas, materiais, tamanhos disponíveis e outras informações importantes que não cabem no card principal.</p>
+                </div>
+
+                <div class="modal-acoes">
+                    <button class="btn-comprar-modal">Consultar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     </dialog>
 
     <script type="module" src="js/cordenador.js"></script>
