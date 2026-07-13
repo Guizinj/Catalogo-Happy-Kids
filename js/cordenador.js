@@ -36,10 +36,20 @@ function configurarPesquisa() {
 
     const formPesquisa = document.getElementById('form-pesquisa');
 
-    formPesquisa.addEventListener('submit', (e) => {
-        e.preventDefault();
+    formPesquisa.addEventListener('submit', (evento) => {
+        evento.preventDefault(); 
         executarBusca();
-        modalMenu.close();
+        campoLupa.blur();
+        setTimeout(() => {
+            modalMenu.close();
+            const gridProdutos = document.querySelector('.conteudo');
+            if (gridProdutos) {
+                gridProdutos.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start'      
+                });
+            }
+        }, 250); 
     });
 
     /* campoLupa.addEventListener('input', () =>{
