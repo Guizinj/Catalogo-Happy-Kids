@@ -138,3 +138,19 @@
   clip-path: polygon(100% 0%, 0 0%, 50% 100%);
   pointer-events: none; 
 }
+.botao-buscar {
+  width: 100%;
+  background-color: var(--logo-laranja);
+  color: #ffffff; 
+  font-size: 16px;
+  font-weight: 700; 
+  font-family: 'Montserrat', sans-serif;
+  border: none;
+  border-radius: 30px; 
+  padding: 14px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+.botao-buscar:hover {
+    background-color: #f38e00f3
+}

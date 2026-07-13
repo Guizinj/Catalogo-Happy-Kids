@@ -1,28 +1,16 @@
 .buscar{
-    width: 250px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 20px;
-    border: 1px solid rgba(128, 128, 128, 0.486);
-    padding: 5px 10px;
-    margin-bottom: 15px;
-}.botao-buscar {
-  width: 100%;
-  background-color: var(--logo-laranja);
-  color: #ffffff; 
-  font-size: 16px;
-  font-weight: 700; 
-  font-family: 'Montserrat', sans-serif;
-  border: none;
-  border-radius: 30px; 
-  padding: 14px;
-  margin-top: 8px;
-  cursor: pointer;
+    border-radius: 5px;
+    padding: 10px 10px;
+    background-color: white;
 }
-.botao-buscar:hover {
-    background-color: #f38e00f3
+.material-symbols-outlined.lupa{
+    font-size: 30px;
 }
 #campo-lupa{
     font-size: 16px;
+    width: 80%;
 }

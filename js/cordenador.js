@@ -14,6 +14,7 @@ async function iniciarLoja() {
 function configurarPesquisa() {
     const btnLupa = document.getElementById('lupa');
     const campoLupa = document.getElementById('campo-lupa');
+    const modalMenu = document.getElementById('modal-menu');
     let tempo = null;
     async function executarBusca() {
         const valorCampoLupa = campoLupa.value.trim();
@@ -26,13 +27,21 @@ function configurarPesquisa() {
 
         const produtosFiltrados = await buscarProdutosPorNome(valorCampoLupa);
         renderizarProdutos(produtosFiltrados);
+
+        btnLupa.addEventListener('click', () => {
+            modalMenu.close();
+        })
     }
 
-    btnLupa.addEventListener('click', executarBusca);
-    campoLupa.addEventListener('input', () =>{
+    btnLupa.addEventListener('click', () => {
+        modalMenu.close();
+        executarBusca();
+    });
+
+    /* campoLupa.addEventListener('input', () =>{
         clearTimeout(tempo);
         tempo = setTimeout(executarBusca, 300);
-    });
+    }); */
 }
 
 document.addEventListener('DOMContentLoaded', () =>{
@@ -53,6 +62,7 @@ const grid = document.getElementById('grid');
     };
 });
 
+/* ABRIR E FECHAR DIALOG DE FAVORITOS*/
 const modalFav = document.getElementById('dialog-favorite');
 const btnAbrirFav = document.getElementById('btn-favorite');
 const btnFecharFav = document.getElementById('btn-fechar-fav');
@@ -64,17 +74,29 @@ btnFecharFav.addEventListener('click', () => {
     modalFav.close();
 })
 
-   /*ABRIR E FECHAR O MODAL DIALOG DO MENU */
-const modalMenu = document.getElementById('meuModal');
-const btnAbrirMenu = document.getElementById('btn-cta');
-const btnFecharMenu = document.getElementById('btn-fechar');
+   /*ABRIR E FECHAR O MODAL DIALOG DO MAGIC */
+const modalMagic = document.getElementById('meuModal');
+const btnAbrirMagic = document.getElementById('btn-cta');
+const btnFecharMagic = document.getElementById('btn-fechar');
+
+btnAbrirMagic.addEventListener('click', () => {
+    modalMagic.showModal()
+});
+btnFecharMagic.addEventListener('click', () => {
+    modalMagic.close()
+});
+
+   /*ABRIR E FECHAR O MODAL DIALOG DO MAGIC */
+const modalMenu = document.getElementById('modal-menu');
+const btnAbrirMenu = document.getElementById('bar');
+const btnFecharMenu = document.getElementById('btn-fechar-menu');
 
 btnAbrirMenu.addEventListener('click', () => {
-    modalMenu.showModal()
+    modalMenu.showModal();
 });
 btnFecharMenu.addEventListener('click', () => {
-    modalMenu.close()
-})
+    modalMenu.close();
+});
 
 
 
