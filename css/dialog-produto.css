@@ -20,8 +20,8 @@
     transform: translateY(100%);
     transition: opacity .5s ease, 
                 transform .5s ease, 
-                display .5s allow-discrete, 
-                overlay .5s allow-discrete;
+                display .1s allow-discrete, 
+                overlay .1s allow-discrete;
 }
 
 .dialog-produto[open] {
