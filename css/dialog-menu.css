@@ -3,7 +3,7 @@
     border: none;
     outline: none;
     padding: 0;
-    width: 80%;
+    width: 85%;
     height: 100%;
     max-height: 100%;
     top: 0;
@@ -121,7 +121,7 @@
     margin: 0;
     display: grid;
     /* Cria colunas automáticas de no mínimo 150px. Se couber mais, ele alinha lado a lado */
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
     gap: 12px;                /* Espaçamento perfeito entre as categorias */
 }
 
