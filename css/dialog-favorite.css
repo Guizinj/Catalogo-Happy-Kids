@@ -20,6 +20,96 @@
     display .5s allow-discrete,
     overlay .5s allow-discrete;
 }
+.modal-favorite{
+    display: flex;
+    flex-direction: column;
+
+}
+.header-favorite{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    padding: 30px 20px;
+    background-color: var(--logo-laranja);
+    border-bottom-left-radius:10px;
+    border-bottom-right-radius:10px;
+}
+.btn-fechar-fav{
+    color: black;
+}
+/* =======================================================
+   ESTILO DO ESTADO VAZIO (FAVORITOS)
+   ======================================================= */
+
+.empty-state-favoritos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 24px;
+    height: 80%; /* Faz ocupar a maior parte do modal verticalmente */
+    box-sizing: border-box;
+}
+
+/* O círculo onde o ursinho fica */
+.ilustracao-ursinho {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    background-color: #f7f7f7; /* Fundo cinza bem suave */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+}
+
+/* O emoji de ursinho */
+.ilustracao-ursinho span {
+    font-size: 60px; /* Bem grande e visível */
+    filter: grayscale(20%); /* Deixa levemente mais opaco/triste */
+}
+
+
+/* Textos */
+.titulo-empty {
+    font-family: var(--fonte-titulos); /* Sua fonte gordinha de títulos */
+    font-size: 1.3rem;
+    color: #333333;
+    margin: 0 0 10px 0;
+}
+
+.texto-empty {
+    font-family: var(--fonte-textos);
+    font-size: 0.95rem;
+    color: #777777; /* Cinza suave para texto de apoio */
+    max-width: 260px; /* Evita que o texto fique largo demais */
+    line-height: 1.4;
+    margin: 0 0 30px 0;
+}
+
+/* Botão de chamada para ação */
+.btn-explorar {
+    font-family: var(--fonte-textos);
+    font-size: 0.95rem;
+    font-weight: var(--font-weight-bold);
+    background-color: #9acd32; /* O verde-limão lindo do seu botão de filtro */
+    color: #ffffff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px; /* Bem arredondado como seu design */
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(154, 205, 50, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-explorar:active {
+    transform: scale(0.96); /* Efeito de clique no celular */
+}
+
 .dialog-favorite[open] {
     opacity: 1;
     transform: translateX(0);
@@ -42,22 +132,4 @@
     .dialog-favorite[open]::backdrop {
         opacity: 0;
     }
-}
-.modal-favorite{
-    display: flex;
-    flex-direction: column;
-
-}
-.header-favorite{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 50px;
-    padding: 30px 20px;
-    background-color: var(--logo-laranja);
-    border-bottom-left-radius:10px;
-    border-bottom-right-radius:10px;
-}
-.btn-fechar-fav{
-    color: black;
 }

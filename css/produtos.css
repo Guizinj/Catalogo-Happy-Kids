@@ -1,5 +1,7 @@
 .conteudo{
     padding: 5px 10px;
+    scroll-margin-top: 100px;
+    margin-top: 60px;
 }
 .principal {
     max-width: 1200px;
@@ -10,7 +12,6 @@
     grid-template-columns: repeat(auto-fit, minmax(min(calc(50% - 8px), 200px), 1fr));
     gap: 15px;
     padding: 10px 5px;
-    scroll-margin-top: 40px;
 }
 .card-produto {
     height: auto;

@@ -34,7 +34,7 @@
             <button class="btn-header" id="bar"><span class="material-symbols-outlined btn-nav">menu</span></button>
             
             <div class="logo">
-                <a href="/index.html"><img class="img-logo" src="nav.png" alt="Logo Happy Kids"></a>
+                <a href=""><img class="img-logo" src="nav.png" alt="Logo Happy Kids"></a>
             </div>
 
             <div class="favorito">
@@ -56,37 +56,37 @@
             <div class="carrosel-categorias">
                 <button class="btn-categoria">
                     <div class="item-categoria">
-                        <p>Bonecos</p>
+                        <p>Categoria</p>
                     </div>
                 </button>
                 <button class="btn-categoria">
                     <div class="item-categoria">
-                        <p>Pelucias</p>
+                        <p>Categoria</p>
                     </div>
                 </button>
                 <button class="btn-categoria">
                     <div class="item-categoria">
-                        <p>Bicicletas</p>
+                        <p>Categoria</p>
                     </div>
                 </button>
                 <button class="btn-categoria">
                     <div class="item-categoria">
-                        <p>Esportes</p>
+                        <p>Categoria</p>
                     </div>
                 </button>
                 <button class="btn-categoria">
                     <div class="item-categoria">
-                        <p>Jogos e Tabuleiros</p>
+                        <p>Categoria</p>
                     </div>
                 </button>
                 <button class="btn-categoria">
                     <div class="item-categoria">
-                        <p>Hot Wheels</p>
+                        <p>Categoria</p>
                     </div>
                 </button>
                 <button class="btn-categoria">
                     <div class="item-categoria">
-                        <p>Carros</p>
+                        <p>Categoria</p>
                     </div>
                 </button>
             </div>
@@ -154,7 +154,18 @@
                 <h2 class="titulos">Meus Favoritos</h2>
                 <button id="btn-fechar-fav" style="background-color: transparent;"><span class="material-symbols-outlined btn-fechar-fav">close</span></button>
             </div>
-            <div class="lista-favorite"></div>
+            <div class="modal-favoritos-conteudo">
+                <div class="empty-state-favoritos" id="empty-state">
+                    <div class="ilustracao-ursinho">
+                        <span>🧸</span>
+                    </div>
+                    
+                    <h3 class="titulo-empty">Seu coração está vazio!</h3>
+                    <p class="texto-empty">Você ainda não escolheu nenhum brinquedo favorito para a sua criança.</p>
+                    
+                    <button class="btn-explorar" id="btn-explorar-favoritos">Explorar brinquedos</button>
+                </div>
+            </div>
             <div class="footer-favorite"></div>
         </div>
     </dialog>
@@ -202,7 +213,7 @@
         
         <div class="modal-produto-conteudo">
             <div class="modal-produto-esquerda">
-                <img id="modal-img" src="" alt="Imagem do produto">
+                <img id="modal-img" src="img.jpg" alt="Imagem do produto">
             </div>
             
             <div class="modal-produto-direita">

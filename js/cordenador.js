@@ -87,7 +87,6 @@ function configurarModalProduto() {
             const produtoSelecionado = produtosAtuais.find(p => p.id == idProduto);
             
             if (produtoSelecionado) {
-                imgModal.src = produtoSelecionado.imagem;
                 imgModal.alt = produtoSelecionado.nome;
                 nomeModal.textContent = produtoSelecionado.nome;
                 precoModal.textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
@@ -150,12 +149,23 @@ const grid = document.getElementById('grid');
 const modalFav = document.getElementById('dialog-favorite');
 const btnAbrirFav = document.getElementById('btn-favorite');
 const btnFecharFav = document.getElementById('btn-fechar-fav');
+const btnExplorar = document.getElementById('btn-explorar-favoritos');
 
 btnAbrirFav.addEventListener('click', () =>{
     modalFav.showModal();
 })
-btnFecharFav.addEventListener('click', () => {
+btnFecharFav.addEventListener('click', () =>{
     modalFav.close();
+})
+btnExplorar.addEventListener('click', () =>{
+    modalFav.close();
+    const gridProdutos = document.querySelector('.conteudo');
+            if (gridProdutos) {
+                gridProdutos.scrollIntoView({ 
+                    behavior: 'smooth'
+                });
+            }
+
 })
 
    /*ABRIR E FECHAR O MODAL DIALOG DO MAGIC */

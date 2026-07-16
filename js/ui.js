@@ -7,10 +7,12 @@ export function renderizarProdutos (listaDeProdutos) {
         return;
     }
 
+    const imagem = "../img.jpg";
+
     listaDeProdutos.forEach(produto => {
     grid.innerHTML += `
             <div class="card-produto" data-id="${produto.id}">
-                <img class="img-card" src="${produto.imagem}" alt="${produto.nome}">
+                <img class="img-card" src="${imagem}" alt="${produto.nome}">
                 <h3>${produto.nome}</h3>
                 <p class="preco">R$ ${produto.preco.toFixed(2)}</p>
                 <button class="btn-comprar">Ver detalhes</button>
