@@ -18,7 +18,8 @@ header{
     font-size: 2rem;
 }
 .img-logo{
-    width: 65%;
+    margin-top: 10px;
+    width: 50%;
     cursor: pointer;
 }
 .nav-bar{
@@ -40,7 +41,7 @@ header{
 }
 .favorito{
     display: flex;
-    gap: 10px;
+    gap: 5px;
     
 }
 .card-produto .btn-comprar:active {
