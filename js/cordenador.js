@@ -87,6 +87,7 @@ function configurarModalProduto() {
             const produtoSelecionado = produtosAtuais.find(p => p.id == idProduto);
             
             if (produtoSelecionado) {
+                imgModal.src = produtoSelecionado.imagem
                 imgModal.alt = produtoSelecionado.nome;
                 nomeModal.textContent = produtoSelecionado.nome;
                 precoModal.textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
