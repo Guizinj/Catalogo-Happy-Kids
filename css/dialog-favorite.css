@@ -96,7 +96,7 @@
     font-family: var(--fonte-textos);
     font-size: 0.95rem;
     font-weight: var(--font-weight-bold);
-    background-color: #9acd32; /* O verde-limão lindo do seu botão de filtro */
+    background-color: var(--logo-verde);
     color: #ffffff;
     border: none;
     padding: 12px 30px;

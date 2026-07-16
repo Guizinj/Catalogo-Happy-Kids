@@ -2,12 +2,12 @@
 
 
 :root{
-    --padrao: #ff8800;
+    --padrao: #FE5000;
 
     --logo-rosa: #FF3F7F;   
-    --logo-laranja: #FF9F1C; 
-    --logo-azul: #2EC4B6;   
-    --logo-verde: #98C01B; 
+    --logo-laranja: #FE5000; 
+    --logo-azul: #1EAA9A;
+    --logo-verde: #7CBD3F; 
 
     /* =========================================
        FAMÍLIAS DE FONTES
