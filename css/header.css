@@ -38,6 +38,11 @@ header{
     font-size: 0.9rem;
     color: rgb(255, 255, 255);
 }
+.favorito{
+    display: flex;
+    gap: 10px;
+    
+}
 .card-produto .btn-comprar:active {
     opacity: 0.8;
 }

@@ -181,16 +181,23 @@ btnFecharMagic.addEventListener('click', () => {
     modalMagic.close()
 });
 
-   /*ABRIR E FECHAR O MODAL DIALOG DO MAGIC */
+   /*ABRIR E FECHAR O MODAL DIALOG DO MENU */
 const modalMenu = document.getElementById('modal-menu');
 const btnAbrirMenu = document.getElementById('bar');
 const btnFecharMenu = document.getElementById('btn-fechar-menu');
+const search =  document.getElementById('search');
+const campoLupa = document.getElementById('campo-lupa');
 
 btnAbrirMenu.addEventListener('click', () => {
     modalMenu.showModal();
 });
 btnFecharMenu.addEventListener('click', () => {
     modalMenu.close();
+});
+search.addEventListener('click', () => {
+    modalMenu.showModal();
+    campoLupa.focus();
+
 });
 
 
