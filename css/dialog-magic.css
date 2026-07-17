@@ -71,6 +71,7 @@
 }
 .img-modal{
     border: none;
+    width: 80%;
 }
 .btn-fechar {
     color: white;

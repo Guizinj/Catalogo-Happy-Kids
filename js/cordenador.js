@@ -54,13 +54,12 @@ function configurarPesquisa() {
             }
         }, 250); 
     });
-
-    /* campoLupa.addEventListener('input', () =>{
-        clearTimeout(tempo);
-        tempo = setTimeout(executarBusca, 300);
-    }); */
 }
 
+/*
+=======                                   =======
+=======  CONFIGURAÇÕES DE MODAIS EM GERAL =======
+=======                                   =======  */
 
 /*======= ABRIR MODAL DE CADA PRODUTO =======*/
 function configurarModalProduto() {
@@ -74,7 +73,7 @@ function configurarModalProduto() {
     const parcelaModal = document.getElementById('modal-parcela');
     const descricaoModal = document.getElementById('modal-descricao');
 
-    // O "escutador" de cliques fica aqui dentro, pronto para agir sempre
+    
     grid.addEventListener('click', (evento) => {
         if (evento.target.classList.contains('favorite') || evento.target.closest('.btn-header')) {
             return; 
@@ -105,35 +104,10 @@ function configurarModalProduto() {
             }
         }
     });
-
     btnFecharModal.addEventListener('click', () => {
         modalProduto.close();
     });
 }
-
-// 2. A INICIALIZAÇÃO (O gatilho)
-document.addEventListener('DOMContentLoaded', () => {
-    iniciarLoja();
-    configurarPesquisa();
-    configurarModalProduto(); // <--- Chamamos a função aqui!
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -166,8 +140,8 @@ btnExplorar.addEventListener('click', () =>{
                     behavior: 'smooth'
                 });
             }
+});
 
-})
 
    /*ABRIR E FECHAR O MODAL DIALOG DO MAGIC */
 const modalMagic = document.getElementById('meuModal');
@@ -180,6 +154,7 @@ btnAbrirMagic.addEventListener('click', () => {
 btnFecharMagic.addEventListener('click', () => {
     modalMagic.close()
 });
+
 
    /*ABRIR E FECHAR O MODAL DIALOG DO MENU */
 const modalMenu = document.getElementById('modal-menu');
@@ -197,13 +172,7 @@ btnFecharMenu.addEventListener('click', () => {
 search.addEventListener('click', () => {
     modalMenu.showModal();
     campoLupa.focus();
-
 });
-
-
-
-
-
 
 
    /* MENSAGENS NO TOPO*/
@@ -237,3 +206,11 @@ function trocarMensagem() {
 
 // 3. Fica repetindo esse ciclo infinitamente
 setInterval(trocarMensagem, tempoLeitura + tempoAnimacao);
+
+
+/* INICIALIZAÇÃO */
+document.addEventListener('DOMContentLoaded', () => {
+    iniciarLoja();
+    configurarPesquisa();
+    configurarModalProduto(); 
+});

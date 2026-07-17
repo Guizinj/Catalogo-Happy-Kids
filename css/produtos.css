@@ -77,9 +77,6 @@
     left: 15px;
     font-size: 30px;
 }
-.btn-header .favorite:active{
-    font-variation-settings:'FILL' 1;
-}
 .favoritado{
     font-variation-settings:'FILL' 1;
 }
