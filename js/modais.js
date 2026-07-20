@@ -20,7 +20,7 @@ export function configurarModalMenu() {
 };
 
      /* ABRIR E FECHAR DIALOG DE FAVORITOS*/
-export function configurarModalFavorito() {
+export function configurarModalFavoritos() {
     const modalFav = document.getElementById('dialog-favorite');
     const btnAbrirFav = document.getElementById('btn-favorite');
     const btnFecharFav = document.getElementById('btn-fechar-fav');

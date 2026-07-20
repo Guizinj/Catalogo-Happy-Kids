@@ -1,7 +1,7 @@
 import { buscarTodosOsProdutos, buscarProdutosPorNome } from "./api.js";
 import { renderizarProdutos } from "./ui.js";
-import { configurarModalMenu, configurarModalFavorito, configurarModalMagic } from "./modais.js";
-import { banner } from "./banner.js";
+import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } from "./modais.js";
+import { mensagensNoTopo } from "./banner.js";
 
 
 
@@ -28,7 +28,7 @@ function configurarPesquisa() {
         if (valorCampoLupa === '') {
             const todosOsProdutos = await buscarTodosOsProdutos();
             renderizarProdutos(todosOsProdutos);
-            produtosAtuais = produtosFiltrados;
+            produtosAtuais = todosOsProdutos;
             return;
         }
 
@@ -120,8 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
     iniciarLoja();
     configurarPesquisa();
     configurarModalProduto(); 
-    configurarModalFavorito();
+    configurarModalFavoritos();
     configurarModalMagic();
     configurarModalMenu();
-    banner();
+    mensagensNoTopo();
 });

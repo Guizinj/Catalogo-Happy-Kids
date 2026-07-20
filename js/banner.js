@@ -1,8 +1,8 @@
-export function banner(){
+export function mensagensNoTopo(){
     const messages = document.querySelectorAll('.message');
     let currentIndex = 0;
 
-    const tempoLeitura = 5000; 
+    const tempoLeitura = 2500; 
     const tempoAnimacao = 300; 
 
     function trocarMensagem() {
