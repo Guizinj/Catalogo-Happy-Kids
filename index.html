@@ -115,16 +115,10 @@
             <form id="formFiltro">
         
                 <div class="select-grupo">
-                    <select name="idade" class="select-campo" required>
-                    <option value="" disabled selected hidden>Qual idade</option>
-                    <option value="0-1">0 a 1 ano</option>
-                    <option value="2-3">2 a 3 anos</option>
-                    <option value="4-5">4 a 5 anos</option>
-                    <option value="6+">6 anos ou mais</option>
-                    </select>
+                    <input type="number" name="idade" class="select-campo" placeholder="Idade da criança" min="0" max="15" required>
                 </div>
         
-                <div class="select-grupo">
+                <div class="select-grupo seta">
                     <select name="para_quem" class="select-campo" required>
                     <option value="" disabled selected hidden>Para quem</option>
                     <option value="ambos">Ambos</option>
@@ -133,12 +127,13 @@
                     </select>
                 </div>
         
-                <div class="select-grupo">
+                <div class="select-grupo seta">
                     <select name="preco" class="select-campo" required>
                     <option value="" disabled selected hidden>Faixa de preço</option>
+                    <option value="livre">Livre</option>
                     <option value="ate-50">Até R$ 50</option>
-                    <option value="50-100">R$ 50 a R$ 100</option>
-                    <option value="100-200">R$ 100 a R$ 200</option>
+                    <option value="50-100">Até R$ 100</option>
+                    <option value="100-200">Até R$ 200</option>
                     <option value="200+">Acima de R$ 200</option>
                     </select>
                 </div>

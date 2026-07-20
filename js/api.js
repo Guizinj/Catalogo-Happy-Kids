@@ -30,3 +30,33 @@ export async function buscarProdutosPorNome (filtro){
         return [];
     }
 }
+
+export async function buscarProdutosPorFiltros(filtros){
+    try{
+        let consulta = supabase.from('produtos').select('*');
+
+        if(filtros.idade !== null && filtros.idade !== undefined){
+            consulta = consulta.lte('idade_recomendada', filtros.idade);
+        }
+        if(filtros.genero){
+            consulta = consulta.eq('genero', filtros.genero);
+        }
+        if(filtros.precoMinimo !== null && filtros.precoMinimo !== undefined){
+            consulta = consulta.gte('preco', filtros.precoMinimo);
+        }
+        if(filtros.precoMaximo !== null && filtros.precoMaximo !== undefined){
+            consulta = consulta.lte('preco', filtros.precoMaximo);
+        }
+
+        const {data, error} = await consulta;
+        if(error){
+            console.error('erro no filtro', error.message);
+            return [];
+        }
+        return data;
+    }
+    catch(erroCatch){
+        console.error('erro critico', erroCatch);
+        return [];
+    }
+}

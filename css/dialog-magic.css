@@ -130,7 +130,7 @@
 .select-campo:focus {
   outline: 1px solid var(--logo-laranja);
 }
-.select-grupo::after {
+.select-grupo.seta::after {
   content: "";
   position: absolute;
   right: 20px;
