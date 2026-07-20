@@ -18,23 +18,21 @@ function configurarPesquisa() {
     const btnLupa = document.getElementById('lupa');
     const campoLupa = document.getElementById('campo-lupa');
     const modalMenu = document.getElementById('modal-menu');
-    let tempo = null;
     async function executarBusca() {
         const valorCampoLupa = campoLupa.value.trim();
 
         if (valorCampoLupa === '') {
             const todosOsProdutos = await buscarTodosOsProdutos();
             renderizarProdutos(todosOsProdutos);
+            produtosAtuais = produtosFiltrados;
             return;
         }
 
         const produtosFiltrados = await buscarProdutosPorNome(valorCampoLupa);
         renderizarProdutos(produtosFiltrados);
+        produtosAtuais = produtosFiltrados;
 
-        btnLupa.addEventListener('click', () => {
-            modalMenu.close();
-        })
-    }
+    };
 
 
     const formPesquisa = document.getElementById('form-pesquisa');
