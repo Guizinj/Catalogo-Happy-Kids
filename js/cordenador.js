@@ -32,10 +32,8 @@ function configurarPesquisa() {
         const valorCampoLupa = campoLupa.value.trim();
 
         if (valorCampoLupa === '') {
-            const todosOsProdutos = await buscarTodosOsProdutos();
-            renderizarProdutos(todosOsProdutos);
-            produtosAtuais = todosOsProdutos;
-            return;
+           await iniciarLoja();
+           return;
         }
 
         const produtosFiltrados = await buscarProdutosPorNome(valorCampoLupa);
