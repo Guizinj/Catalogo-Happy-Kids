@@ -13,7 +13,7 @@ let produtosAtuais = [];
 
 async function iniciarLoja() {
     try {
-        const produtos = await buscarTodosOsProdutos();
+        const produtos = await buscarTodosOsProdutos(0, 20);
         renderizarProdutos(produtos);
         produtosAtuais = produtos;
     }

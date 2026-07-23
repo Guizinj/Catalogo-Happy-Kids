@@ -1,14 +1,12 @@
 export function renderizarProdutos(listaDeProdutos) {
     const grid = document.getElementById('grid');
 
-     const produtosComEstoque = listaDeProdutos.filter(produto => produto.estoque === true);
-
-    if (produtosComEstoque.length === 0) {
+    if (listaDeProdutos.length === 0) {
         grid.textContent = 'Nenhum produto encontrado na loja';
         return;
     }
 
-    const htmlCards = produtosComEstoque.map(produto => `
+    const htmlCards = listaDeProdutos.map(produto => `
         <div class="card-produto" data-id="${produto.codigo}">
             <img class="img-card" src="${produto.imagem}" alt="${produto.nome}">
             <h3>${produto.nome}</h3>

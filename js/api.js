@@ -1,19 +1,29 @@
-import { supabase } from './config.js'
+import { supabase } from './config.js';
 
-export async function buscarTodosOsProdutos(){
-    try{
-        const {data, error} = await supabase.from('produtos').select('*').order('codigo', { ascending: false });
-        if(error){
+export async function buscarTodosOsProdutos(pagina = 0, limite = 20) {
+    
+    const inicio = pagina * limite;
+    const fim = inicio + limite - 1;
+
+    try {
+        const { data, error } = await supabase
+            .from('produtos')
+            .select('*')
+            .eq('estoque', true)
+            .order('codigo', { ascending: false })
+            .range(inicio, fim); // Paginação aplicada aqui
+
+        if (error) {
             console.error('Erro na aquisição', error.message);
             return [];
         }
         return data;
     }
     catch (erroCatch) {
-         console.error ('Erro crítico', erroCatch);
-         return [];
-        }
-};
+        console.error('Erro crítico', erroCatch);
+        return [];
+    }
+}
 
 export async function buscarProdutosPorNome (filtro){
     try {
