@@ -6,7 +6,6 @@ import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } f
 
 import { mensagensNoTopo } from "./banner.js";
 
-import { converterFaixaDePreco } from "./filtros.js";
 
 
 
@@ -75,15 +74,10 @@ function configurarFiltroMagico() {
         const dadosForm = new FormData(formFiltro);
         const idade = dadosForm.get('idade');
         const paraQuem = dadosForm.get('para_quem');
-        const preco = dadosForm.get('preco');
-
-        const faixaPreco = converterFaixaDePreco(preco);
 
         const filtros = {
             idade: Number(idade),
             genero: paraQuem,
-            precoMinimo: faixaPreco.min,
-            precoMaximo: faixaPreco.max
         };
 
         const produtosFiltrados = await buscarProdutosPorFiltros(filtros);

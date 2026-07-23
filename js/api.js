@@ -41,12 +41,6 @@ export async function buscarProdutosPorFiltros(filtros){
         if(filtros.genero){
             consulta = consulta.eq('genero', filtros.genero);
         }
-        if(filtros.precoMinimo !== null && filtros.precoMinimo !== undefined){
-            consulta = consulta.gte('preco', filtros.precoMinimo);
-        }
-        if(filtros.precoMaximo !== null && filtros.precoMaximo !== undefined){
-            consulta = consulta.lte('preco', filtros.precoMaximo);
-        }
 
         const {data, error} = await consulta;
         if(error){
@@ -60,3 +54,4 @@ export async function buscarProdutosPorFiltros(filtros){
         return [];
     }
 }
+

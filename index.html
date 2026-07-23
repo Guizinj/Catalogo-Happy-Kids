@@ -114,8 +114,11 @@
                 </div>
             <form id="formFiltro">
         
-                <div class="select-grupo">
-                    <input type="number" name="idade" class="select-campo" placeholder="Idade da criança" min="0" max="15" required>
+                <div class="select-grupo seta">
+                    <select name="idade" class="select-campo" required>
+                    <option value="" disabled selected hidden>Idade</option>
+                    <option value="1">1 a 2 anos</option>
+                    </select>
                 </div>
         
                 <div class="select-grupo seta">
@@ -127,16 +130,6 @@
                     </select>
                 </div>
         
-                <div class="select-grupo seta">
-                    <select name="preco" class="select-campo" required>
-                    <option value="" disabled selected hidden>Faixa de preço</option>
-                    <option value="livre">Livre</option>
-                    <option value="ate-50">Até R$ 50</option>
-                    <option value="50-100">Até R$ 100</option>
-                    <option value="100-200">Até R$ 200</option>
-                    <option value="200+">Acima de R$ 200</option>
-                    </select>
-                </div>
                 <button type="submit" class="botao-buscar">Buscar brinquedo</button>
             </form>
             </section>
