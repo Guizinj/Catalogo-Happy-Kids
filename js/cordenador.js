@@ -124,7 +124,7 @@ function configurarModalProduto() {
         
         if (cardClicado) {
             const idProduto = cardClicado.getAttribute('data-id');
-            const produtoSelecionado = produtosAtuais.find(p => p.id == idProduto);
+            const produtoSelecionado = produtosAtuais.find(p => p.codigo == idProduto);
             
             if (produtoSelecionado) {
                 imgModal.src = produtoSelecionado.imagem
