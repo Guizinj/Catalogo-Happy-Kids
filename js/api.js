@@ -11,7 +11,7 @@ export async function buscarTodosOsProdutos(pagina = 0, limite = 20) {
             .select('*')
             .eq('estoque', true)
             .order('codigo', { ascending: false })
-            .range(inicio, fim); // Paginação aplicada aqui
+            .range(inicio, fim);
 
         if (error) {
             console.error('Erro na aquisição', error.message);

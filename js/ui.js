@@ -1,8 +1,12 @@
-export function renderizarProdutos(listaDeProdutos) {
+export function renderizarProdutos(listaDeProdutos, deveAcrescentar = false) {
     const grid = document.getElementById('grid');
+    const btnPlus = document.getElementById('btn-proxima-pagina');
 
     if (listaDeProdutos.length === 0) {
+        if(!deveAcrescentar){
         grid.textContent = 'Nenhum produto encontrado na loja';
+        };
+        btnPlus.style.display = 'none';
         return;
     }
 
@@ -16,5 +20,10 @@ export function renderizarProdutos(listaDeProdutos) {
         </div>
     `).join('');
 
+    if(deveAcrescentar){
+        grid.insertAdjacentHTML('beforeend', htmlCards);
+    }
+    else {
     grid.innerHTML = htmlCards;
+    }
 };

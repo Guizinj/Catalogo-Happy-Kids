@@ -10,15 +10,50 @@ import { mensagensNoTopo } from "./banner.js";
 
 
 let produtosAtuais = [];
+let paginaAtual = 0;
+const limitePorPagina = 20;
 
 async function iniciarLoja() {
     try {
-        const produtos = await buscarTodosOsProdutos(0, 20);
+        paginaAtual = 0;
+        const produtos = await buscarTodosOsProdutos(paginaAtual, limitePorPagina);
         renderizarProdutos(produtos);
         produtosAtuais = produtos;
     }
     catch (erro) {
        console.error('Falha ao iniciar loja', erro);
+    }
+}
+
+async function carregarProximaPagina() {
+    try {
+        paginaAtual++;
+
+        const novosProdutos = await buscarTodosOsProdutos(paginaAtual, limitePorPagina);
+
+        if(novosProdutos.length > 0){
+            renderizarProdutos(novosProdutos, true);
+            produtosAtuais = produtosAtuais.concat(novosProdutos);
+        }
+        else{
+            const btnProximaPagina = document.getElementById('btn-proxima-pagina');
+            if (btnProximaPagina) {
+                btnProximaPagina.style.display = 'none';
+            }
+        }
+    }
+     catch (erro) {
+        console.error('Falha ao carregar próxima página', erro);
+    }
+}
+
+function configurarProximaPagina(){
+    const btnProximaPagina = document.getElementById('btn-proxima-pagina');
+
+    if(btnProximaPagina){
+        btnProximaPagina.addEventListener('click', () =>{
+            carregarProximaPagina();
+        });
     }
 }
 
@@ -30,12 +65,6 @@ function configurarPesquisa() {
     const modalMenu = document.getElementById('modal-menu');
     async function executarBusca() {
         const valorCampoLupa = campoLupa.value.trim();
-
-        if (valorCampoLupa === '') {
-           await iniciarLoja();
-           return;
-        }
-
         const produtosFiltrados = await buscarProdutosPorNome(valorCampoLupa);
         renderizarProdutos(produtosFiltrados);
         produtosAtuais = produtosFiltrados;
@@ -46,6 +75,13 @@ function configurarPesquisa() {
 
     formPesquisa.addEventListener('submit', (evento) => {
         evento.preventDefault(); 
+        const valorCampoLupa = campoLupa.value.trim();
+        if (valorCampoLupa === '') {
+            campoLupa.placeholder = 'Digite algo para buscar!';
+            campoLupa.focus();
+            return; 
+        };
+
         executarBusca();
         campoLupa.blur();
         setTimeout(() => {
@@ -170,4 +206,5 @@ document.addEventListener('DOMContentLoaded', () => {
     configurarModalMenu();
     mensagensNoTopo();
     configurarFiltroMagico();
+    configurarProximaPagina();
 });
