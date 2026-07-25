@@ -13,12 +13,21 @@ let produtosAtuais = [];
 let paginaAtual = 0;
 const limitePorPagina = 20;
 
+function controlarVisibilidadeBotaoPaginacao(deveMostrar) {
+    const btnProximaPagina = document.getElementById('btn-proxima-pagina');
+    if (btnProximaPagina) {
+        btnProximaPagina.style.display = deveMostrar ? 'inline-block' : 'none';
+    }
+}
+
 async function iniciarLoja() {
     try {
         paginaAtual = 0;
         const produtos = await buscarTodosOsProdutos(paginaAtual, limitePorPagina);
         renderizarProdutos(produtos);
         produtosAtuais = produtos;
+
+        controlarVisibilidadeBotaoPaginacao(true);
     }
     catch (erro) {
        console.error('Falha ao iniciar loja', erro);
@@ -36,10 +45,7 @@ async function carregarProximaPagina() {
             produtosAtuais = produtosAtuais.concat(novosProdutos);
         }
         else{
-            const btnProximaPagina = document.getElementById('btn-proxima-pagina');
-            if (btnProximaPagina) {
-                btnProximaPagina.style.display = 'none';
-            }
+            controlarVisibilidadeBotaoPaginacao(false)
         }
     }
      catch (erro) {
@@ -68,6 +74,8 @@ function configurarPesquisa() {
         const produtosFiltrados = await buscarProdutosPorNome(valorCampoLupa);
         renderizarProdutos(produtosFiltrados);
         produtosAtuais = produtosFiltrados;
+
+        controlarVisibilidadeBotaoPaginacao(false);
 
     };
 
@@ -117,6 +125,8 @@ function configurarFiltroMagico() {
         const produtosFiltrados = await buscarProdutosPorFiltros(filtros);
         renderizarProdutos(produtosFiltrados);
         produtosAtuais = produtosFiltrados;
+        
+        controlarVisibilidadeBotaoPaginacao(false)
 
         modalMagic.close();
 

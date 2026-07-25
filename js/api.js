@@ -27,8 +27,11 @@ export async function buscarTodosOsProdutos(pagina = 0, limite = 20) {
 
 export async function buscarProdutosPorNome (filtro){
     try {
-        const {data, error} = await supabase.from('produtos')
-        .select('*').ilike('nome' , `%${filtro}%`);
+        const {data, error} = await supabase
+        .from('produtos')
+        .select('*')
+        .eq('estoque', true)
+        .ilike('nome' , `%${filtro}%`);
         if (error){
             console.error ('Erro no filtro', error.message);
             return [];
@@ -43,7 +46,10 @@ export async function buscarProdutosPorNome (filtro){
 
 export async function buscarProdutosPorFiltros(filtros){
     try{
-        let consulta = supabase.from('produtos').select('*');
+        let consulta = supabase
+        .from('produtos')
+        .select('*')
+        .eq('estoque', true);
 
         if(filtros.idade !== null && filtros.idade !== undefined){
             consulta = consulta.lte('idade_recomendada', filtros.idade);
