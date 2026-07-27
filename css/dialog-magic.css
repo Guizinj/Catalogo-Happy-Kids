@@ -4,8 +4,8 @@
     padding: 0px;
     border-radius: 20px;
 
-    width: 80%;
-    height: 70%;
+    width: 90%;
+    height: 80%;
     max-height: none;
     max-width: none;
 
@@ -52,6 +52,7 @@
     align-items: center;
     background-color: white;
     margin: auto;
+    
 }
 .modal-topo{
     background-color: var(--logo-verde);

@@ -56,7 +56,7 @@ async function iniciarLoja() {
         // Executa a busca da API e a trava de 4 segundos em paralelo
         const [produtos] = await Promise.all([
             buscarTodosOsProdutos(paginaAtual, limitePorPagina),
-            new Promise(resolve => setTimeout(resolve, 4000)) // Trava exata de 4 segundos
+            new Promise(resolve => setTimeout(resolve, 100)) // Trava exata de 4 segundos
         ]);
 
         renderizarProdutos(produtos, false, listaFavoritos);
@@ -462,7 +462,7 @@ function mostrarToast(mensagem, tipo = 'sucesso') {
                 toast.remove();
             }
         }, 300); // Tempo correspondente à transição do CSS
-    }, 3000);
+    }, 500);
 }
 
 /* INICIALIZAÇÃO */
