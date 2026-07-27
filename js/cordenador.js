@@ -53,10 +53,10 @@ async function iniciarLoja() {
     try {
         paginaAtual = 0;
         
-        // Executa a busca da API e a trava de 5 segundos em paralelo
+        // Executa a busca da API e a trava de 4 segundos em paralelo
         const [produtos] = await Promise.all([
             buscarTodosOsProdutos(paginaAtual, limitePorPagina),
-            new Promise(resolve => setTimeout(resolve, 5000)) // Trava exata de 5 segundos
+            new Promise(resolve => setTimeout(resolve, 4000)) // Trava exata de 4 segundos
         ]);
 
         renderizarProdutos(produtos, false, listaFavoritos);
@@ -431,22 +431,38 @@ function favNavbar(){
    FUNÇÃO GLOBAL DE TOAST
 ========================================= */
 function mostrarToast(mensagem, tipo = 'sucesso') {
-    let toast = document.getElementById('toast-feedback');
+    // Remove qualquer toast anterior para evitar duplicação na tela
+    const toastAntigo = document.getElementById('toast-feedback');
+    if (toastAntigo) {
+        toastAntigo.remove();
+    }
     
-    // Se o elemento ainda não existe na página, injeta ele automaticamente
-    if (!toast) {
-        document.body.insertAdjacentHTML('beforeend', `<div id="toast-feedback"></div>`);
-        toast = document.getElementById('toast-feedback');
+    // Cria o novo elemento do toast
+    const toast = document.createElement('div');
+    toast.id = 'toast-feedback';
+    toast.className = `mostrar ${tipo}`;
+    toast.textContent = mensagem;
+
+    // DETECÇÃO DE TOP LAYER: Se houver um modal (<dialog>) aberto na tela, 
+    // injetamos o toast dentro dele para que ele fique visível na frente do modal.
+    const dialogAberto = document.querySelector('dialog[open]');
+    
+    if (dialogAberto) {
+        dialogAberto.appendChild(toast);
+    } else {
+        document.body.appendChild(toast);
     }
 
-    toast.textContent = mensagem;
-    toast.className = `mostrar ${tipo}`;
-
-    // Reseta o timer anterior se houver disparo duplo e some após 3 segundos
+    // Reseta o timer e remove o toast após 3 segundos com animação limpa
     clearTimeout(toast.timer);
     toast.timer = setTimeout(() => {
-        toast.className = '';
-    }, 1900);
+        toast.classList.remove('mostrar');
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.remove();
+            }
+        }, 300); // Tempo correspondente à transição do CSS
+    }, 3000);
 }
 
 /* INICIALIZAÇÃO */

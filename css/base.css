@@ -46,8 +46,8 @@ h1, h2, h3 {
 #toast-feedback {
     font: var(--fonte-titulos);
     position: fixed;
-    bottom: 30px;
-    left: 30px;
+    top: 10px;
+    right: 10px;
     color: #ffffff;
     padding: 14px 22px;
     border-radius: 12px;
@@ -72,9 +72,9 @@ h1, h2, h3 {
 
 /* Cores baseadas na sua paleta de identidade visual */
 #toast-feedback.sucesso {
-    background-color: var(--logo-verde);
+    background-color: #7cbd3ff1; 
 }
 
 #toast-feedback.removido {
-    background-color: var(--logo-rosa);
+    background-color: #ff3f7fde;  
 }
