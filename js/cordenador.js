@@ -34,6 +34,7 @@ function salvarFavoritos(){
 
     renderizarListaFavoritos(listaFavoritos);
     favNavbar();
+    atualizarTotalFavoritos();
 }
 
 
@@ -465,6 +466,53 @@ function mostrarToast(mensagem, tipo = 'sucesso') {
     }, 500);
 }
 
+/* =========================================
+   LÓGICA DO FOOTER DE FAVORITOS / CARRINHO
+========================================= */
+
+// Função que calcula e atualiza o valor total na tela
+function atualizarTotalFavoritos() {
+    const elTotal = document.getElementById('total-favoritos');
+    if (!elTotal) return;
+
+    const valorTotal = listaFavoritos.reduce((acumulador, produto) => {
+        return acumulador + (produto.preco * (produto.quantidade || 1));
+    }, 0);
+
+    elTotal.textContent = `R$ ${valorTotal.toFixed(2)}`;
+}
+
+// Configura o botão de Consultar
+function configurarBotaoConsultar() {
+    const btnConsultar = document.getElementById('btn-consultar-favoritos');
+    
+    if (btnConsultar) {
+        btnConsultar.addEventListener('click', () => {
+            // Se a lista estiver vazia, avisa o usuário e não faz nada
+            if (listaFavoritos.length === 0) {
+                mostrarToast('Sua lista de favoritos está vazia!', 'removido');
+                return;
+            }
+
+            // Monta o texto para o WhatsApp
+            let texto = "Olá! Gostaria de consultar a disponibilidade dos seguintes brinquedos: ";
+            
+            listaFavoritos.forEach(produto => {
+                texto += ` ${produto.quantidade}x ${produto.nome} (Ref: ${produto.codigo})%0A`;
+            });
+
+            const valorTotal = listaFavoritos.reduce((acc, p) => acc + (p.preco * (p.quantidade || 1)), 0);
+            texto += `%0A*Total estimado: R$ ${valorTotal.toFixed(2)}*`;
+
+            // COLOCAR O NÚMERO DA LOJA AQUI (Apenas números, com DDI e DDD)
+            const numeroWhatsApp = "5511999999999"; 
+            
+            // Abre uma nova aba no WhatsApp com o texto preenchido
+            window.open(`https://wa.me/${numeroWhatsApp}?text=${texto}`, '_blank');
+        });
+    }
+}
+
 /* INICIALIZAÇÃO */
 document.addEventListener('DOMContentLoaded', () => {
     iniciarLoja();
@@ -477,4 +525,5 @@ document.addEventListener('DOMContentLoaded', () => {
     mensagensNoTopo();
     configurarFiltroMagico();
     configurarProximaPagina();
+    configurarBotaoConsultar();
 });
