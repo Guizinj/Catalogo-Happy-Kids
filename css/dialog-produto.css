@@ -137,6 +137,13 @@
     line-height: 1.5;
     margin: 0 0 30px 0;
 }
+#modal-descricao::-webkit-scrollbar {
+    width: 6px;
+}
+#modal-descricao::-webkit-scrollbar-thumb {
+    background: var(--logo-verde);
+    border-radius: 10px;
+}
 
 /* Botões de ação */
 .modal-acoes {

@@ -302,8 +302,59 @@ grid.addEventListener('click', (e) => {
     }
 });
 
-/* EXCLUIR E ALTERAR QUANTIDADE PELO MODAL */
+/* EXCLUIR E ALTERAR QUANTIDADE PELO MODAL COM CONFIRMAÇÃO */
 function configurarEventosModalFavoritosConteudo() {
+    // Injeta o HTML do modal de confirmação no documento caso ele não exista
+    if (!document.getElementById('modal-confirmacao')) {
+        const dialogHTML = `
+            <dialog id="modal-confirmacao">
+                <div class="conteudo-confirmacao">
+                    <h3>Remover Favorito</h3>
+                    <p>Deseja realmente remover este brinquedo dos seus favoritos?</p>
+                    <div class="botoes-confirmacao">
+                        <button id="btn-cancelar-remocao">Cancelar</button>
+                        <button id="btn-confirmar-remocao">Sim, remover</button>
+                    </div>
+                </div>
+            </dialog>
+        `;
+        document.body.insertAdjacentHTML('beforeend', dialogHTML);
+    }
+
+    const modalConfirmacao = document.getElementById('modal-confirmacao');
+    const btnCancelar = document.getElementById('btn-cancelar-remocao');
+    const btnConfirmar = document.getElementById('btn-confirmar-remocao');
+
+    let idProdutoPendente = null;
+
+    // Ação do botão Cancelar do pop-up
+    btnCancelar.addEventListener('click', () => {
+        idProdutoPendente = null;
+        modalConfirmacao.close();
+    });
+
+    // Ação do botão Confirmar Remoção do pop-up
+    btnConfirmar.addEventListener('click', () => {
+        if (idProdutoPendente) {
+            const index = listaFavoritos.findIndex(p => String(p.codigo) === String(idProdutoPendente));
+            
+            if (index !== -1) {
+                listaFavoritos.splice(index, 1);
+                
+                // Sincronização: apaga o coração do grid de fundo
+                const iconeCoracao = document.querySelector(`.card-produto[data-id="${idProdutoPendente}"] .favorite`);
+                if (iconeCoracao) {
+                    iconeCoracao.classList.remove('favoritado');
+                }
+                
+                salvarFavoritos();
+            }
+        }
+        idProdutoPendente = null;
+        modalConfirmacao.close();
+    });
+
+    // Ouvinte global para os cliques dentro do modal de favoritos
     document.addEventListener('click', (e) => {
         
         // --- SE CLICAR NO BOTÃO DE MENOS (-) ---
@@ -314,20 +365,15 @@ function configurarEventosModalFavoritosConteudo() {
             const index = listaFavoritos.findIndex(p => String(p.codigo) === String(idProduto));
             
             if (index !== -1) {
-                // Se a quantidade atual for maior que 1, apenas subtrai
+                // Se a quantidade for maior que 1, apenas subtrai normalmente
                 if (listaFavoritos[index].quantidade > 1) {
                     listaFavoritos[index].quantidade--;
+                    salvarFavoritos();
                 } else {
-                    // Se a quantidade for 1, o próximo clique remove o item
-                    listaFavoritos.splice(index, 1);
-                    
-                    // Sincronização: apaga o coração do grid de fundo
-                    const iconeCoracao = document.querySelector(`.card-produto[data-id="${idProduto}"] .favorite`);
-                    if (iconeCoracao) {
-                        iconeCoracao.classList.remove('favoritado');
-                    }
+                    // Se a quantidade for 1, segura a exclusão e abre o pop-up de confirmação
+                    idProdutoPendente = idProduto;
+                    modalConfirmacao.showModal();
                 }
-                salvarFavoritos(); // Salva e recarrega o modal na mesma hora
             }
         }
 
@@ -339,7 +385,6 @@ function configurarEventosModalFavoritosConteudo() {
             const index = listaFavoritos.findIndex(p => String(p.codigo) === String(idProduto));
             
             if (index !== -1) {
-                // Soma +1 na quantidade (garantindo que se for antigo, parta de 1)
                 listaFavoritos[index].quantidade = (listaFavoritos[index].quantidade || 1) + 1;
                 salvarFavoritos();
             }

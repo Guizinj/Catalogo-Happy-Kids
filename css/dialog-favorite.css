@@ -257,3 +257,94 @@
     min-width: 16px;
     text-align: center;
 }
+
+
+/* =========================================
+   MODAL DE CONFIRMAÇÃO DE REMOÇÃO
+========================================= */
+
+#modal-confirmacao {
+    margin: auto;
+    padding: 0;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    max-width: 360px;
+    width: 90%;
+    animation: fadeInModal 0.25s ease;
+}
+
+#modal-confirmacao::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+}
+
+.conteudo-confirmacao {
+    padding: 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.conteudo-confirmacao h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333333;
+}
+
+.conteudo-confirmacao p {
+    margin: 0;
+    font-size: 14px;
+    color: #666666;
+    line-height: 1.4;
+}
+
+.botoes-confirmacao {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.botoes-confirmacao button {
+    flex: 1;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+/* Botão Cancelar */
+#btn-cancelar-remocao {
+    background-color: var(--logo-verde);
+    color: #ffffff;
+}
+
+#btn-cancelar-remocao:hover {
+    background-color: #e2e2e2;
+}
+
+/* Botão Confirmar Remoção (Usa o rosa da sua paleta) */
+#btn-confirmar-remocao {
+    background-color: white;
+    color: #313131;
+}
+
+#btn-confirmar-remocao:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+@keyframes fadeInModal {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
