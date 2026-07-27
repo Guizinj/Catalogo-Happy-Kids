@@ -6,13 +6,22 @@ import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } f
 
 import { mensagensNoTopo } from "./banner.js";
 
-
-
-
 let produtosAtuais = [];
 let paginaAtual = 0;
 const limitePorPagina = 20;
 let listaFavoritos = [];
+
+
+function ocultarLoader() {
+    const loader = document.getElementById('loader-overlay');
+    if (loader) {
+        loader.classList.add('oculto');
+        // Remove do DOM após a animação acabar para liberar memória
+        setTimeout(() => {
+            loader.remove();
+        }, 5000);
+    }
+}
 
 function controlarVisibilidadeBotaoPaginacao(deveMostrar) {
     const btnProximaPagina = document.getElementById('btn-proxima-pagina');
@@ -47,6 +56,7 @@ async function iniciarLoja() {
         produtosAtuais = produtos;
 
         controlarVisibilidadeBotaoPaginacao(true);
+        ocultarLoader();
     }
     catch (erro) {
        console.error('Falha ao iniciar loja', erro);
@@ -111,8 +121,9 @@ function configurarPesquisa() {
 
         executarBusca();
         campoLupa.blur();
+        modalMenu.close();
         setTimeout(() => {
-            modalMenu.close();
+    
             const gridProdutos = document.querySelector('.conteudo');
             if (gridProdutos) {
                 gridProdutos.scrollIntoView({ 
@@ -120,7 +131,7 @@ function configurarPesquisa() {
                     block: 'start'      
                 });
             }
-        }, 250); 
+        }, 1000); 
     });
 }
 
