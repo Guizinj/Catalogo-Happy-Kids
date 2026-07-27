@@ -157,10 +157,8 @@ function configurarFiltroMagico() {
 }
 
 
-
 /*======= ABRIR E CONTROLAR MODAL DE CADA PRODUTO =======*/
 function configurarModalProduto() {
-    const grid = document.getElementById('grid');
     const modalProduto = document.getElementById('modal-produto');
     const btnFecharModal = document.getElementById('btn-fechar-modal');
 
@@ -169,14 +167,10 @@ function configurarModalProduto() {
     const precoModal = document.getElementById('modal-preco');
     const parcelaModal = document.getElementById('modal-parcela');
     const descricaoModal = document.getElementById('modal-descricao');
-    
-    // Captura o botão do modal que você alterou no HTML
     const btnFavoritarModal = document.getElementById('btn-favoritar-modal');
 
-    // Variável de controle: guarda o objeto do produto que está aberto na tela do usuário
     let produtoAtualNoModal = null;
 
-    // Função auxiliar para mudar o texto do botão baseado no estado atual do produto
     function atualizarTextoBotaoModal() {
         if (!produtoAtualNoModal || !btnFavoritarModal) return;
 
@@ -184,85 +178,92 @@ function configurarModalProduto() {
         
         if (jaEhFavorito) {
             btnFavoritarModal.textContent = "Remover dos Favoritos";
-            btnFavoritarModal.style.backgroundColor = "var(--logo-rosa)"; // Opcional: muda a cor para combinar
+            btnFavoritarModal.style.backgroundColor = "var(--logo-rosa)";
             btnFavoritarModal.style.color = "#ffffff";
         } else {
             btnFavoritarModal.textContent = "Adicionar aos Favoritos";
-            btnFavoritarModal.style.backgroundColor = ""; // Volta para o estilo padrão do seu CSS
+            btnFavoritarModal.style.backgroundColor = ""; 
             btnFavoritarModal.style.color = "";
         }
     }
 
-    grid.addEventListener('click', (evento) => {
-        if (evento.target.classList.contains('favorite') || evento.target.closest('.btn-header')) {
-            return; 
-        }
+    // NOVA ROTINA: Função encapsulada para não repetir código ao abrir o modal
+    function exibirDetalhes(produtoSelecionado) {
+        produtoAtualNoModal = produtoSelecionado;
 
-        const cardClicado = evento.target.closest('.card-produto');
+        imgModal.src = produtoSelecionado.imagem;
+        imgModal.alt = produtoSelecionado.nome;
+        nomeModal.textContent = produtoSelecionado.nome;
+        precoModal.textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
         
+        if(produtoSelecionado.preco > 100){
+            const valorParcela = (produtoSelecionado.preco / 10).toFixed(2);
+            parcelaModal.textContent = `ou até 10x de R$ ${valorParcela} sem juros`;
+        } else {
+            parcelaModal.textContent = 'pagamento à vista'; 
+        }
+        
+        descricaoModal.textContent = produtoSelecionado.descricao || "Descrição não informada.";
+
+        atualizarTextoBotaoModal();
+        modalProduto.showModal();
+    }
+
+    // DELEGAÇÃO GLOBAL DE CLIQUES PARA ABRIR O MODAL
+    document.addEventListener('click', (evento) => {
+        
+        // 1. Se clicou no GRID PRINCIPAL (Cards Grandes)
+        const cardClicado = evento.target.closest('.card-produto');
         if (cardClicado) {
+            // Ignora se clicou no coração para não dar conflito
+            if (evento.target.classList.contains('favorite') || evento.target.closest('.btn-header')) return; 
+
             const idProduto = cardClicado.getAttribute('data-id');
             const produtoSelecionado = produtosAtuais.find(p => p.codigo == idProduto);
             
             if (produtoSelecionado) {
-                // Guarda o produto selecionado na nossa variável de controle antes de abrir
-                produtoAtualNoModal = produtoSelecionado;
-
-                imgModal.src = produtoSelecionado.imagem;
-                imgModal.alt = produtoSelecionado.nome;
-                nomeModal.textContent = produtoSelecionado.nome;
-                precoModal.textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
-                
-                if(produtoSelecionado.preco > 100){
-                    const valorParcela = (produtoSelecionado.preco / 10).toFixed(2);
-                    parcelaModal.textContent = `ou até 10x de R$ ${valorParcela} sem juros`;
-                } else {
-                    parcelaModal.textContent = 'pagamento à vista'; 
-                }
-                
-                descricaoModal.textContent = produtoSelecionado.descricao || "Descrição não informada.";
-
-                // Atualiza o texto do botão (se vai abrir como Adicionar ou Remover)
-                atualizarTextoBotaoModal();
-
-                modalProduto.showModal();
+                exibirDetalhes(produtoSelecionado);
             }
+            return; // Encerra a verificação
+        }
+
+        // 2. Se clicou no MINI CARD DE FAVORITOS (O "Buraco" consertado!)
+        const miniCardClicado = evento.target.closest('.card-favorito-mini');
+        if (miniCardClicado) {
+            // SEGURANÇA: Ignora se clicou na pílula de quantidade (+ / - / Lixeira)
+            if (evento.target.closest('.pilula-quantidade') || evento.target.closest('.btn-remover-favorito')) {
+                return;
+            }
+
+            const idProduto = miniCardClicado.getAttribute('data-id');
+            // Busca os dados diretamente da memória de favoritos
+            const produtoSelecionado = listaFavoritos.find(p => String(p.codigo) === String(idProduto));
+            
+            if (produtoSelecionado) {
+                exibirDetalhes(produtoSelecionado);
+            }
+            return;
         }
     });
 
-    // LÓGICA DE CLIQUE NO BOTÃO INTERNO DO MODAL
+    // LÓGICA DE CLIQUE NO BOTÃO INTERNO DO MODAL (Sem alterações)
     if (btnFavoritarModal) {
         btnFavoritarModal.addEventListener('click', () => {
             if (!produtoAtualNoModal) return;
 
             const idProduto = produtoAtualNoModal.codigo;
             const indexFavorito = listaFavoritos.findIndex(p => String(p.codigo) === String(idProduto));
-            
-            // Captura o coração correspondente lá no grid de fundo (caso ele esteja visível na tela)
             const iconeCoracaoNoGrid = document.querySelector(`.card-produto[data-id="${idProduto}"] .favorite`);
 
             if (indexFavorito !== -1) {
-                // Se já for favorito, remove da lista global
                 listaFavoritos.splice(indexFavorito, 1);
-                
-                // Sincroniza: desliga o coração do card no fundo
-                if (iconeCoracaoNoGrid) {
-                    iconeCoracaoNoGrid.classList.remove('favoritado');
-                }
+                if (iconeCoracaoNoGrid) iconeCoracaoNoGrid.classList.remove('favoritado');
             } else {
-                // Se não for favorito, adiciona respeitando a regra da pílula (quantidade inicial 1)
                 listaFavoritos.push({ ...produtoAtualNoModal, quantidade: 1 });
-                
-                // Sincroniza: acende o coração do card no fundo
-                if (iconeCoracaoNoGrid) {
-                    iconeCoracaoNoGrid.classList.add('favoritado');
-                }
+                if (iconeCoracaoNoGrid) iconeCoracaoNoGrid.classList.add('favoritado');
             }
             
-            // Atualiza o localStorage, reconstrói o modal de lista e atualiza o coração do topo (navbar)
             salvarFavoritos(); 
-            
-            // Recalcula o texto do próprio botão interno do modal instantaneamente
             atualizarTextoBotaoModal();
         });
     }

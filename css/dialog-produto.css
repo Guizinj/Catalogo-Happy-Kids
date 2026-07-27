@@ -6,7 +6,7 @@
     width: 80%;
     height: 80%;
     max-width: 900px; 
-    max-height: 600px;
+    max-height: 700px;
     top: 0;
     bottom: 0;
     left: 0;
@@ -130,6 +130,8 @@
 }
 
 #modal-descricao {
+    overflow-y: auto;
+    max-height: 100px;
     font-size: 15px;
     color: #666;
     line-height: 1.5;
