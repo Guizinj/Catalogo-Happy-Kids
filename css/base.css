@@ -38,3 +38,43 @@ h1, h2, h3 {
     text-align: center;
     font-family: var(--fonte-titulos);
 }
+
+/* =========================================
+   TOAST DE FEEDBACK (NOTIFICAÇÕES)
+========================================= */
+
+#toast-feedback {
+    font: var(--fonte-titulos);
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    color: #ffffff;
+    padding: 14px 22px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    font-size: 14px;
+    font-weight: 300;
+    z-index: 10000 !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    pointer-events: none;
+}
+
+/* Quando estiver ativo na tela */
+#toast-feedback.mostrar {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Cores baseadas na sua paleta de identidade visual */
+#toast-feedback.sucesso {
+    background-color: var(--logo-verde);
+}
+
+#toast-feedback.removido {
+    background-color: var(--logo-rosa);
+}

@@ -258,9 +258,11 @@ function configurarModalProduto() {
             if (indexFavorito !== -1) {
                 listaFavoritos.splice(indexFavorito, 1);
                 if (iconeCoracaoNoGrid) iconeCoracaoNoGrid.classList.remove('favoritado');
+                mostrarToast('Item removido dos favoritos', 'removido');
             } else {
                 listaFavoritos.push({ ...produtoAtualNoModal, quantidade: 1 });
                 if (iconeCoracaoNoGrid) iconeCoracaoNoGrid.classList.add('favoritado');
+                mostrarToast('Item adicionado aos favoritos', 'sucesso');
             }
             
             salvarFavoritos(); 
@@ -291,10 +293,12 @@ grid.addEventListener('click', (e) => {
                 // Se já for favorito, tira da array e remove a classe
                 listaFavoritos.splice(indexFavorito, 1);
                 e.target.classList.remove('favoritado');
+                mostrarToast('Item removido dos favoritos', 'removido');
             } else {
                 // Se não for, adiciona o objeto completo na array e põe a classe
                 listaFavoritos.push({...produtoSelecionado, quantidade:1});
                 e.target.classList.add('favoritado');
+                mostrarToast('Item adicionado aos favoritos', 'sucesso');
             }
             
             salvarFavoritos(); // Sincroniza com o localStorage e o Modal
@@ -348,6 +352,7 @@ function configurarEventosModalFavoritosConteudo() {
                 }
                 
                 salvarFavoritos();
+                mostrarToast('Item removido dos favoritos', 'removido');
             }
         }
         idProdutoPendente = null;
@@ -398,6 +403,28 @@ function favNavbar(){
     if(btnFavorite){
         btnFavorite.classList.toggle('favoritado', listaFavoritos.length > 0);
     }
+}
+
+/* =========================================
+   FUNÇÃO GLOBAL DE TOAST
+========================================= */
+function mostrarToast(mensagem, tipo = 'sucesso') {
+    let toast = document.getElementById('toast-feedback');
+    
+    // Se o elemento ainda não existe na página, injeta ele automaticamente
+    if (!toast) {
+        document.body.insertAdjacentHTML('beforeend', `<div id="toast-feedback"></div>`);
+        toast = document.getElementById('toast-feedback');
+    }
+
+    toast.textContent = mensagem;
+    toast.className = `mostrar ${tipo}`;
+
+    // Reseta o timer anterior se houver disparo duplo e some após 3 segundos
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => {
+        toast.className = '';
+    }, 1900);
 }
 
 /* INICIALIZAÇÃO */
