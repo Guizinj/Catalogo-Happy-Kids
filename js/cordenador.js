@@ -12,17 +12,6 @@ const limitePorPagina = 20;
 let listaFavoritos = [];
 
 
-function ocultarLoader() {
-    const loader = document.getElementById('loader-overlay');
-    if (loader) {
-        loader.classList.add('oculto');
-        // Remove do DOM após a animação acabar para liberar memória
-        setTimeout(() => {
-            loader.remove();
-        }, 5000);
-    }
-}
-
 function controlarVisibilidadeBotaoPaginacao(deveMostrar) {
     const btnProximaPagina = document.getElementById('btn-proxima-pagina');
     if (btnProximaPagina) {
@@ -47,19 +36,41 @@ function salvarFavoritos(){
     favNavbar();
 }
 
+
+function ocultarLoader() {
+    const loader = document.getElementById('loader-overlay');
+    if (loader) {
+        loader.classList.add('oculto');
+        // Remove do DOM após a animação acabar para liberar memória
+        setTimeout(() => {
+            loader.remove();
+        }, 400);
+    }
+}
+
+
 async function iniciarLoja() {
     try {
-        carregarFavoritos();
         paginaAtual = 0;
         const produtos = await buscarTodosOsProdutos(paginaAtual, limitePorPagina);
         renderizarProdutos(produtos, false, listaFavoritos);
         produtosAtuais = produtos;
+        carregarFavoritos();
 
         controlarVisibilidadeBotaoPaginacao(true);
+
+        // TRAVA INTELIGENTE: Aguarda o navegador baixar a fonte dos ícones 
+        // (com um limite máximo de 3 segundos para nunca travar o site)
+        await Promise.race([
+            document.fonts.ready,
+            new Promise(resolve => setTimeout(resolve, 3000))
+        ]);
+
         ocultarLoader();
     }
     catch (erro) {
-       console.error('Falha ao iniciar loja', erro);
+        console.error('Falha ao iniciar loja', erro);
+        ocultarLoader();
     }
 }
 
