@@ -52,20 +52,20 @@ function ocultarLoader() {
 async function iniciarLoja() {
     try {
         paginaAtual = 0;
-        const produtos = await buscarTodosOsProdutos(paginaAtual, limitePorPagina);
+        
+        // Executa a busca da API e a trava de 5 segundos em paralelo
+        const [produtos] = await Promise.all([
+            buscarTodosOsProdutos(paginaAtual, limitePorPagina),
+            new Promise(resolve => setTimeout(resolve, 5000)) // Trava exata de 5 segundos
+        ]);
+
         renderizarProdutos(produtos, false, listaFavoritos);
         produtosAtuais = produtos;
         carregarFavoritos();
 
         controlarVisibilidadeBotaoPaginacao(true);
-
-        // TRAVA INTELIGENTE: Aguarda o navegador baixar a fonte dos ícones 
-        // (com um limite máximo de 3 segundos para nunca travar o site)
-        await Promise.race([
-            document.fonts.ready,
-            new Promise(resolve => setTimeout(resolve, 3000))
-        ]);
-
+        
+        // Agora o loader some com tudo 100% renderizado e sem nenhum flash de texto!
         ocultarLoader();
     }
     catch (erro) {
