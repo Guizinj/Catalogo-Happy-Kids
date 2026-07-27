@@ -63,20 +63,30 @@ export function renderizarListaFavoritos(favoritos = []) {
         return;
     }
 
-    const htmlFavoritos = favoritos.map(produto => `
+    const htmlFavoritos = favoritos.map(produto => {
+    const qtd = produto.quantidade || 1; 
+
+    return `
     <div class="card-favorito-mini" data-id="${produto.codigo}">
         <img class="img-favorito-mini" src="${produto.imagem}" alt="${produto.nome}">
         
         <div class="info-favorito-mini">
             <h4>${produto.nome}</h4>
-            <p>R$ ${produto.preco.toFixed(2)}</p>
+            <!-- Opcional e muito usado: multiplica o preço pela quantidade -->
+            <p>R$ ${(produto.preco * qtd).toFixed(2)}</p> 
         </div>
         
-        <button class="btn-remover-favorito" title="Remover dos favoritos">
-            <span class="material-symbols-outlined">delete</span>
-        </button>
+        <div class="pilula-quantidade">
+            <button class="btn-qtd btn-menos" title="Diminuir">
+                <span class="material-symbols-outlined">${qtd === 1 ? 'delete' : 'remove'}</span>
+            </button>
+            <span class="qtd-numero">${qtd}</span>
+            <button class="btn-qtd btn-mais" title="Aumentar">
+                <span class="material-symbols-outlined">add</span>
+            </button>
+        </div>
     </div>
-`).join('');
-
+    `;
+    }).join('');
     containerFavoritos.innerHTML = htmlFavoritos;
 }

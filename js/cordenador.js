@@ -227,7 +227,7 @@ grid.addEventListener('click', (e) => {
                 e.target.classList.remove('favoritado');
             } else {
                 // Se não for, adiciona o objeto completo na array e põe a classe
-                listaFavoritos.push(produtoSelecionado);
+                listaFavoritos.push({...produtoSelecionado, quantidade:1});
                 e.target.classList.add('favoritado');
             }
             
@@ -236,30 +236,46 @@ grid.addEventListener('click', (e) => {
     }
 });
 
-
-/* EXCLUIR FAVORITO DIRETAMENTE PELO MODAL */
-/* EXCLUIR FAVORITO DIRETAMENTE PELO MODAL */
+/* EXCLUIR E ALTERAR QUANTIDADE PELO MODAL */
 function configurarEventosModalFavoritosConteudo() {
-    // Atrelamos ao 'document' para blindar contra recriações do DOM do modal
     document.addEventListener('click', (e) => {
-        // Verifica se o clique veio de dentro de um botão de remover favorito
-        const btnRemover = e.target.closest('.btn-remover-favorito');
         
-        if (btnRemover) {
-            const cardMini = btnRemover.closest('.card-favorito-mini');
+        // --- SE CLICAR NO BOTÃO DE MENOS (-) ---
+        const btnMenos = e.target.closest('.btn-menos');
+        if (btnMenos) {
+            const cardMini = btnMenos.closest('.card-favorito-mini');
+            const idProduto = cardMini.getAttribute('data-id');
+            const index = listaFavoritos.findIndex(p => String(p.codigo) === String(idProduto));
             
-            if (cardMini) {
-                const idProduto = cardMini.getAttribute('data-id');
-                
-                // Remove o item da lista garantindo a conversão para texto (String) para evitar erros do filtro
-                listaFavoritos = listaFavoritos.filter(p => String(p.codigo) !== String(idProduto));
-                salvarFavoritos(); // Salva e re-renderiza o modal
-                
-                // Sincronização Mágica: Se o produto estiver visível no grid de fundo, apaga o coração dele!
-                const iconeCoracaoNoGrid = document.querySelector(`.card-produto[data-id="${idProduto}"] .favorite`);
-                if (iconeCoracaoNoGrid) {
-                    iconeCoracaoNoGrid.classList.remove('favoritado');
+            if (index !== -1) {
+                // Se a quantidade atual for maior que 1, apenas subtrai
+                if (listaFavoritos[index].quantidade > 1) {
+                    listaFavoritos[index].quantidade--;
+                } else {
+                    // Se a quantidade for 1, o próximo clique remove o item
+                    listaFavoritos.splice(index, 1);
+                    
+                    // Sincronização: apaga o coração do grid de fundo
+                    const iconeCoracao = document.querySelector(`.card-produto[data-id="${idProduto}"] .favorite`);
+                    if (iconeCoracao) {
+                        iconeCoracao.classList.remove('favoritado');
+                    }
                 }
+                salvarFavoritos(); // Salva e recarrega o modal na mesma hora
+            }
+        }
+
+        // --- SE CLICAR NO BOTÃO DE MAIS (+) ---
+        const btnMais = e.target.closest('.btn-mais');
+        if (btnMais) {
+            const cardMini = btnMais.closest('.card-favorito-mini');
+            const idProduto = cardMini.getAttribute('data-id');
+            const index = listaFavoritos.findIndex(p => String(p.codigo) === String(idProduto));
+            
+            if (index !== -1) {
+                // Soma +1 na quantidade (garantindo que se for antigo, parta de 1)
+                listaFavoritos[index].quantidade = (listaFavoritos[index].quantidade || 1) + 1;
+                salvarFavoritos();
             }
         }
     });

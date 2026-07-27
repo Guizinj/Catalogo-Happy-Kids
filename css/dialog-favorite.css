@@ -202,3 +202,58 @@
     font-size: 20px;
 }
 
+/* =========================================
+   PÍLULA DE QUANTIDADE (MAIS E MENOS)
+========================================= */
+
+.pilula-quantidade {
+    display: flex;
+    align-items: center;
+    background-color: #f5f5f5;
+    border-radius: 50px; /* Cria o formato de pílula */
+    padding: 4px;
+    gap: 8px;
+    border: 1px solid #eeeeee;
+}
+
+.btn-qtd {
+    background: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #555555;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+}
+
+.btn-qtd .material-symbols-outlined {
+    font-size: 18px;
+}
+
+/* Efeito Hover: O botão de menos/lixeira fica rosa, o de mais fica verde */
+.btn-menos:hover {
+    background-color: var(--logo-rosa);
+    color: white;
+}
+
+.btn-mais:hover {
+    background-color: var(--logo-verde);
+    color: white;
+}
+
+.btn-qtd:active {
+    transform: scale(0.90);
+}
+
+.qtd-numero {
+    font-size: 15px;
+    font-weight: 700;
+    color: #333;
+    min-width: 16px;
+    text-align: center;
+}
