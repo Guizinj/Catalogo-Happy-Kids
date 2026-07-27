@@ -158,8 +158,7 @@ function configurarFiltroMagico() {
 
 
 
-
-/*======= ABRIR MODAL DE CADA PRODUTO =======*/
+/*======= ABRIR E CONTROLAR MODAL DE CADA PRODUTO =======*/
 function configurarModalProduto() {
     const grid = document.getElementById('grid');
     const modalProduto = document.getElementById('modal-produto');
@@ -170,8 +169,30 @@ function configurarModalProduto() {
     const precoModal = document.getElementById('modal-preco');
     const parcelaModal = document.getElementById('modal-parcela');
     const descricaoModal = document.getElementById('modal-descricao');
-
     
+    // Captura o botão do modal que você alterou no HTML
+    const btnFavoritarModal = document.getElementById('btn-favoritar-modal');
+
+    // Variável de controle: guarda o objeto do produto que está aberto na tela do usuário
+    let produtoAtualNoModal = null;
+
+    // Função auxiliar para mudar o texto do botão baseado no estado atual do produto
+    function atualizarTextoBotaoModal() {
+        if (!produtoAtualNoModal || !btnFavoritarModal) return;
+
+        const jaEhFavorito = listaFavoritos.some(p => String(p.codigo) === String(produtoAtualNoModal.codigo));
+        
+        if (jaEhFavorito) {
+            btnFavoritarModal.textContent = "Remover dos Favoritos";
+            btnFavoritarModal.style.backgroundColor = "var(--logo-rosa)"; // Opcional: muda a cor para combinar
+            btnFavoritarModal.style.color = "#ffffff";
+        } else {
+            btnFavoritarModal.textContent = "Adicionar aos Favoritos";
+            btnFavoritarModal.style.backgroundColor = ""; // Volta para o estilo padrão do seu CSS
+            btnFavoritarModal.style.color = "";
+        }
+    }
+
     grid.addEventListener('click', (evento) => {
         if (evento.target.classList.contains('favorite') || evento.target.closest('.btn-header')) {
             return; 
@@ -184,24 +205,68 @@ function configurarModalProduto() {
             const produtoSelecionado = produtosAtuais.find(p => p.codigo == idProduto);
             
             if (produtoSelecionado) {
-                imgModal.src = produtoSelecionado.imagem
+                // Guarda o produto selecionado na nossa variável de controle antes de abrir
+                produtoAtualNoModal = produtoSelecionado;
+
+                imgModal.src = produtoSelecionado.imagem;
                 imgModal.alt = produtoSelecionado.nome;
                 nomeModal.textContent = produtoSelecionado.nome;
                 precoModal.textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
                 
                 if(produtoSelecionado.preco > 100){
-                const valorParcela = (produtoSelecionado.preco / 10).toFixed(2);
-                parcelaModal.textContent = `ou até 10x de R$ ${valorParcela} sem juros`;
+                    const valorParcela = (produtoSelecionado.preco / 10).toFixed(2);
+                    parcelaModal.textContent = `ou até 10x de R$ ${valorParcela} sem juros`;
                 } else {
-                parcelaModal.textContent = 'pagamento avista'; 
-                };
+                    parcelaModal.textContent = 'pagamento à vista'; 
+                }
                 
                 descricaoModal.textContent = produtoSelecionado.descricao || "Descrição não informada.";
+
+                // Atualiza o texto do botão (se vai abrir como Adicionar ou Remover)
+                atualizarTextoBotaoModal();
 
                 modalProduto.showModal();
             }
         }
     });
+
+    // LÓGICA DE CLIQUE NO BOTÃO INTERNO DO MODAL
+    if (btnFavoritarModal) {
+        btnFavoritarModal.addEventListener('click', () => {
+            if (!produtoAtualNoModal) return;
+
+            const idProduto = produtoAtualNoModal.codigo;
+            const indexFavorito = listaFavoritos.findIndex(p => String(p.codigo) === String(idProduto));
+            
+            // Captura o coração correspondente lá no grid de fundo (caso ele esteja visível na tela)
+            const iconeCoracaoNoGrid = document.querySelector(`.card-produto[data-id="${idProduto}"] .favorite`);
+
+            if (indexFavorito !== -1) {
+                // Se já for favorito, remove da lista global
+                listaFavoritos.splice(indexFavorito, 1);
+                
+                // Sincroniza: desliga o coração do card no fundo
+                if (iconeCoracaoNoGrid) {
+                    iconeCoracaoNoGrid.classList.remove('favoritado');
+                }
+            } else {
+                // Se não for favorito, adiciona respeitando a regra da pílula (quantidade inicial 1)
+                listaFavoritos.push({ ...produtoAtualNoModal, quantidade: 1 });
+                
+                // Sincroniza: acende o coração do card no fundo
+                if (iconeCoracaoNoGrid) {
+                    iconeCoracaoNoGrid.classList.add('favoritado');
+                }
+            }
+            
+            // Atualiza o localStorage, reconstrói o modal de lista e atualiza o coração do topo (navbar)
+            salvarFavoritos(); 
+            
+            // Recalcula o texto do próprio botão interno do modal instantaneamente
+            atualizarTextoBotaoModal();
+        });
+    }
+
     btnFecharModal.addEventListener('click', () => {
         modalProduto.close();
     });
