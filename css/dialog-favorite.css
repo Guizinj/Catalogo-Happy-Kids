@@ -220,8 +220,8 @@
     background: #ffffff;
     border: none;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    width: 26px;
+    height: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -232,7 +232,7 @@
 }
 
 .btn-qtd .material-symbols-outlined {
-    font-size: 18px;
+    font-size: 15px;
 }
 
 /* Efeito Hover: O botão de menos/lixeira fica rosa, o de mais fica verde */
@@ -251,7 +251,7 @@
 }
 
 .qtd-numero {
-    font-size: 15px;
+    font-size: 12px;
     font-weight: 700;
     color: #333;
     min-width: 16px;
@@ -324,7 +324,7 @@
 }
 
 #btn-cancelar-remocao:hover {
-    background-color: #e2e2e2;
+    background-color: #e62b2b;
 }
 
 /* Botão Confirmar Remoção (Usa o rosa da sua paleta) */
