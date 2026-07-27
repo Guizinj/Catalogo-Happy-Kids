@@ -1,5 +1,6 @@
 
 .dialog-favorite {
+    font-family: var(--fonte-titulos);
     border: none;
     outline: none;
     padding: 0;
@@ -29,7 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 50px;
+    margin-bottom: 10px;
     padding: 30px 20px;
     background-color: var(--logo-laranja);
     border-bottom-left-radius:10px;
@@ -109,7 +110,6 @@
 .btn-explorar:active {
     transform: scale(0.96); /* Efeito de clique no celular */
 }
-
 .dialog-favorite[open] {
     opacity: 1;
     transform: translateX(0);
@@ -133,3 +133,72 @@
         opacity: 0;
     }
 }
+
+
+
+
+
+
+
+
+
+/* =========================================
+   MODAL DE FAVORITOS - MINI CARDS
+========================================= */
+
+/* O container do card */
+.card-favorito-mini {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+/* Imagem do produto */
+.img-favorito-mini {
+    width: 20%;
+    height: 20%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Área de texto (Nome e Preço) */
+.info-favorito-mini {
+    flex-grow: 1;
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Título do produto */
+.info-favorito-mini h4 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333333;
+    line-height: 1.2;
+}
+
+/* Preço do produto usando o laranja da marca */
+.info-favorito-mini p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--logo-laranja);
+}
+
+/* Botão de lixeira */
+.btn-remover-favorito {
+   
+}
+
+/* Ícone da lixeira */
+.btn-remover-favorito .material-symbols-outlined {
+    font-size: 20px;
+}
+

@@ -1,6 +1,6 @@
 import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros } from "./api.js";
 
-import { renderizarProdutos } from "./ui.js";
+import { renderizarListaFavoritos, renderizarProdutos } from "./ui.js";
 
 import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } from "./modais.js";
 
@@ -12,6 +12,7 @@ import { mensagensNoTopo } from "./banner.js";
 let produtosAtuais = [];
 let paginaAtual = 0;
 const limitePorPagina = 20;
+let listaFavoritos = [];
 
 function controlarVisibilidadeBotaoPaginacao(deveMostrar) {
     const btnProximaPagina = document.getElementById('btn-proxima-pagina');
@@ -20,11 +21,29 @@ function controlarVisibilidadeBotaoPaginacao(deveMostrar) {
     }
 }
 
+function carregarFavoritos(){
+    const favoritosSalvos = localStorage.getItem('happyKidsFavoritos');
+    if(favoritosSalvos){
+        listaFavoritos = JSON.parse(favoritosSalvos);
+    }
+    renderizarListaFavoritos(listaFavoritos);
+    favNavbar()
+    
+}
+
+function salvarFavoritos(){
+    localStorage.setItem('happyKidsFavoritos', JSON.stringify(listaFavoritos));
+
+    renderizarListaFavoritos(listaFavoritos);
+    favNavbar();
+}
+
 async function iniciarLoja() {
     try {
+        carregarFavoritos();
         paginaAtual = 0;
         const produtos = await buscarTodosOsProdutos(paginaAtual, limitePorPagina);
-        renderizarProdutos(produtos);
+        renderizarProdutos(produtos, false, listaFavoritos);
         produtosAtuais = produtos;
 
         controlarVisibilidadeBotaoPaginacao(true);
@@ -41,7 +60,7 @@ async function carregarProximaPagina() {
         const novosProdutos = await buscarTodosOsProdutos(paginaAtual, limitePorPagina);
 
         if(novosProdutos.length > 0){
-            renderizarProdutos(novosProdutos, true);
+            renderizarProdutos(novosProdutos, true, listaFavoritos);
             produtosAtuais = produtosAtuais.concat(novosProdutos);
         }
         else{
@@ -72,7 +91,7 @@ function configurarPesquisa() {
     async function executarBusca() {
         const valorCampoLupa = campoLupa.value.trim();
         const produtosFiltrados = await buscarProdutosPorNome(valorCampoLupa);
-        renderizarProdutos(produtosFiltrados);
+        renderizarProdutos(produtosFiltrados, false, listaFavoritos);
         produtosAtuais = produtosFiltrados;
 
         controlarVisibilidadeBotaoPaginacao(false);
@@ -123,7 +142,7 @@ function configurarFiltroMagico() {
         };
 
         const produtosFiltrados = await buscarProdutosPorFiltros(filtros);
-        renderizarProdutos(produtosFiltrados);
+        renderizarProdutos(produtosFiltrados, false, listaFavoritos);
         produtosAtuais = produtosFiltrados;
         
         controlarVisibilidadeBotaoPaginacao(false)
@@ -191,20 +210,68 @@ function configurarModalProduto() {
 
      /* BOTÃO DE FAVORITO DOS CARDS*/
 const grid = document.getElementById('grid');
-
+/* BOTÃO DE FAVORITO DOS CARDS NO GRID PRINCIPAL */
 grid.addEventListener('click', (e) => {
     if (e.target.classList.contains('favorite')) {
-        const jaFavoritado = e.target.classList.contains('favoritado');
-        const mensagem = jaFavoritado 
-            ? 'Deseja remover este brinquedo dos favoritos? ' 
-            : 'Deseja adicionar este brinquedo aos favoritos? ';
-        const confirmacao = confirm(mensagem);
-        if (confirmacao) {
-            e.target.classList.toggle('favoritado');
+        const cardClicado = e.target.closest('.card-produto');
+        const idProduto = cardClicado.getAttribute('data-id');
+        const produtoSelecionado = produtosAtuais.find(p => p.codigo == idProduto);
+
+        if (produtoSelecionado) {
+            // Verifica se já existe na lista
+            const indexFavorito = listaFavoritos.findIndex(p => p.codigo == idProduto);
+            
+            if (indexFavorito !== -1) {
+                // Se já for favorito, tira da array e remove a classe
+                listaFavoritos.splice(indexFavorito, 1);
+                e.target.classList.remove('favoritado');
+            } else {
+                // Se não for, adiciona o objeto completo na array e põe a classe
+                listaFavoritos.push(produtoSelecionado);
+                e.target.classList.add('favoritado');
+            }
+            
+            salvarFavoritos(); // Sincroniza com o localStorage e o Modal
         }
     }
 });
 
+
+/* EXCLUIR FAVORITO DIRETAMENTE PELO MODAL */
+/* EXCLUIR FAVORITO DIRETAMENTE PELO MODAL */
+function configurarEventosModalFavoritosConteudo() {
+    // Atrelamos ao 'document' para blindar contra recriações do DOM do modal
+    document.addEventListener('click', (e) => {
+        // Verifica se o clique veio de dentro de um botão de remover favorito
+        const btnRemover = e.target.closest('.btn-remover-favorito');
+        
+        if (btnRemover) {
+            const cardMini = btnRemover.closest('.card-favorito-mini');
+            
+            if (cardMini) {
+                const idProduto = cardMini.getAttribute('data-id');
+                
+                // Remove o item da lista garantindo a conversão para texto (String) para evitar erros do filtro
+                listaFavoritos = listaFavoritos.filter(p => String(p.codigo) !== String(idProduto));
+                salvarFavoritos(); // Salva e re-renderiza o modal
+                
+                // Sincronização Mágica: Se o produto estiver visível no grid de fundo, apaga o coração dele!
+                const iconeCoracaoNoGrid = document.querySelector(`.card-produto[data-id="${idProduto}"] .favorite`);
+                if (iconeCoracaoNoGrid) {
+                    iconeCoracaoNoGrid.classList.remove('favoritado');
+                }
+            }
+        }
+    });
+}
+
+function favNavbar(){
+    const btnFavorite = document.getElementById('btn-favorite');
+
+    if(btnFavorite){
+        btnFavorite.classList.toggle('favoritado', listaFavoritos.length > 0);
+    }
+}
 
 /* INICIALIZAÇÃO */
 document.addEventListener('DOMContentLoaded', () => {
@@ -212,6 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
     configurarPesquisa();
     configurarModalProduto(); 
     configurarModalFavoritos();
+    configurarEventosModalFavoritosConteudo();
     configurarModalMagic();
     configurarModalMenu();
     mensagensNoTopo();

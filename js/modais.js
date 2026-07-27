@@ -32,7 +32,8 @@ export function configurarModalFavoritos() {
     btnFecharFav.addEventListener('click', () =>{
         modalFav.close();
     })
-    btnExplorar.addEventListener('click', () =>{
+    if(btnExplorar){
+        btnExplorar.addEventListener('click', () =>{
         modalFav.close();
         const gridProdutos = document.querySelector('.conteudo');
                 if (gridProdutos) {
@@ -41,6 +42,7 @@ export function configurarModalFavoritos() {
                     });
                 };
     });
+    }
 };
 
     /*ABRIR E FECHAR O MODAL DIALOG DO MAGIC */
