@@ -99,10 +99,8 @@
 }
 .imagem-principal{
     width:100%;
-    max-width:420px;
-    max-height:420px;
     aspect-ratio:1/1;
-    background:white;
+    background: transparent;
     border-radius:12px;
     overflow:hidden;
     display:flex;

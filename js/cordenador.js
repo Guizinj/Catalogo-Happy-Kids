@@ -316,6 +316,8 @@ function configurarEventosModalFavoritosConteudo() {
             sincronizarInterfaceFavoritos();
         }
     });
+
+   
 }
 
 function configurarBotaoConsultar() {
