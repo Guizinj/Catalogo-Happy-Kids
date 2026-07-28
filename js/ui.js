@@ -35,9 +35,11 @@ export function renderizarProdutos(listaDeProdutos, deveAcrescentar = false, lis
 // NOVA FUNÇÃO: Desenha os itens dentro do modal de favoritos
 export function renderizarListaFavoritos(favoritos = []) {
     const containerFavoritos = document.querySelector('.modal-favoritos-conteudo');
+    const footerFav = document.querySelector('.footer-modal-favoritos');
     
     // Se a lista estiver vazia, renderizamos o "Empty State" (ursinho)
     if (favoritos.length === 0) {
+        footerFav.style.display= 'none'
         containerFavoritos.innerHTML = `
             <div class="empty-state-favoritos" id="empty-state">
                 <div class="ilustracao-ursinho">
@@ -89,4 +91,79 @@ export function renderizarListaFavoritos(favoritos = []) {
     `;
     }).join('');
     containerFavoritos.innerHTML = htmlFavoritos;
+    footerFav.style.display = 'flex'
+}
+
+export function controlarVisibilidadeBotaoPaginacao(deveMostrar) {
+    const btnProximaPagina = document.getElementById('btn-proxima-pagina');
+    if (btnProximaPagina) {
+        btnProximaPagina.style.display = deveMostrar ? 'inline-block' : 'none';
+    }
+}
+
+export function ocultarLoader() {
+    const loader = document.getElementById('loader-overlay');
+    if (loader) {
+        loader.classList.add('oculto');
+        setTimeout(() => loader.remove(), 400);
+    }
+}
+
+export function favNavbar(quantidade) {
+    const btnFavorite = document.getElementById('btn-favorite');
+    if (btnFavorite) {
+        btnFavorite.classList.toggle('favoritado', quantidade > 0);
+    }
+}
+
+export function atualizarTotalFavoritos(listaFavoritos) {
+    const elTotal = document.getElementById('total-favoritos');
+    if (!elTotal) return;
+
+    const valorTotal = listaFavoritos.reduce((acumulador, produto) => {
+        return acumulador + (produto.preco * (produto.quantidade || 1));
+    }, 0);
+
+    elTotal.textContent = `R$ ${valorTotal.toFixed(2)}`;
+}
+
+export function mostrarToast(mensagem, tipo = 'sucesso') {
+    const toastAntigo = document.getElementById('toast-feedback');
+    if (toastAntigo) toastAntigo.remove();
+    
+    const toast = document.createElement('div');
+    toast.id = 'toast-feedback';
+    toast.className = `mostrar ${tipo}`;
+    toast.textContent = mensagem;
+
+    const dialogAberto = document.querySelector('dialog[open]');
+    if (dialogAberto) {
+        dialogAberto.appendChild(toast);
+    } else {
+        document.body.appendChild(toast);
+    }
+
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => {
+        toast.classList.remove('mostrar');
+        setTimeout(() => { if (toast.parentElement) toast.remove(); }, 300);
+    }, 500);
+}
+
+export function enviarOrcamentoWhatsApp(listaFavoritos) {
+    if (listaFavoritos.length === 0) {
+        mostrarToast('Sua lista de favoritos está vazia!', 'removido');
+        return;
+    }
+
+    let texto = "Olá! Gostaria de consultar a disponibilidade dos seguintes brinquedos: ";
+    listaFavoritos.forEach(produto => {
+        texto += ` ${produto.quantidade}x ${produto.nome} (Ref: ${produto.codigo})%0A`;
+    });
+
+    const valorTotal = listaFavoritos.reduce((acc, p) => acc + (p.preco * (p.quantidade || 1)), 0);
+    texto += `%0A*Total estimado: R$ ${valorTotal.toFixed(2)}*`;
+
+    const numeroWhatsApp = "5511999999999"; 
+    window.open(`https://wa.me/${numeroWhatsApp}?text=${texto}`, '_blank');
 }
