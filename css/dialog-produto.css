@@ -119,8 +119,8 @@
     flex-wrap:wrap;
 }
 .miniaturas img{
-    width:70px;
-    height:70px;
+    width:60px;
+    height:60px;
     object-fit:contain;
     border:2px solid transparent;
     border-radius:8px;
@@ -128,9 +128,8 @@
     transition:.2s;
 }
 .miniaturas img.ativa{
-    border-color:var(--logo-rosa);
+    border-color:var(--logo-laranja);
 }
-
 
 
 /* Coluna dos Textos */
