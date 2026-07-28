@@ -1,3 +1,5 @@
+import { configurarGestosGaleria } from './gestos.js';
+import { URL_BUCKET_PRODUTOS } from "./config.js";
 import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros } from "./api.js";
 import { renderizarListaFavoritos, renderizarProdutos, controlarVisibilidadeBotaoPaginacao, ocultarLoader, favNavbar, atualizarTotalFavoritos, mostrarToast, enviarOrcamentoWhatsApp } from "./ui.js";
 import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } from "./modais.js";
@@ -147,8 +149,36 @@ function configurarModalProduto() {
 
     function exibirDetalhes(produtoSelecionado) {
         produtoAtualNoModal = produtoSelecionado;
-        document.getElementById('modal-img').src = produtoSelecionado.imagem;
-        document.getElementById('modal-img').alt = produtoSelecionado.nome;
+        const containerMiniaturas = document.getElementById('miniaturas');
+        containerMiniaturas.innerHTML = '';
+        const imagemPrincipal = document.getElementById('modal-img');
+        const imagensDosProdutos = [];
+        let imagemAtual = 0
+        imagemPrincipal.src = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_1.webp`;
+        imagemPrincipal.alt = produtoSelecionado.nome;
+        for(let i = 1 ; i <= 3 ; i++){
+            const urlImagem = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_${i}.webp`;
+            const miniatura = document.createElement('img');
+            miniatura.src = urlImagem;
+            miniatura.alt = produtoSelecionado.nome;
+            if (i === 1) {
+                miniatura.classList.add('ativa');
+            }
+             miniatura.onload = () => {
+                imagensDosProdutos.push(urlImagem);
+                containerMiniaturas.appendChild(miniatura);
+            };
+            miniatura.addEventListener('click', () =>{
+                imagemPrincipal.src = urlImagem;
+                document.querySelectorAll('#miniaturas img').forEach(img => img.classList.remove('ativa'));
+                miniatura.classList.add('ativa');
+            })
+        };
+            
+configurarGestosGaleria(
+    imagemPrincipal,
+    imagensDosProdutos
+)
         document.getElementById('modal-nome').textContent = produtoSelecionado.nome;
         document.getElementById('modal-preco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
         

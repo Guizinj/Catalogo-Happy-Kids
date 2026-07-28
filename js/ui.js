@@ -54,7 +54,6 @@ export function renderizarListaFavoritos(favoritos = []) {
             </div>
         `;
         
-        // Como re-criamos o botão explorar no DOM, precisamos plugar o evento nele de novo
         const btnExplorar = document.getElementById('btn-explorar-favoritos');
         if (btnExplorar) {
             btnExplorar.addEventListener('click', () =>{
@@ -71,9 +70,11 @@ export function renderizarListaFavoritos(favoritos = []) {
     const htmlFavoritos = favoritos.map(produto => {
     const qtd = produto.quantidade || 1; 
 
+    const imagem = `${URL_BUCKET_PRODUTOS}${produto.codigo}_1.webp`;
+
     return `
     <div class="card-favorito-mini" data-id="${produto.codigo}">
-        <img class="img-favorito-mini" src="${produto.imagem}" alt="${produto.nome}">
+        <img class="img-favorito-mini" src="${imagem}" alt="${produto.nome}">
         
         <div class="info-favorito-mini">
             <h4>${produto.nome}</h4>
