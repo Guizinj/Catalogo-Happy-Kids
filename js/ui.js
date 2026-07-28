@@ -1,3 +1,5 @@
+import { URL_BUCKET_PRODUTOS } from "./config.js";
+
 export function renderizarProdutos(listaDeProdutos, deveAcrescentar = false, listaFavoritos = []) {
     const grid = document.getElementById('grid');
 
@@ -12,10 +14,11 @@ export function renderizarProdutos(listaDeProdutos, deveAcrescentar = false, lis
         // Verifica se o produto atual existe na array de favoritos
         const ehFavorito = listaFavoritos.some(fav => fav.codigo == produto.codigo);
         const classeFavorito = ehFavorito ? 'favoritado' : '';
+        const imagem = `${URL_BUCKET_PRODUTOS}${produto.codigo}_1.webp`;
 
         return `
             <div class="card-produto" data-id="${produto.codigo}">
-                <img class="img-card" src="${produto.imagem}" alt="${produto.nome}">
+                <img class="img-card" src="${imagem}" alt="${produto.nome}">
                 <h3>${produto.nome}</h3>
                 <p class="preco">R$ ${produto.preco.toFixed(2)}</p>
                 <button class="btn-comprar">Ver detalhes</button>
@@ -32,7 +35,7 @@ export function renderizarProdutos(listaDeProdutos, deveAcrescentar = false, lis
     }
 };
 
-// NOVA FUNÇÃO: Desenha os itens dentro do modal de favoritos
+// FUNÇÃO: Desenha os itens dentro do modal de favoritos
 export function renderizarListaFavoritos(favoritos = []) {
     const containerFavoritos = document.querySelector('.modal-favoritos-conteudo');
     const footerFav = document.querySelector('.footer-modal-favoritos');
