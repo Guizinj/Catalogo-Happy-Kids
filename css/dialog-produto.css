@@ -1,12 +1,12 @@
-/* Configurações principais do modal 100% da tela */
+/* Configurações principais do modal adaptado para barras de navegação mobile */
 .dialog-produto {
     border: none;
     outline: none;
     padding: 0;
-    width: 97vw;
-    height: 97vh;
-    max-width: 100dvw;  /* Remove os limites nativos do <dialog> */
-    max-height: 100dvh; /* Remove os limites nativos do <dialog> */
+    width: 95%;          /* Trocar vvw por % evita quebra com barras de rolagem */
+    height: 95dvh;       /* dvh se adapta perfeitamente se a barra do Safari/Chrome subir ou descer */
+    max-width: 100dvw;  
+    max-height: 100dvh; 
     top: 0;
     bottom: 0;
     left: 0;
@@ -14,6 +14,7 @@
     margin: auto; 
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
     border-radius: 20px;
+    overflow: hidden;    /* Garante que nada vaze do dialog principal */
 
     /* Animação surgindo de baixo para cima */
     opacity: 0;
@@ -51,20 +52,26 @@
     }
 }
 
-/* Estrutura Interna do Modal (Trava a rolagem global) */
+/* Estrutura Interna do Modal */
 .modal-produto-container {
     position: relative;
-    padding: 40px;
+    padding: 20px;       /* Reduzido no mobile para dar mais espaço ao conteúdo útil */
     height: 100%;
     box-sizing: border-box;
     font-family: sans-serif;
-    overflow: hidden; /* Proíbe o modal inteiro de rolar */
+    overflow: hidden; 
+}
+
+@media (min-width: 768px) {
+    .modal-produto-container {
+        padding: 40px;   /* Restaura o espaçamento original apenas no Computador */
+    }
 }
 
 .btn-fechar {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 15px;
+    right: 15px;
     background: none;
     border: none;
     font-size: 30px;
@@ -76,8 +83,8 @@
 
 .modal-produto-conteudo {
     display: flex;
-    flex-direction: column; /* Celular primeiro: empilhado */
-    gap: 20px;
+    flex-direction: column; 
+    gap: 15px;
     height: 100%;
 }
 
@@ -96,24 +103,27 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     background-color: #f7f8fa;
     border-radius: 16px;
-    padding: 20px;
+    padding: 15px;
     box-sizing: border-box;
-    max-height: 40vh; /* Evita que a imagem engula a tela no celular */
+    max-height: 40dvh;   /* Ajustado para não sufocar o texto em telas pequenas */
+    flex-shrink: 0;      /* Impede a seção da imagem de achatar a área de texto */
 }
 
 @media (min-width: 768px) {
     .modal-produto-esquerda {
-        max-height: 100%; /* No desktop ela pode usar a altura total */
+        max-height: 100%; 
+        padding: 20px;
+        gap: 16px;
     }
 }
 
 .imagem-principal {
     width: 100%;
     height: 100%;
-    max-height: 250px;
+    max-height: 200px;   /* Controle rígido para telas mobile */
     background: transparent;
     border-radius: 12px;
     overflow: hidden;
@@ -136,75 +146,105 @@
 
 .miniaturas {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     justify-content: center;
     flex-wrap: wrap;
 }
 .miniaturas img {
-    width: 50px;
-    height: 50px;
+    width: 40px;         /* Ligeiramente menor no mobile para caber sem quebrar */
+    height: 40px;
     object-fit: contain;
     border: 2px solid transparent;
     border-radius: 8px;
     cursor: pointer;
     transition: .2s;
 }
+@media (min-width: 768px) {
+    .miniaturas img {
+        width: 50px;
+        height: 50px;
+    }
+}
 .miniaturas img.ativa {
     border-color: var(--logo-laranja);
 }
 
-/* Coluna dos Textos (Garante controle rígido de altura) */
+/* Coluna dos Textos (REPARADA) */
 .modal-produto-direita {
     flex: 1.2;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden; /* Não deixa esta coluna vazar do container principal */
+    min-height: 0;       /* ESSENCIAL: Permite que elementos filhos usem rolagem em Flexbox Column */
+    overflow: hidden; 
 }
 
 #modal-nome {
-    font-size: 28px;
-    margin: 0 0 10px 0;
+    font-size: 22px;     /* Responsivo: menor no mobile */
+    margin: 0 0 5px 0;
     color: #2b2b2b;
+}
+@media (min-width: 768px) {
+    #modal-nome {
+        font-size: 28px;
+        margin: 0 0 10px 0;
+    }
 }
 
 .modal-produto-direita .preco {
-    font-size: 26px;
+    font-size: 22px;
     font-weight: bold;
     color: var(--logo-laranja);
     margin: 0;
 }
-
-.modal-parcelamento {
-    font-size: 14px;
-    color: #777;
-    margin: 4px 0 20px 0;
+@media (min-width: 768px) {
+    .modal-produto-direita .preco {
+        font-size: 26px;
+    }
 }
 
-/* O PULO DO GATO: Seção da descrição vira um flexbox isolado */
+.modal-parcelamento {
+    font-size: 13px;
+    color: #777;
+    margin: 2px 0 15px 0;
+}
+@media (min-width: 768px) {
+    .modal-parcelamento {
+        font-size: 14px;
+        margin: 4px 0 20px 0;
+    }
+}
+
+/* Seção da descrição resolvida */
 .modal-descricao-secao {
-    margin: 0 0 20px 0;
+    margin: 0 0 15px 0;
     display: flex;
     flex-direction: column;
-    flex: 1;          /* Ocupa todo o espaço restante empurrando os botões para baixo */
-    overflow: hidden; /* Impede a seção de estourar a janela */
+    flex: 1;          
+    min-height: 0;       /* ESSENCIAL: Permite o encolhimento dinâmico interno */
+    overflow: hidden; 
 }
 
 .modal-descricao-secao h4 {
-    margin: 0 0 8px 0;
+    margin: 0 0 6px 0;
     color: #444;
-    flex-shrink: 0;   /* Não deixa o título sumir/esmagar */
+    flex-shrink: 0;   
 }
 
-/* Apenas a descrição rola se o texto for gigante */
+/* A descrição agora ganha a rolagem perfeitamente */
 #modal-descricao {
     flex: 1;
     overflow-y: auto;  
-    font-size: 15px;
+    font-size: 14px;
     color: #666;
     line-height: 1.5;
     margin: 0;
-    padding-right: 5px; /* Espaço para a scrollbar não cobrir o texto */
+    padding-right: 5px;
+    -webkit-overflow-scrolling: touch; /* Suaviza a rolagem no ecossistema iOS (iPhone) */
+}
+@media (min-width: 768px) {
+    #modal-descricao {
+        font-size: 15px;
+    }
 }
 
 #modal-descricao::-webkit-scrollbar {
@@ -215,13 +255,13 @@
     border-radius: 10px;
 }
 
-/* Botões de ação (Fixos no rodapé da coluna direita) */
+/* Botões de ação robustos na base */
 .modal-acoes {
     display: flex;
     gap: 12px;
-    margin-top: auto; /* Garante que fiquem colados embaixo */
-    flex-shrink: 0;   /* Impede os botões de serem esmagados se a tela for muito baixa */
-    padding-top: 10px;
+    margin-top: auto; 
+    flex-shrink: 0;   /* Proíbe os botões de sumirem ou serem esmagados */
+    padding-top: 5px;
 }
 
 .btn-comprar-modal {
@@ -229,12 +269,17 @@
     background-color: var(--logo-laranja);
     color: white;
     border: none;
-    padding: 16px;
+    padding: 14px;
     border-radius: 12px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     transition: background 0.2s;
+}
+@media (min-width: 768px) {
+    .btn-comprar-modal {
+        padding: 16px;
+    }
 }
 
 .btn-comprar-modal:hover { 
@@ -244,13 +289,18 @@
 .btn-favoritar-modal {
     background: #f0f0f5;
     border: none;
-    padding: 0 16px;
+    padding: 0 14px;
     border-radius: 12px;
     cursor: pointer;
     display: flex;
     align-items: center;
     color: #444;
     transition: background 0.2s;
+}
+@media (min-width: 768px) {
+    .btn-favoritar-modal {
+        padding: 0 16px;
+    }
 }
 .btn-favoritar-modal:hover {
     background: #e4e4eb;
