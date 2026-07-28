@@ -182,9 +182,13 @@ function configurarModalProduto() {
         
         const parcelaModal = document.getElementById('modal-parcela');
         if(produtoSelecionado.preco > 100){
-            parcelaModal.textContent = `ou até 10x de R$ ${(produtoSelecionado.preco / 10).toFixed(2)} sem juros`;
-        } else {
-            parcelaModal.textContent = 'pagamento à vista'; 
+            parcelaModal.textContent = `ou 2x de R$ ${(produtoSelecionado.preco / 2).toFixed(2)} sem juros`;
+        } 
+        else if(produtoSelecionado.preco > 200 ){
+             parcelaModal.textContent = `ou até 3x de R$ ${(produtoSelecionado.preco / 3).toFixed(2)} sem juros`;
+        }
+        else {
+            parcelaModal.textContent = 'pagamento à vista ou em 1x no crtão'; 
         }
         
         document.getElementById('modal-descricao').textContent = produtoSelecionado.descricao || "Descrição não informada.";
