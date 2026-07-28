@@ -175,10 +175,8 @@ function configurarModalProduto() {
             })
         };
             
-configurarGestosGaleria(
-    imagemPrincipal,
-    imagensDosProdutos
-)
+        configurarGestosGaleria(imagemPrincipal, imagensDosProdutos);
+
         document.getElementById('modal-nome').textContent = produtoSelecionado.nome;
         document.getElementById('modal-preco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
         
