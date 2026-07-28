@@ -1,19 +1,19 @@
-/* Configurações principais do modal centralizado */
+/* Configurações principais do modal 100% da tela */
 .dialog-produto {
     border: none;
     outline: none;
     padding: 0;
-    width: 80%;
-    height: 80%;
-    max-width: 900px; 
-    max-height: 700px;
+    width: 99vw;
+    height: 99vh;
+    max-width: 100vw;  /* Remove os limites nativos do <dialog> */
+    max-height: 100vh; /* Remove os limites nativos do <dialog> */
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
     margin: auto; 
-    border-radius: 24px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    border-radius: 20px;
 
     /* Animação surgindo de baixo para cima */
     opacity: 0;
@@ -51,14 +51,14 @@
     }
 }
 
-/* Estrutura Interna do Modal */
+/* Estrutura Interna do Modal (Trava a rolagem global) */
 .modal-produto-container {
     position: relative;
     padding: 40px;
     height: 100%;
     box-sizing: border-box;
     font-family: sans-serif;
-    overflow-y: auto; 
+    overflow: hidden; /* Proíbe o modal inteiro de rolar */
 }
 
 .btn-fechar {
@@ -71,16 +71,23 @@
     cursor: pointer;
     color: black;
     transition: color 0.2s;
+    z-index: 10;
 }
 
 .modal-produto-conteudo {
     display: flex;
-    gap: 40px;
+    flex-direction: column; /* Celular primeiro: empilhado */
+    gap: 20px;
     height: 100%;
-    align-items: center;
 }
 
-
+/* Ajuste para telas maiores: Lado a Lado (Esquerda / Direita) */
+@media (min-width: 768px) {
+    .modal-produto-conteudo {
+        flex-direction: row;
+        gap: 40px;
+    }
+}
 
 /* Coluna da Imagem */
 .modal-produto-esquerda {
@@ -89,54 +96,70 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     gap: 16px;
-
     background-color: #f7f8fa;
     border-radius: 16px;
-    height: 100%;
     padding: 20px;
+    box-sizing: border-box;
+    max-height: 40vh; /* Evita que a imagem engula a tela no celular */
 }
-.imagem-principal{
-    width:100%;
-    aspect-ratio:1/1;
+
+@media (min-width: 768px) {
+    .modal-produto-esquerda {
+        max-height: 100%; /* No desktop ela pode usar a altura total */
+    }
+}
+
+.imagem-principal {
+    width: 100%;
+    height: 100%;
+    max-height: 250px;
     background: transparent;
-    border-radius:12px;
-    overflow:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.imagem-principal img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
+@media (min-width: 768px) {
+    .imagem-principal {
+        max-height: 100%;
+        aspect-ratio: 1/1;
+    }
 }
-.miniaturas{
-    display:flex;
+
+.imagem-principal img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.miniaturas {
+    display: flex;
     gap: 10px;
-    justify-content:center;
-    flex-wrap:wrap;
+    justify-content: center;
+    flex-wrap: wrap;
 }
-.miniaturas img{
-    width:60px;
-    height:60px;
-    object-fit:contain;
-    border:2px solid transparent;
-    border-radius:8px;
-    cursor:pointer;
-    transition:.2s;
+.miniaturas img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: .2s;
 }
-.miniaturas img.ativa{
-    border-color:var(--logo-laranja);
+.miniaturas img.ativa {
+    border-color: var(--logo-laranja);
 }
 
-
-/* Coluna dos Textos */
+/* Coluna dos Textos (Garante controle rígido de altura) */
 .modal-produto-direita {
     flex: 1.2;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    overflow: hidden; /* Não deixa esta coluna vazar do container principal */
 }
 
 #modal-nome {
@@ -158,19 +181,32 @@
     margin: 4px 0 20px 0;
 }
 
+/* O PULO DO GATO: Seção da descrição vira um flexbox isolado */
+.modal-descricao-secao {
+    margin: 0 0 20px 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;          /* Ocupa todo o espaço restante empurrando os botões para baixo */
+    overflow: hidden; /* Impede a seção de estourar a janela */
+}
+
 .modal-descricao-secao h4 {
     margin: 0 0 8px 0;
     color: #444;
+    flex-shrink: 0;   /* Não deixa o título sumir/esmagar */
 }
 
+/* Apenas a descrição rola se o texto for gigante */
 #modal-descricao {
-    overflow-y: auto;
-    max-height: 100px;
+    flex: 1;
+    overflow-y: auto;  
     font-size: 15px;
     color: #666;
     line-height: 1.5;
-    margin: 0 0 30px 0;
+    margin: 0;
+    padding-right: 5px; /* Espaço para a scrollbar não cobrir o texto */
 }
+
 #modal-descricao::-webkit-scrollbar {
     width: 6px;
 }
@@ -179,11 +215,13 @@
     border-radius: 10px;
 }
 
-/* Botões de ação */
+/* Botões de ação (Fixos no rodapé da coluna direita) */
 .modal-acoes {
     display: flex;
     gap: 12px;
-    margin-top: auto; 
+    margin-top: auto; /* Garante que fiquem colados embaixo */
+    flex-shrink: 0;   /* Impede os botões de serem esmagados se a tela for muito baixa */
+    padding-top: 10px;
 }
 
 .btn-comprar-modal {
@@ -200,7 +238,7 @@
 }
 
 .btn-comprar-modal:hover { 
-    background-color:#f38e00f3;
+    background-color: #f38e00f3;
 }
 
 .btn-favoritar-modal {
@@ -212,12 +250,8 @@
     display: flex;
     align-items: center;
     color: #444;
+    transition: background 0.2s;
 }
-
-/* Responsividade para Celular */
-@media (max-width: 768px) {
-    .dialog-produto { width: 95%; height: 90%; }
-    .modal-produto-conteudo { flex-direction: column; gap: 20px; }
-    .modal-produto-container { padding: 20px; }
-    .modal-produto-esquerda { height: 250px; width: 100%; }
+.btn-favoritar-modal:hover {
+    background: #e4e4eb;
 }
