@@ -3,8 +3,8 @@
     border: none;
     outline: none;
     padding: 0;
-    width: 99vw;
-    height: 99vh;
+    width: 97vw;
+    height: 97vh;
     max-width: 100dvw;  /* Remove os limites nativos do <dialog> */
     max-height: 100dvh; /* Remove os limites nativos do <dialog> */
     top: 0;
