@@ -9,7 +9,7 @@ import { carregarFavoritos, obterFavoritos, verificarFavorito, buscarFavorito, a
 /* ESTADOS GLOBAIS DA PÁGINA ATUAL */
 let produtosAtuais = [];
 let paginaAtual = 0;
-const limitePorPagina = 20;
+const limitePorPagina = 14;
 
 /* PONTE DE COMUNICAÇÃO: DADOS -> UI */
 function sincronizarInterfaceFavoritos() {

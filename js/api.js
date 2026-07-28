@@ -1,6 +1,6 @@
 import { supabase } from './config.js';
 
-export async function buscarTodosOsProdutos(pagina = 0, limite = 20) {
+export async function buscarTodosOsProdutos(pagina = 0, limite = 14) {
     
     const inicio = pagina * limite;
     const fim = inicio + limite - 1;
@@ -10,7 +10,7 @@ export async function buscarTodosOsProdutos(pagina = 0, limite = 20) {
             .from('produtos')
             .select('*')
             .eq('estoque', true)
-            .order('codigo', { ascending: false })
+            .order('codigo', { ascending: true })
             .range(inicio, fim);
 
         if (error) {
