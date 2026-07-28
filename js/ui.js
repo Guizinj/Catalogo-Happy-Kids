@@ -164,6 +164,6 @@ export function enviarOrcamentoWhatsApp(listaFavoritos) {
     const valorTotal = listaFavoritos.reduce((acc, p) => acc + (p.preco * (p.quantidade || 1)), 0);
     texto += `%0A*Total estimado: R$ ${valorTotal.toFixed(2)}*`;
 
-    const numeroWhatsApp = "5511999999999"; 
+    const numeroWhatsApp = "558130463443"; 
     window.open(`https://wa.me/${numeroWhatsApp}?text=${texto}`, '_blank');
 }
