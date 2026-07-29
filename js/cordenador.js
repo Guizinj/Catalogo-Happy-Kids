@@ -1,7 +1,6 @@
-import { configurarGestosGaleria } from './gestos.js';
 import { URL_BUCKET_PRODUTOS } from "./config.js";
 import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros } from "./api.js";
-import { renderizarListaFavoritos, renderizarProdutos, controlarVisibilidadeBotaoPaginacao, ocultarLoader, favNavbar, atualizarTotalFavoritos, mostrarToast, enviarOrcamentoWhatsApp } from "./ui.js";
+import { renderizarListaFavoritos, renderizarProdutos, controlarVisibilidadeBotaoPaginacao, ocultarLoader, favNavbar, atualizarTotalFavoritos, mostrarToast, enviarOrcamentoWhatsApp, atualizarModalProdutoUI } from "./ui.js";
 import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } from "./modais.js";
 import { mensagensNoTopo } from "./banner.js";
 
@@ -131,69 +130,10 @@ function configurarModalProduto() {
     const btnFavoritarModal = document.getElementById('btn-favoritar-modal');
     let produtoAtualNoModal = null;
 
-    function atualizarTextoBotaoModal() {
-        if (!produtoAtualNoModal || !btnFavoritarModal) return;
-        
-        // Verifica no storage se o item está salvo
-        const jaEhFavorito = verificarFavorito(produtoAtualNoModal.codigo);
-        
-        if (jaEhFavorito) {
-            btnFavoritarModal.textContent = "Remover dos Favoritos";
-            btnFavoritarModal.style.backgroundColor = "var(--logo-rosa)";
-            btnFavoritarModal.style.color = "#ffffff";
-        } else {
-            btnFavoritarModal.textContent = "Adicionar aos Favoritos";
-            btnFavoritarModal.style.backgroundColor = ""; 
-            btnFavoritarModal.style.color = "";
-        }
-    }
-
     function exibirDetalhes(produtoSelecionado) {
         produtoAtualNoModal = produtoSelecionado;
-        const containerMiniaturas = document.getElementById('miniaturas');
-        containerMiniaturas.innerHTML = '';
-        const imagemPrincipal = document.getElementById('modal-img');
-        const imagensDosProdutos = [];
-        let imagemAtual = 0
-        imagemPrincipal.src = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_1.webp`;
-        imagemPrincipal.alt = produtoSelecionado.nome;
-        for(let i = 1 ; i <= 3 ; i++){
-            const urlImagem = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_${i}.webp`;
-            const miniatura = document.createElement('img');
-            miniatura.src = urlImagem;
-            miniatura.alt = produtoSelecionado.nome;
-            if (i === 1) {
-                miniatura.classList.add('ativa');
-            }
-             miniatura.onload = () => {
-                imagensDosProdutos.push(urlImagem);
-                containerMiniaturas.appendChild(miniatura);
-            };
-            miniatura.addEventListener('click', () =>{
-                imagemPrincipal.src = urlImagem;
-                document.querySelectorAll('#miniaturas img').forEach(img => img.classList.remove('ativa'));
-                miniatura.classList.add('ativa');
-            })
-        };
-            
-        configurarGestosGaleria(imagemPrincipal, imagensDosProdutos);
-
-        document.getElementById('modal-nome').textContent = produtoSelecionado.nome;
-        document.getElementById('modal-preco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
-        
-        const parcelaModal = document.getElementById('modal-parcela');
-        if(produtoSelecionado.preco > 100){
-            parcelaModal.textContent = `ou 2x de R$ ${(produtoSelecionado.preco / 2).toFixed(2)} sem juros`;
-        } 
-        else if(produtoSelecionado.preco > 200 ){
-             parcelaModal.textContent = `ou até 3x de R$ ${(produtoSelecionado.preco / 3).toFixed(2)} sem juros`;
-        }
-        else {
-            parcelaModal.textContent = 'pagamento à vista ou em 1x no crtão'; 
-        }
-        
-        document.getElementById('modal-descricao').textContent = produtoSelecionado.descricao || "Descrição não informada.";
-        atualizarTextoBotaoModal();
+        // Chama a função visual isolada no ui.js
+        atualizarModalProdutoUI(produtoSelecionado, verificarFavorito);
         modalProduto.showModal();
     }
 
@@ -224,12 +164,8 @@ function configurarModalProduto() {
             const iconeCoracaoNoGrid = document.querySelector(`.card-produto[data-id="${produtoAtualNoModal.codigo}"] .favorite`);
 
             if (foiAdicionado) {
-                 setTimeout(()=>{
-                    modalProduto.close();
-                }, 500);
-                 setTimeout(()=>{
-                    modalFav.showModal();
-                }, 500)
+                 setTimeout(() => { modalProduto.close(); }, 500);
+                 setTimeout(() => { modalFav.showModal(); }, 500);
                 if (iconeCoracaoNoGrid) iconeCoracaoNoGrid.classList.add('favoritado');
                 mostrarToast('Item adicionado aos favoritos', 'sucesso');
             } else {
@@ -238,8 +174,8 @@ function configurarModalProduto() {
             }
             
             sincronizarInterfaceFavoritos(); 
-            atualizarTextoBotaoModal();
-            
+            // Atualiza o estado visual do botão após o clique utilizando a função do ui.js
+            atualizarModalProdutoUI(produtoAtualNoModal, verificarFavorito);
         });
     }
 
@@ -247,48 +183,35 @@ function configurarModalProduto() {
 }
 
 /* EVENTOS DE FAVORITOS (GRID E CARRINHO) */
-const grid = document.getElementById('grid');
-grid.addEventListener('click', (e) => {
-    if (e.target.classList.contains('favorite')) {
-        const modalFav = document.getElementById('dialog-favorite');
-        const idProduto = e.target.closest('.card-produto').getAttribute('data-id');
-        const produtoSelecionado = produtosAtuais.find(p => p.codigo == idProduto);
+function configurarCliqueNoGrid() {
+    const grid = document.getElementById('grid');
+    if (!grid) return;
 
-        if (produtoSelecionado) {
-            const { foiAdicionado } = alternarFavorito(produtoSelecionado);
-            
-            if (foiAdicionado) {
-                modalFav.showModal();
-                e.target.classList.add('favoritado');
-                mostrarToast('Item adicionado aos favoritos', 'sucesso');
-            } else {
-                e.target.classList.remove('favoritado');
-                mostrarToast('Item removido dos favoritos', 'removido');
+    grid.addEventListener('click', (e) => {
+        if (e.target.classList.contains('favorite')) {
+            const modalFav = document.getElementById('dialog-favorite');
+            const idProduto = e.target.closest('.card-produto').getAttribute('data-id');
+            const produtoSelecionado = produtosAtuais.find(p => p.codigo == idProduto);
+
+            if (produtoSelecionado) {
+                const { foiAdicionado } = alternarFavorito(produtoSelecionado);
+                
+                if (foiAdicionado) {
+                    modalFav.showModal();
+                    e.target.classList.add('favoritado');
+                    mostrarToast('Item adicionado aos favoritos', 'sucesso');
+                } else {
+                    e.target.classList.remove('favoritado');
+                    mostrarToast('Item removido dos favoritos', 'removido');
+                }
+                
+                sincronizarInterfaceFavoritos();
             }
-            
-            sincronizarInterfaceFavoritos();
-            
         }
-    }
-});
+    });
+}
 
-function configurarEventosModalFavoritosConteudo() {
-    if (!document.getElementById('modal-confirmacao')) {
-        const dialogHTML = `
-            <dialog id="modal-confirmacao">
-                <div class="conteudo-confirmacao">
-                    <h3>Remover Favorito</h3>
-                    <p>Deseja realmente remover este brinquedo dos seus favoritos?</p>
-                    <div class="botoes-confirmacao">
-                        <button id="btn-cancelar-remocao">Cancelar</button>
-                        <button id="btn-confirmar-remocao">Sim, remover</button>
-                    </div>
-                </div>
-            </dialog>
-        `;
-        document.body.insertAdjacentHTML('beforeend', dialogHTML);
-    }
-
+    function configurarEventosModalFavoritosConteudo() {
     const modalConfirmacao = document.getElementById('modal-confirmacao');
     let idProdutoPendente = null;
 
@@ -331,8 +254,6 @@ function configurarEventosModalFavoritosConteudo() {
             sincronizarInterfaceFavoritos();
         }
     });
-
-   
 }
 
 function configurarBotaoConsultar() {
@@ -346,6 +267,7 @@ function configurarBotaoConsultar() {
 document.addEventListener('DOMContentLoaded', () => {
     iniciarLoja();
     configurarPesquisa();
+    configurarCliqueNoGrid();
     configurarModalProduto(); 
     configurarModalFavoritos();
     configurarEventosModalFavoritosConteudo();

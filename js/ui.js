@@ -1,4 +1,6 @@
 import { URL_BUCKET_PRODUTOS } from "./config.js";
+import { configurarGestosGaleria } from './gestos.js';
+
 
 export function renderizarProdutos(listaDeProdutos, deveAcrescentar = false, listaFavoritos = []) {
     const grid = document.getElementById('grid');
@@ -170,4 +172,66 @@ export function enviarOrcamentoWhatsApp(listaFavoritos) {
 
     const numeroWhatsApp = "558130463443"; 
     window.open(`https://wa.me/${numeroWhatsApp}?text=${texto}`, '_blank');
+}
+
+// No final do arquivo ui.js
+
+export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
+    const imagemPrincipal = document.getElementById('modal-img');
+    const containerMiniaturas = document.getElementById('miniaturas');
+    const btnFavoritarModal = document.getElementById('btn-favoritar-modal');
+    const parcelaModal = document.getElementById('modal-parcela');
+    
+    containerMiniaturas.innerHTML = '';
+    const imagensDosProdutos = [];
+    
+    imagemPrincipal.src = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_1.webp`;
+    imagemPrincipal.alt = produtoSelecionado.nome;
+    
+    for (let i = 1; i <= 3; i++) {
+        const urlImagem = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_${i}.webp`;
+        const miniatura = document.createElement('img');
+        miniatura.src = urlImagem;
+        miniatura.alt = produtoSelecionado.nome;
+        if (i === 1) miniatura.classList.add('ativa');
+        
+        miniatura.onload = () => {
+            imagensDosProdutos.push(urlImagem);
+            containerMiniaturas.appendChild(miniatura);
+        };
+        
+        miniatura.addEventListener('click', () => {
+            imagemPrincipal.src = urlImagem;
+            document.querySelectorAll('#miniaturas img').forEach(img => img.classList.remove('ativa'));
+            miniatura.classList.add('ativa');
+        });
+    }
+    
+    configurarGestosGaleria(imagemPrincipal, imagensDosProdutos);
+
+    document.getElementById('modal-nome').textContent = produtoSelecionado.nome;
+    document.getElementById('modal-preco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
+    
+    // CORREÇÃO LÓGICA: Inverti a ordem para que valores acima de R$ 200 entrem na condição correta
+    if (produtoSelecionado.preco > 200) {
+        parcelaModal.textContent = `ou até 3x de R$ ${(produtoSelecionado.preco / 3).toFixed(2)} sem juros`;
+    } else if (produtoSelecionado.preco > 100) {
+        parcelaModal.textContent = `ou 2x de R$ ${(produtoSelecionado.preco / 2).toFixed(2)} sem juros`;
+    } else {
+        parcelaModal.textContent = 'pagamento à vista ou em 1x no cartão'; 
+    }
+    
+    document.getElementById('modal-descricao').textContent = produtoSelecionado.descricao || "Descrição não informada.";
+    
+    // Atualização visual do botão de favoritos interno do modal
+    const jaEhFavorito = verificarFavorito(produtoSelecionado.codigo);
+    if (jaEhFavorito) {
+        btnFavoritarModal.textContent = "Remover dos Favoritos";
+        btnFavoritarModal.style.backgroundColor = "var(--logo-rosa)";
+        btnFavoritarModal.style.color = "#ffffff";
+    } else {
+        btnFavoritarModal.textContent = "Adicionar aos Favoritos";
+        btnFavoritarModal.style.backgroundColor = ""; 
+        btnFavoritarModal.style.color = "";
+    }
 }
