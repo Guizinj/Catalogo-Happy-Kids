@@ -6,7 +6,7 @@
     border-radius: 20px;
 
     width: 90%;
-    height: 60%;
+    height: 70%;
     max-height: 80vh; /* Garante que ele respeite a trava de altura da tela */
     max-width: 550px;  /* Um limite elegante para não ficar excessivamente largo no desktop */
 
