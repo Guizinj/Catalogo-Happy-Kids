@@ -5,61 +5,103 @@ import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } f
 import { mensagensNoTopo } from "./banner.js";
 import { carregarFavoritos, obterFavoritos, verificarFavorito, buscarFavorito, alternarFavorito, removerFavorito, alterarQuantidade, obterQuantidade } from "./storage.js";
 
+// Este arquivo é o "maestro" da aplicação: importa dados (api.js), estado (storage.js)
+// e visual (ui.js) e conecta tudo através de eventos de clique/submit do usuário.
+// Nenhuma manipulação direta de HTML deveria acontecer aqui — isso é papel do ui.js.
+
+
 /* ESTADOS GLOBAIS DA PÁGINA ATUAL */
+// Guardam o que está sendo exibido no grid AGORA, pra outras funções (como abrir
+// o modal de detalhes) saberem qual produto foi clicado sem precisar buscar de novo na API.
 let produtosAtuais = [];
 let paginaAtual = 0;
 const limitePorPagina = 14;
 
-/* PONTE DE COMUNICAÇÃO: DADOS -> UI */
+
+/**
+ * Ponte de comunicação: pega o estado atual de favoritos (storage.js)
+ * e manda atualizar TUDO que depende dele na tela (ui.js).
+ *
+ * Chamada sempre que a lista de favoritos muda: adicionar, remover, alterar quantidade.
+ * Chamadores: configurarModalProduto(), configurarCliqueNoGrid(),
+ * configurarEventosModalFavoritosConteudo() (várias vezes neste arquivo)
+ */
 function sincronizarInterfaceFavoritos() {
-    const lista = obterFavoritos();
-    renderizarListaFavoritos(lista);
-    favNavbar(lista.length);
-    atualizarTotalFavoritos(lista);
+    const lista = obterFavoritos(); // vem de storage.js
+
+    renderizarListaFavoritos(lista);     // desenha os mini-cards no modal de favoritos (ui.js)
+    favNavbar(lista.length);             // acende o coração da navbar se lista.length > 0 (ui.js)
+    atualizarTotalFavoritos(lista);      // calcula e escreve o preço total (ui.js)
 }
 
-/* ORQUESTRAÇÃO DE INICIALIZAÇÃO */
+
+/**
+ * Orquestra o carregamento inicial da loja: busca a primeira página de produtos,
+ * carrega os favoritos salvos, renderiza tudo e esconde o loader.
+ *
+ * Chamada por: o próprio arquivo, no listener de DOMContentLoaded (final do arquivo)
+ * Busca dados em: api.js → buscarTodosOsProdutos()
+ * Manda desenhar em: ui.js → renderizarProdutos(), ocultarLoader(), etc.
+ */
 async function iniciarLoja() {
     try {
         paginaAtual = 0;
+
+        // Promise.all roda as duas promises AO MESMO TEMPO e só continua quando
+        // AMBAS terminarem. Aqui é um truque de UX: garante que o loader fique
+        // visível por pelo menos 100ms, mesmo se a busca no Supabase for instantânea
+        // (evita um "piscar" feio na tela).
         const [produtos] = await Promise.all([
             buscarTodosOsProdutos(paginaAtual, limitePorPagina),
-            new Promise(resolve => setTimeout(resolve, 100)) 
+            new Promise(resolve => setTimeout(resolve, 100))
         ]);
 
         produtosAtuais = produtos;
-        
-        // Puxa a memória local
+
+        // Puxa a memória local (localStorage → variável em storage.js)
         carregarFavoritos();
-        
+
         // Renderiza tudo injetando os favoritos para a verificação de corações ativos
         renderizarProdutos(produtosAtuais, false, obterFavoritos());
         sincronizarInterfaceFavoritos();
-        
+
         controlarVisibilidadeBotaoPaginacao(true);
         ocultarLoader();
     } catch (erro) {
         console.error('Falha ao iniciar loja', erro);
-        ocultarLoader();
+        ocultarLoader(); // mesmo com erro, tira o loader pra não travar o usuário
     }
 }
 
+
+/**
+ * Busca a próxima página de produtos e ACRESCENTA ao grid existente (não substitui).
+ *
+ * Chamada por: configurarProximaPagina() → clique em #btn-proxima-pagina
+ * Busca dados em: api.js → buscarTodosOsProdutos()
+ */
 async function carregarProximaPagina() {
     try {
         paginaAtual++;
         const novosProdutos = await buscarTodosOsProdutos(paginaAtual, limitePorPagina);
 
         if (novosProdutos.length > 0) {
+            // .concat() junta os arrays sem alterar o original — mantém produtosAtuais
+            // sempre com TODOS os produtos já carregados (necessário pra abrir o modal depois)
             produtosAtuais = produtosAtuais.concat(novosProdutos);
-            renderizarProdutos(novosProdutos, true, obterFavoritos());
+            renderizarProdutos(novosProdutos, true, obterFavoritos()); // true = acrescentar
         } else {
-            controlarVisibilidadeBotaoPaginacao(false);
+            controlarVisibilidadeBotaoPaginacao(false); // acabaram os produtos, esconde o botão
         }
     } catch (erro) {
         console.error('Falha ao carregar próxima página', erro);
     }
 }
 
+
+/**
+ * Liga o clique do botão "próxima página" à função que busca mais produtos.
+ */
 function configurarProximaPagina() {
     const btnProximaPagina = document.getElementById('btn-proxima-pagina');
     if (btnProximaPagina) {
@@ -67,46 +109,65 @@ function configurarProximaPagina() {
     }
 }
 
+
 /* FILTROS E BUSCAS */
+
+/**
+ * Configura o formulário de busca por nome (a lupa).
+ *
+ * Busca dados em: api.js → buscarProdutosPorNome()
+ * Manda desenhar em: ui.js → renderizarProdutos()
+ */
 function configurarPesquisa() {
     const campoLupa = document.getElementById('campo-lupa');
     const modalMenu = document.getElementById('modal-menu');
     const formPesquisa = document.getElementById('form-pesquisa');
 
     formPesquisa.addEventListener('submit', async (evento) => {
-        evento.preventDefault(); 
-        const valorCampoLupa = campoLupa.value.trim();
-        
+        evento.preventDefault(); // impede o formulário de recarregar a página (comportamento padrão do HTML)
+        const valorCampoLupa = campoLupa.value.trim(); // .trim() remove espaços em branco do início/fim
+
         if (valorCampoLupa === '') {
             campoLupa.placeholder = 'Digite algo para buscar!';
             campoLupa.focus();
-            return; 
+            return;
         }
 
         produtosAtuais = await buscarProdutosPorNome(valorCampoLupa);
-        renderizarProdutos(produtosAtuais, false, obterFavoritos());
-        controlarVisibilidadeBotaoPaginacao(false);
+        renderizarProdutos(produtosAtuais, false, obterFavoritos()); // false = substitui o grid inteiro
+        controlarVisibilidadeBotaoPaginacao(false); // busca não tem paginação
 
-        campoLupa.blur();
-        modalMenu.close();
-        
+        campoLupa.blur();   // tira o foco do campo (fecha teclado no celular)
+        modalMenu.close();  // fecha o modal do menu onde fica a busca
+
         setTimeout(() => {
             const gridProdutos = document.querySelector('.conteudo');
             if (gridProdutos) gridProdutos.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 1000); 
+        }, 1000);
     });
 }
 
+
+/**
+ * Configura o formulário do filtro "Magic" (idade + gênero).
+ *
+ * Busca dados em: api.js → buscarProdutosPorFiltros()
+ * Manda desenhar em: ui.js → renderizarProdutos()
+ */
 function configurarFiltroMagico() {
     const formFiltro = document.getElementById('formFiltro');
     const modalMagic = document.getElementById('meuModal');
 
     formFiltro.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        // FormData lê todos os campos (input/select) de dentro do <form> de uma vez,
+        // sem precisar pegar cada um por getElementById. dadosForm.get('nome_do_campo')
+        // retorna o valor daquele input específico (baseado no atributo "name" do HTML).
         const dadosForm = new FormData(formFiltro);
-        
+
         const filtros = {
-            idade: Number(dadosForm.get('idade')),
+            idade: Number(dadosForm.get('idade')),   // Number() converte a string do input pra número
             genero: dadosForm.get('para_quem'),
         };
 
@@ -120,29 +181,47 @@ function configurarFiltroMagico() {
     });
 }
 
+
 /* EVENTOS DE MODAL DE PRODUTO */
+
+/**
+ * Configura a abertura do modal de detalhes do produto e o botão de favoritar
+ * que fica DENTRO desse modal.
+ *
+ * Usa: storage.js → verificarFavorito(), buscarFavorito(), alternarFavorito()
+ * Manda desenhar em: ui.js → atualizarModalProdutoUI(), mostrarToast()
+ */
 function configurarModalProduto() {
     const modalFav = document.getElementById('dialog-favorite');
     const modalProduto = document.getElementById('modal-produto');
     const btnFecharModal = document.getElementById('btn-fechar-modal');
     const btnFavoritarModal = document.getElementById('btn-favoritar-modal');
-    let produtoAtualNoModal = null;
+    let produtoAtualNoModal = null; // guarda qual produto está aberto no modal agora
 
     function exibirDetalhes(produtoSelecionado) {
         produtoAtualNoModal = produtoSelecionado;
-        // Chama a função visual isolada no ui.js
+        // Chama a função visual isolada no ui.js, passando verificarFavorito como
+        // callback (função repassada como argumento) pra ui.js poder checar o
+        // estado de favorito sem precisar importar storage.js diretamente
         atualizarModalProdutoUI(produtoSelecionado, verificarFavorito);
         modalProduto.showModal();
     }
 
-    // Abertura do Modal via Delegação de Eventos
+    // Abertura do Modal via Delegação de Eventos: em vez de colocar um listener
+    // em CADA card (que nem existem todos ainda, já que a página carrega aos poucos),
+    // colocamos UM listener no document inteiro e usamos .closest() pra descobrir
+    // se o clique aconteceu dentro de um card. Isso funciona até com cards criados depois.
     document.addEventListener('click', (evento) => {
         const cardClicado = evento.target.closest('.card-produto');
         if (cardClicado) {
-            if (evento.target.classList.contains('favorite') || evento.target.closest('.btn-header')) return; 
+            // .contains() aqui checa se a classe 'favorite' está entre as classes do
+            // elemento clicado — usado pra NÃO abrir o modal quando o clique foi no coração
+            if (evento.target.classList.contains('favorite') || evento.target.closest('.btn-header')) return;
+
+            // == (e não ===) porque data-id vem como string do HTML e p.codigo pode ser number
             const produtoSelecionado = produtosAtuais.find(p => p.codigo == cardClicado.getAttribute('data-id'));
             if (produtoSelecionado) exibirDetalhes(produtoSelecionado);
-            return; 
+            return;
         }
 
         const miniCardClicado = evento.target.closest('.card-favorito-mini');
@@ -153,12 +232,12 @@ function configurarModalProduto() {
         }
     });
 
-    // Ação do Botão Interno
+    // Ação do Botão Interno (favoritar/desfavoritar de dentro do modal de detalhes)
     if (btnFavoritarModal) {
         btnFavoritarModal.addEventListener('click', () => {
             if (!produtoAtualNoModal) return;
-            
-            const { foiAdicionado } = alternarFavorito(produtoAtualNoModal);
+
+            const { foiAdicionado } = alternarFavorito(produtoAtualNoModal); // storage.js
             const iconeCoracaoNoGrid = document.querySelector(`.card-produto[data-id="${produtoAtualNoModal.codigo}"] .favorite`);
 
             if (foiAdicionado) {
@@ -170,8 +249,8 @@ function configurarModalProduto() {
                 if (iconeCoracaoNoGrid) iconeCoracaoNoGrid.classList.remove('favoritado');
                 mostrarToast('Item removido dos favoritos', 'removido');
             }
-            
-            sincronizarInterfaceFavoritos(); 
+
+            sincronizarInterfaceFavoritos();
             // Atualiza o estado visual do botão após o clique utilizando a função do ui.js
             atualizarModalProdutoUI(produtoAtualNoModal, verificarFavorito);
         });
@@ -180,20 +259,31 @@ function configurarModalProduto() {
     btnFecharModal.addEventListener('click', () => modalProduto.close());
 }
 
+
 /* EVENTOS DE FAVORITOS (GRID E CARRINHO) */
+
+/**
+ * Configura o clique no coração de favoritar DIRETO no grid de produtos (sem abrir modal).
+ * Usa delegação de evento no #grid, igual à ideia explicada acima.
+ */
 function configurarCliqueNoGrid() {
     const grid = document.getElementById('grid');
     if (!grid) return;
 
     grid.addEventListener('click', (e) => {
+        // .classList.contains() checa se o elemento clicado tem a classe 'favorite'
+        // (ou seja, se o clique foi exatamente no ícone de coração)
         if (e.target.classList.contains('favorite')) {
             const modalFav = document.getElementById('dialog-favorite');
             const idProduto = e.target.closest('.card-produto').getAttribute('data-id');
+
+            // .find() percorre o array e retorna o PRIMEIRO item que bate com a condição
+            // (ou undefined se nenhum bater) — diferente de .some(), que só responde true/false
             const produtoSelecionado = produtosAtuais.find(p => p.codigo == idProduto);
 
             if (produtoSelecionado) {
                 const { foiAdicionado } = alternarFavorito(produtoSelecionado);
-                
+
                 if (foiAdicionado) {
                     modalFav.showModal();
                     e.target.classList.add('favoritado');
@@ -202,16 +292,23 @@ function configurarCliqueNoGrid() {
                     e.target.classList.remove('favoritado');
                     mostrarToast('Item removido dos favoritos', 'removido');
                 }
-                
+
                 sincronizarInterfaceFavoritos();
             }
         }
     });
 }
 
-    function configurarEventosModalFavoritosConteudo() {
+
+/**
+ * Configura os controles de quantidade (+/-) e a confirmação de remoção
+ * dentro do modal de favoritos.
+ *
+ * Usa: storage.js → obterQuantidade(), alterarQuantidade(), removerFavorito()
+ */
+function configurarEventosModalFavoritosConteudo() {
     const modalConfirmacao = document.getElementById('modal-confirmacao');
-    let idProdutoPendente = null;
+    let idProdutoPendente = null; // guarda o produto aguardando confirmação de remoção
 
     document.getElementById('btn-cancelar-remocao').addEventListener('click', () => {
         idProdutoPendente = null;
@@ -230,16 +327,21 @@ function configurarCliqueNoGrid() {
         modalConfirmacao.close();
     });
 
+    // Delegação de evento de novo: os mini-cards de favorito são recriados toda hora
+    // (renderizarListaFavoritos reescreve o innerHTML), então um listener fixo em
+    // cada botão não funcionaria — por isso o listener fica no document
     document.addEventListener('click', (e) => {
         const btnMenos = e.target.closest('.btn-menos');
         if (btnMenos) {
             const idProduto = btnMenos.closest('.card-favorito-mini').getAttribute('data-id');
             const qtdAtual = obterQuantidade(idProduto);
-            
+
             if (qtdAtual > 1) {
                 alterarQuantidade(idProduto, 'subtrair');
                 sincronizarInterfaceFavoritos();
             } else if (qtdAtual === 1) {
+                // Se a quantidade é 1 e o usuário clica em "-", em vez de zerar direto,
+                // abre um modal pedindo confirmação (evita remoção acidental)
                 idProdutoPendente = idProduto;
                 modalConfirmacao.showModal();
             }
@@ -254,6 +356,10 @@ function configurarCliqueNoGrid() {
     });
 }
 
+
+/**
+ * Liga o clique do botão "Consultar no WhatsApp" à função que monta e abre a mensagem.
+ */
 function configurarBotaoConsultar() {
     const btnConsultar = document.getElementById('btn-consultar-favoritos');
     if (btnConsultar) {
@@ -261,17 +367,21 @@ function configurarBotaoConsultar() {
     }
 }
 
+
 /* INICIALIZAÇÃO GERAL */
+// DOMContentLoaded dispara quando o HTML terminou de ser carregado e montado
+// (antes de imagens/CSS externos terminarem, o que é mais rápido que 'load').
+// É aqui que TODAS as funções de configuração ligam seus eventos, e a loja começa a carregar.
 document.addEventListener('DOMContentLoaded', () => {
     iniciarLoja();
     configurarPesquisa();
     configurarCliqueNoGrid();
-    configurarModalProduto(); 
-    configurarModalFavoritos();
+    configurarModalProduto();
+    configurarModalFavoritos();               // vem de modais.js
     configurarEventosModalFavoritosConteudo();
-    configurarModalMagic();
-    configurarModalMenu();
-    mensagensNoTopo();
+    configurarModalMagic();                    // vem de modais.js
+    configurarModalMenu();                     // vem de modais.js
+    mensagensNoTopo();                         // vem de banner.js
     configurarFiltroMagico();
     configurarProximaPagina();
     configurarBotaoConsultar();

@@ -1,4 +1,3 @@
-  
      /*ABRIR E FECHAR O MODAL DIALOG DO MENU */
 export function configurarModalMenu() {
     const modalMenu = document.getElementById('modal-menu');
