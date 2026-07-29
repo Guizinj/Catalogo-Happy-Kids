@@ -162,16 +162,28 @@ export function enviarOrcamentoWhatsApp(listaFavoritos) {
         return;
     }
 
-    let texto = "Olá! Gostaria de consultar a disponibilidade dos seguintes brinquedos: ";
+    // 1. Iniciamos o texto usando \n para pular linha no JavaScript de forma limpa
+    let texto = "Olá! Gostaria de consultar a disponibilidade dos seguintes brinquedos:\n";
+
     listaFavoritos.forEach(produto => {
-        texto += ` ${produto.quantidade}x ${produto.nome} (Ref: ${produto.codigo})%0A`;
+        // Criamos uma segurança para a quantidade caso ela venha zerada/nula
+        const qtd = produto.quantidade || 1;
+        
+        // Adicionei um pontinho (•) para listar os itens de forma mais elegante
+        texto += `\n• ${qtd}x ${produto.nome} (Ref: ${produto.codigo})`;
     });
 
     const valorTotal = listaFavoritos.reduce((acc, p) => acc + (p.preco * (p.quantidade || 1)), 0);
-    texto += `%0A*Total estimado: R$ ${valorTotal.toFixed(2)}*`;
+    
+    // Adicionamos duas quebras de linha antes do total para separá-lo da lista
+    texto += `\n\n*Total estimado: R$ ${valorTotal.toFixed(2)}*`;
 
     const numeroWhatsApp = "558130463443"; 
-    window.open(`https://wa.me/${numeroWhatsApp}?text=${texto}`, '_blank');
+    
+    // 2. A MÁGICA: O encodeURIComponent transforma todos os \n em %0A e protege os espaços
+    const urlFormatada = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
+
+    window.open(urlFormatada, '_blank');
 }
 
 // No final do arquivo ui.js
