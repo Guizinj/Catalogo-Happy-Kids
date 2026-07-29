@@ -125,6 +125,7 @@ function configurarFiltroMagico() {
 
 /* EVENTOS DE MODAL DE PRODUTO */
 function configurarModalProduto() {
+    const modalFav = document.getElementById('dialog-favorite');
     const modalProduto = document.getElementById('modal-produto');
     const btnFecharModal = document.getElementById('btn-fechar-modal');
     const btnFavoritarModal = document.getElementById('btn-favoritar-modal');
@@ -223,6 +224,12 @@ function configurarModalProduto() {
             const iconeCoracaoNoGrid = document.querySelector(`.card-produto[data-id="${produtoAtualNoModal.codigo}"] .favorite`);
 
             if (foiAdicionado) {
+                 setTimeout(()=>{
+                    modalProduto.close();
+                }, 500);
+                 setTimeout(()=>{
+                    modalFav.showModal();
+                }, 500)
                 if (iconeCoracaoNoGrid) iconeCoracaoNoGrid.classList.add('favoritado');
                 mostrarToast('Item adicionado aos favoritos', 'sucesso');
             } else {
@@ -232,6 +239,7 @@ function configurarModalProduto() {
             
             sincronizarInterfaceFavoritos(); 
             atualizarTextoBotaoModal();
+            
         });
     }
 
@@ -242,6 +250,7 @@ function configurarModalProduto() {
 const grid = document.getElementById('grid');
 grid.addEventListener('click', (e) => {
     if (e.target.classList.contains('favorite')) {
+        const modalFav = document.getElementById('dialog-favorite');
         const idProduto = e.target.closest('.card-produto').getAttribute('data-id');
         const produtoSelecionado = produtosAtuais.find(p => p.codigo == idProduto);
 
@@ -249,6 +258,7 @@ grid.addEventListener('click', (e) => {
             const { foiAdicionado } = alternarFavorito(produtoSelecionado);
             
             if (foiAdicionado) {
+                modalFav.showModal();
                 e.target.classList.add('favoritado');
                 mostrarToast('Item adicionado aos favoritos', 'sucesso');
             } else {
@@ -257,6 +267,7 @@ grid.addEventListener('click', (e) => {
             }
             
             sincronizarInterfaceFavoritos();
+            
         }
     }
 });
