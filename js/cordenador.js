@@ -3,8 +3,6 @@ import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros 
 import { renderizarListaFavoritos, renderizarProdutos, controlarVisibilidadeBotaoPaginacao, ocultarLoader, favNavbar, atualizarTotalFavoritos, mostrarToast, enviarOrcamentoWhatsApp, atualizarModalProdutoUI } from "./ui.js";
 import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } from "./modais.js";
 import { mensagensNoTopo } from "./banner.js";
-
-// IMPORT DO NOVO MÓDULO DE DADOS
 import { carregarFavoritos, obterFavoritos, verificarFavorito, buscarFavorito, alternarFavorito, removerFavorito, alterarQuantidade, obterQuantidade } from "./storage.js";
 
 /* ESTADOS GLOBAIS DA PÁGINA ATUAL */
