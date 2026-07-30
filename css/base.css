@@ -72,9 +72,9 @@ h1, h2, h3 {
 
 /* Cores baseadas na sua paleta de identidade visual */
 #toast-feedback.sucesso {
-    background-color: #7cbd3ff1; 
+    background-color: var(--logo-verde);
 }
 
 #toast-feedback.removido {
-    background-color: #ff3f7fde;  
+    background-color: var(--logo-rosa);
 }
