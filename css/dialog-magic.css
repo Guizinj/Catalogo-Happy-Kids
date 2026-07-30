@@ -67,18 +67,11 @@
 
 /* Topo Fixo */
 .modal-topo {
-    background-color: var(--logo-verde);
+    background-image: url('../fundo.webp');
+    background-size: contain;
     width: 100%;
-    padding-top: 15px;
-    padding-bottom: 25px;
-    padding-right: 45px;
-    padding-left: 45px;
+    height: 100px;
     margin-bottom: 15px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border: none;
-    box-sizing: border-box;
-    flex-shrink: 0;      /* Impede o topo de ser esmagado */
 }
 
 .modal-topo a {
