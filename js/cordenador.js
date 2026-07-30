@@ -15,7 +15,7 @@ import { carregarFavoritos, obterFavoritos, verificarFavorito, buscarFavorito, a
 // o modal de detalhes) saberem qual produto foi clicado sem precisar buscar de novo na API.
 let produtosAtuais = [];
 let paginaAtual = 0;
-const limitePorPagina = 14;
+const limitePorPagina = 10;
 
 
 /**
