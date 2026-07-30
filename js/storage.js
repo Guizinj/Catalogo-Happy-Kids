@@ -151,3 +151,49 @@ export function obterQuantidade(idProduto) {
     }
     return 0;
 }
+
+
+/**
+ * Atualiza os favoritos já salvos com dados FRESCOS vindos do banco
+ * (preço, nome, descrição, etc.) — sem adicionar nem remover nenhum favorito.
+ *
+ * Correção do bug do "preço congelado": até aqui, `alternarFavorito` salvava
+ * uma FOTOGRAFIA do produto no momento de favoritar. Se o preço mudasse no
+ * banco depois, essa fotografia continuava com o valor antigo pra sempre —
+ * o cliente veria um preço errado no modal de favoritos e no orçamento do
+ * WhatsApp. Esta função "revela" a fotografia de novo com os dados de hoje.
+ *
+ * Chamada por: cordenador.js → iniciarLoja()
+ * (uma vez, ao carregar a página — não em tempo real, veja observação abaixo)
+ *
+ * Recebe: array de produtos atualizados (vindo de api.js → buscarProdutosPorCodigos)
+ */
+export function atualizarPrecosFavoritos(produtosAtualizados) {
+    // Nada pra atualizar (sem favoritos, ou a busca no banco falhou/voltou vazia)?
+    // Sai sem fazer nada — evita reescrever o localStorage à toa.
+    if (!produtosAtualizados || produtosAtualizados.length === 0) {
+        return listaFavoritos;
+    }
+ 
+    listaFavoritos = listaFavoritos.map(favorito => {
+        // Procura, entre os produtos atualizados, a versão que bate com este favorito
+        const versaoAtualizada = produtosAtualizados.find(
+            p => String(p.codigo) === String(favorito.codigo)
+        );
+ 
+        // Achou a versão atual no banco? Usa os dados dela (preço, nome, etc.),
+        // mas MANTÉM a quantidade que o cliente já tinha escolhido — a
+        // quantidade é decisão do cliente, não vem do banco de produtos.
+        if (versaoAtualizada) {
+            return { ...versaoAtualizada, quantidade: favorito.quantidade };
+        }
+ 
+        // Produto não foi encontrado no banco (ex: foi excluído)?
+        // Mantém o favorito como estava — decidir se remove ou não é
+        // responsabilidade de outra parte do código, não desta função.
+        return favorito;
+    });
+ 
+    sincronizarLocalStorage();
+    return listaFavoritos;
+}

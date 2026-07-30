@@ -222,7 +222,7 @@ export function mostrarToast(mensagem, tipo = 'sucesso') {
     toast.timer = setTimeout(() => {
         toast.classList.remove('mostrar');
         setTimeout(() => { if (toast.parentElement) toast.remove(); }, 300);
-    }, 500);
+    }, 1000);
 }
 
 

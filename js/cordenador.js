@@ -1,9 +1,9 @@
 import { URL_BUCKET_PRODUTOS } from "./config.js";
-import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros } from "./api.js";
+import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros, buscarProdutosPorCodigos } from "./api.js";
 import { renderizarListaFavoritos, renderizarProdutos, controlarVisibilidadeBotaoPaginacao, ocultarLoader, favNavbar, atualizarTotalFavoritos, mostrarToast, enviarOrcamentoWhatsApp, atualizarModalProdutoUI } from "./ui.js";
 import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } from "./modais.js";
 import { mensagensNoTopo } from "./banner.js";
-import { carregarFavoritos, obterFavoritos, verificarFavorito, buscarFavorito, alternarFavorito, removerFavorito, alterarQuantidade, obterQuantidade } from "./storage.js";
+import { carregarFavoritos, obterFavoritos, verificarFavorito, buscarFavorito, alternarFavorito, removerFavorito, alterarQuantidade, obterQuantidade, atualizarPrecosFavoritos } from "./storage.js";
 
 // Este arquivo é o "maestro" da aplicação: importa dados (api.js), estado (storage.js)
 // e visual (ui.js) e conecta tudo através de eventos de clique/submit do usuário.
@@ -61,7 +61,24 @@ async function iniciarLoja() {
         // Puxa a memória local (localStorage → variável em storage.js)
         carregarFavoritos();
 
-        // Renderiza tudo injetando os favoritos para a verificação de corações ativos
+        // CORREÇÃO "preço congelado": os favoritos salvos no localStorage podem
+        // ter dados antigos (o cliente favoritou há dias/semanas e o preço pode
+        // ter mudado desde então no banco). Antes de desenhar qualquer coisa na
+        // tela, buscamos os dados de HOJE desses produtos específicos e
+        // corrigimos o que está guardado localmente.
+        //
+        // Nota: isso só acontece aqui, uma vez, ao carregar a página — não em
+        // tempo real. Se o preço mudar enquanto o cliente já está com a loja
+        // aberta, ele só vai ver o valor novo na próxima vez que recarregar.
+        // Pra essa loja isso é suficiente: o cenário raro de alguém ficar com
+        // a aba aberta por dias enquanto o preço muda no meio do caminho não
+        // compensa o custo de ficar consultando o banco toda hora.
+        const codigosFavoritados = obterFavoritos().map(favorito => favorito.codigo);
+        const favoritosAtualizados = await buscarProdutosPorCodigos(codigosFavoritados);
+        atualizarPrecosFavoritos(favoritosAtualizados);
+
+        // Renderiza tudo injetando os favoritos (já com preços em dia) para
+        // a verificação de corações ativos
         renderizarProdutos(produtosAtuais, false, obterFavoritos());
         sincronizarInterfaceFavoritos();
 
@@ -70,6 +87,9 @@ async function iniciarLoja() {
     } catch (erro) {
         console.error('Falha ao iniciar loja', erro);
         ocultarLoader(); // mesmo com erro, tira o loader pra não travar o usuário
+        // Antes, o cliente só via a loja vazia sem entender por quê. Agora
+        // ele sabe que foi um problema técnico, não que "não tem produto".
+        mostrarToast('Não foi possível carregar a loja. Tente recarregar a página.', 'removido');
     }
 }
 
@@ -95,6 +115,9 @@ async function carregarProximaPagina() {
         }
     } catch (erro) {
         console.error('Falha ao carregar próxima página', erro);
+        // Antes, esse erro só ia pro console — o cliente clicava em "Carregar
+        // mais" e nada acontecia, sem entender por quê. Agora avisamos.
+        mostrarToast('Não foi possível carregar mais produtos. Tente novamente.', 'removido');
     }
 }
 
@@ -133,7 +156,18 @@ function configurarPesquisa() {
             return;
         }
 
-        produtosAtuais = await buscarProdutosPorNome(valorCampoLupa);
+        // try/catch aqui: se buscarProdutosPorNome() lançar erro (falha real de
+        // conexão/banco), NÃO queremos sobrescrever produtosAtuais com um resultado
+        // ambíguo nem fechar o modal como se a busca tivesse dado certo — melhor
+        // avisar o cliente e deixar ele tentar de novo.
+        try {
+            produtosAtuais = await buscarProdutosPorNome(valorCampoLupa);
+        } catch (erro) {
+            console.error('Falha na busca por nome', erro);
+            mostrarToast('Não foi possível buscar. Tente novamente.', 'removido');
+            return;
+        }
+
         renderizarProdutos(produtosAtuais, false, obterFavoritos()); // false = substitui o grid inteiro
         controlarVisibilidadeBotaoPaginacao(false); // busca não tem paginação
 
@@ -171,7 +205,16 @@ function configurarFiltroMagico() {
             genero: dadosForm.get('para_quem'),
         };
 
-        produtosAtuais = await buscarProdutosPorFiltros(filtros);
+        // Mesmo raciocínio da busca por nome: se a consulta falhar de verdade,
+        // avisamos e paramos aqui — não fechamos o modal nem mexemos no grid.
+        try {
+            produtosAtuais = await buscarProdutosPorFiltros(filtros);
+        } catch (erro) {
+            console.error('Falha no filtro mágico', erro);
+            mostrarToast('Não foi possível buscar. Tente novamente.', 'removido');
+            return;
+        }
+
         renderizarProdutos(produtosAtuais, false, obterFavoritos());
         controlarVisibilidadeBotaoPaginacao(false);
         modalMagic.close();
