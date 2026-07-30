@@ -54,7 +54,8 @@
     justify-content: space-between;
     margin-bottom: 20px;
     padding: 30px 15px;
-    background-color: var(--logo-laranja);
+    background-image: url('../fundo.jpg');
+    background-size: cover;
     border-bottom-left-radius:10px;
     border-bottom-right-radius:10px;
 }
@@ -128,7 +129,8 @@
 
 /* Estilo de cada caixinha de categoria */
 .item-categoria-modal {
-    background-color: var(--logo-verde);
+     background-image: url('../fundo.jpg');
+    background-size: cover;
     color: #000000;
     font-size: 15px;
     font-weight: 650;

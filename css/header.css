@@ -17,18 +17,22 @@ header{
 .btn-header .btn-nav{
     font-size: 2rem;
 }
+
 .img-logo{
-    margin-top: 10px;
-    width: 50%;
+    max-width: 250px;
+    width: 100%;
     cursor: pointer;
+    height: auto;
+    display: block;
 }
 .nav-bar{
-    padding: 5px 20px;
+    margin-top: -15px;
+    padding: 0 20px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 10px;
+
 }.topo{
     font-family: monospace;
     width: 100%;
