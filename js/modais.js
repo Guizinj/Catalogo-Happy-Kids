@@ -6,6 +6,8 @@ export function configurarModalMenu() {
     const search =  document.getElementById('search');
     const campoLupa = document.getElementById('campo-lupa');
 
+    fecharAoClicarFora(modalMenu);
+
     btnAbrirMenu.addEventListener('click', () => {
         modalMenu.showModal();
     });
@@ -24,6 +26,8 @@ export function configurarModalFavoritos() {
     const btnAbrirFav = document.getElementById('btn-favorite');
     const btnFecharFav = document.getElementById('btn-fechar-fav');
     const btnExplorar = document.getElementById('btn-explorar-favoritos');
+
+    fecharAoClicarFora(modalFav);
 
     btnAbrirFav.addEventListener('click', () =>{
         modalFav.showModal();
@@ -50,6 +54,8 @@ export function configurarModalMagic(){
     const btnAbrirMagic = document.getElementById('btn-cta');
     const btnFecharMagic = document.getElementById('btn-fechar');
 
+    fecharAoClicarFora(modalMagic);
+
     btnAbrirMagic.addEventListener('click', () => {
         modalMagic.showModal()
     });
@@ -58,3 +64,25 @@ export function configurarModalMagic(){
     });
 
 };
+
+/**
+ * Escuta os cliques em um modal do tipo <dialog> e o fecha se o clique 
+ * for na área escura (backdrop). 
+ **/
+
+
+export function fecharAoClicarFora(modalElement) {
+    // Adicionamos o ouvinte de evento 'click' DIRETAMENTE no modal passado
+    modalElement.addEventListener('click', (evento) => {
+        // A MÁGICA DA TAG <DIALOG>:
+        // O evento.target é o elemento exato onde o mouse/dedo encostou.
+        // Como o seu HTML tem divs internas (ex: .modal, .modal-menu, .modal-produto-container),
+        // se o usuário clicar no conteúdo, o target será uma dessas divs (ou algo dentro delas).
+        // Mas se ele clicar na parte escura (backdrop), o navegador entende que o 
+        // target é o PRÓPRIO modalElement.
+        if (evento.target === modalElement) {
+            // Se bateu exatamente no elemento raiz do modal, significa clique fora. Pode fechar!
+            modalElement.close();
+        }
+    });
+}
