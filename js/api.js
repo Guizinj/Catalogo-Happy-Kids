@@ -27,6 +27,8 @@ export async function buscarTodosOsProdutos(pagina = 0, limite = 14) {
         .from('produtos')
         .select('*')
         .eq('estoque', true)
+        // Puxa os destaques (1 a 10) primeiro e joga quem for NULL para o fim da fila
+        .order('destaque', { ascending: true, nullsFirst: false })
         .order('codigo', { ascending: true })
         .range(inicio, fim);
 
