@@ -176,6 +176,7 @@
     flex-direction: column;
     min-height: 0;       /* ESSENCIAL: Permite que elementos filhos usem rolagem em Flexbox Column */
     overflow: hidden; 
+    
 }
 
 #modal-nome {
