@@ -1,6 +1,6 @@
 import { URL_BUCKET_PRODUTOS } from "./config.js";
 import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros, buscarProdutosPorCodigos } from "./api.js";
-import { renderizarListaFavoritos, renderizarProdutos, controlarVisibilidadeBotaoPaginacao, ocultarLoader, favNavbar, atualizarTotalFavoritos, mostrarToast, enviarOrcamentoWhatsApp, atualizarModalProdutoUI } from "./ui.js";
+import { renderizarListaFavoritos, renderizarProdutos, controlarVisibilidadeBotaoPaginacao, controlarVisibilidadeBotaoCatalogoCompleto, ocultarLoader, favNavbar, atualizarTotalFavoritos, mostrarToast, enviarOrcamentoWhatsApp, atualizarModalProdutoUI } from "./ui.js";
 import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } from "./modais.js";
 import { mensagensNoTopo } from "./banner.js";
 import { carregarFavoritos, obterFavoritos, verificarFavorito, buscarFavorito, alternarFavorito, removerFavorito, alterarQuantidade, obterQuantidade, atualizarPrecosFavoritos } from "./storage.js";
@@ -15,7 +15,7 @@ import { carregarFavoritos, obterFavoritos, verificarFavorito, buscarFavorito, a
 // o modal de detalhes) saberem qual produto foi clicado sem precisar buscar de novo na API.
 let produtosAtuais = [];
 let paginaAtual = 0;
-const limitePorPagina = 10;
+const limitePorPagina = 14;
 
 
 /**
@@ -32,6 +32,48 @@ function sincronizarInterfaceFavoritos() {
     renderizarListaFavoritos(lista);     // desenha os mini-cards no modal de favoritos (ui.js)
     favNavbar(lista.length);             // acende o coração da navbar se lista.length > 0 (ui.js)
     atualizarTotalFavoritos(lista);      // calcula e escreve o preço total (ui.js)
+}
+
+
+/**
+ * Faz o "miolo" comum de favoritar/desfavoritar um produto: chama o toggle em
+ * storage.js, decide qual toast mostrar, marca ou desmarca o ícone de coração
+ * indicado, e sincroniza o resto da interface (modal de favoritos, navbar, total).
+ *
+ * Correção de bug (duplicação): antes, esse bloco de 10 linhas existia repetido
+ * em DOIS lugares — no botão do modal de detalhes e no clique do coração no
+ * grid — cada um com uma pequena variação. Se um dia precisássemos mudar o
+ * texto do toast, por exemplo, teríamos que lembrar de mudar nos dois lugares.
+ * Agora existe uma única versão, e cada chamador só cuida do que é
+ * ESPECÍFICO dele (abrir modal com ou sem atraso, atualizar botão interno, etc.)
+ *
+ * Chamada por: configurarModalProduto() e configurarCliqueNoGrid()
+ *
+ * Recebe: o produto sendo favoritado/desfavoritado, e o elemento do ícone de
+ * coração que deve ser marcado/desmarcado na tela (pode ser null, se por
+ * algum motivo o ícone não existir no momento — ex: produto não está mais
+ * visível no grid)
+ *
+ * Retorna: { foiAdicionado } — quem chamou usa isso pra decidir a parte
+ * específica (abrir modal de favoritos, com ou sem atraso, etc.)
+ */
+function favoritarComFeedback(produto, iconeCoracao) {
+    const { foiAdicionado } = alternarFavorito(produto); // storage.js
+
+    // .toggle(classe, condicao) adiciona a classe se condicao for true,
+    // remove se for false — substitui o if/else que existia antes
+    if (iconeCoracao) {
+        iconeCoracao.classList.toggle('favoritado', foiAdicionado);
+    }
+
+    mostrarToast(
+        foiAdicionado ? 'Item adicionado aos favoritos' : 'Item removido dos favoritos',
+        foiAdicionado ? 'sucesso' : 'removido'
+    );
+
+    sincronizarInterfaceFavoritos();
+
+    return { foiAdicionado };
 }
 
 
@@ -83,6 +125,7 @@ async function iniciarLoja() {
         sincronizarInterfaceFavoritos();
 
         controlarVisibilidadeBotaoPaginacao(true);
+        controlarVisibilidadeBotaoCatalogoCompleto(false); // sem busca/filtro ativo ainda, então escondido
         ocultarLoader();
     } catch (erro) {
         console.error('Falha ao iniciar loja', erro);
@@ -133,6 +176,49 @@ function configurarProximaPagina() {
 }
 
 
+/**
+ * Correção de bug (paginação sem caminho de volta): depois de uma busca por
+ * nome ou do filtro mágico, produtosAtuais deixa de ser a lista paginada
+ * original, e não existia nenhum jeito de voltar pra ela sem recarregar a
+ * página inteira (F5) — o que fecharia qualquer modal aberto e perderia o
+ * scroll do cliente. Esta função refaz exatamente o que iniciarLoja() faz
+ * pra buscar a página 0, mas sem mexer no loader de tela cheia (a loja já
+ * está carregada, não faz sentido mostrar aquele overlay de novo).
+ *
+ * Chamada por: configurarBotaoVerCatalogoCompleto() → clique em
+ * #btn-ver-catalogo-completo (que só aparece depois de busca/filtro)
+ */
+async function voltarParaCatalogoCompleto() {
+    try {
+        paginaAtual = 0;
+        produtosAtuais = await buscarTodosOsProdutos(paginaAtual, limitePorPagina);
+
+        renderizarProdutos(produtosAtuais, false, obterFavoritos()); // false = substitui o grid inteiro
+
+        controlarVisibilidadeBotaoPaginacao(true);           // catálogo normal tem paginação de volta
+        controlarVisibilidadeBotaoCatalogoCompleto(false);    // já voltamos, esconde este botão
+
+        const gridProdutos = document.querySelector('.conteudo');
+        if (gridProdutos) gridProdutos.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (erro) {
+        console.error('Falha ao voltar para o catálogo completo', erro);
+        mostrarToast('Não foi possível carregar o catálogo. Tente novamente.', 'removido');
+    }
+}
+
+
+/**
+ * Liga o clique do botão "← Ver catálogo completo" à função que volta
+ * pro catálogo paginado normal.
+ */
+function configurarBotaoVerCatalogoCompleto() {
+    const btnVerCatalogoCompleto = document.getElementById('btn-ver-catalogo-completo');
+    if (btnVerCatalogoCompleto) {
+        btnVerCatalogoCompleto.addEventListener('click', voltarParaCatalogoCompleto);
+    }
+}
+
+
 /* FILTROS E BUSCAS */
 
 /**
@@ -170,6 +256,7 @@ function configurarPesquisa() {
 
         renderizarProdutos(produtosAtuais, false, obterFavoritos()); // false = substitui o grid inteiro
         controlarVisibilidadeBotaoPaginacao(false); // busca não tem paginação
+        controlarVisibilidadeBotaoCatalogoCompleto(true); // mostra o caminho de volta pro catálogo completo
 
         campoLupa.blur();   // tira o foco do campo (fecha teclado no celular)
         modalMenu.close();  // fecha o modal do menu onde fica a busca
@@ -217,6 +304,7 @@ function configurarFiltroMagico() {
 
         renderizarProdutos(produtosAtuais, false, obterFavoritos());
         controlarVisibilidadeBotaoPaginacao(false);
+        controlarVisibilidadeBotaoCatalogoCompleto(true); // mostra o caminho de volta pro catálogo completo
         modalMagic.close();
 
         const gridProdutos = document.querySelector('.conteudo');
@@ -280,20 +368,20 @@ function configurarModalProduto() {
         btnFavoritarModal.addEventListener('click', () => {
             if (!produtoAtualNoModal) return;
 
-            const { foiAdicionado } = alternarFavorito(produtoAtualNoModal); // storage.js
+            // O ícone que precisa ser atualizado aqui é o do GRID, não o botão
+            // deste modal — o botão do modal é tratado à parte, logo abaixo,
+            // por atualizarModalProdutoUI (que muda texto e cor, não só a classe)
             const iconeCoracaoNoGrid = document.querySelector(`.card-produto[data-id="${produtoAtualNoModal.codigo}"] .favorite`);
+            const { foiAdicionado } = favoritarComFeedback(produtoAtualNoModal, iconeCoracaoNoGrid);
 
+            // Parte específica deste fluxo: se acabou de adicionar, fecha o
+            // modal de produto e abre o de favoritos, com um pequeno atraso
+            // pra dar tempo da animação de fechar não brigar com a de abrir
             if (foiAdicionado) {
-                 setTimeout(() => { modalProduto.close(); }, 500);
-                 setTimeout(() => { modalFav.showModal(); }, 500);
-                if (iconeCoracaoNoGrid) iconeCoracaoNoGrid.classList.add('favoritado');
-                mostrarToast('Item adicionado aos favoritos', 'sucesso');
-            } else {
-                if (iconeCoracaoNoGrid) iconeCoracaoNoGrid.classList.remove('favoritado');
-                mostrarToast('Item removido dos favoritos', 'removido');
+                setTimeout(() => { modalProduto.close(); }, 500);
+                setTimeout(() => { modalFav.showModal(); }, 500);
             }
 
-            sincronizarInterfaceFavoritos();
             // Atualiza o estado visual do botão após o clique utilizando a função do ui.js
             atualizarModalProdutoUI(produtoAtualNoModal, verificarFavorito);
         });
@@ -325,18 +413,13 @@ function configurarCliqueNoGrid() {
             const produtoSelecionado = produtosAtuais.find(p => p.codigo == idProduto);
 
             if (produtoSelecionado) {
-                const { foiAdicionado } = alternarFavorito(produtoSelecionado);
+                const { foiAdicionado } = favoritarComFeedback(produtoSelecionado, e.target);
 
+                // Parte específica deste fluxo: aqui não existe outro modal
+                // pra fechar antes, então abre na hora, sem atraso.
                 if (foiAdicionado) {
                     modalFav.showModal();
-                    e.target.classList.add('favoritado');
-                    mostrarToast('Item adicionado aos favoritos', 'sucesso');
-                } else {
-                    e.target.classList.remove('favoritado');
-                    mostrarToast('Item removido dos favoritos', 'removido');
                 }
-
-                sincronizarInterfaceFavoritos();
             }
         }
     });
@@ -427,5 +510,6 @@ document.addEventListener('DOMContentLoaded', () => {
     mensagensNoTopo();                         // vem de banner.js
     configurarFiltroMagico();
     configurarProximaPagina();
+    configurarBotaoVerCatalogoCompleto();
     configurarBotaoConsultar();
 });

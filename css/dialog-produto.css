@@ -240,6 +240,7 @@
     margin: 0;
     padding-right: 5px;
     -webkit-overflow-scrolling: touch; /* Suaviza a rolagem no ecossistema iOS (iPhone) */
+    white-space: pre-wrap;
 }
 @media (min-width: 768px) {
     #modal-descricao {

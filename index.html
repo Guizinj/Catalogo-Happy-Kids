@@ -160,6 +160,19 @@
 
         <section class="conteudo">
             <h1 style="color: var(--logo-laranja); margin-bottom: 15px;">Destaques</h1>
+            <!--
+                Botão que só aparece quando o cliente está vendo resultado de
+                busca ou do filtro mágico — permite voltar pro catálogo
+                paginado completo sem precisar recarregar a página (F5).
+                Começa escondido (display:none) porque, ao carregar a loja
+                pela primeira vez, ainda não tem busca/filtro nenhum ativo.
+                Quem mostra/esconde esse botão é o ui.js, junto com a mesma
+                lógica que já mostra/esconde o botão "Carregar mais".
+            -->
+            <button id="btn-ver-catalogo-completo" class="btn-cta-voltar" style="display:none; margin-bottom: 15px;">
+                ← Ver catálogo completo
+            </button>
+
             <div class="grid-produtos" id="grid"></div>
 
             <div style="text-align: center; margin: 30px;">

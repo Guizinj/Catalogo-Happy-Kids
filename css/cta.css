@@ -25,6 +25,19 @@
     margin-bottom: 5px;
     animation: pulsar 1.5s infinite;
 }
+.btn-cta-voltar{
+    display: block;
+    margin: 0 auto;
+    padding: 12px 24px;
+    font-family: var(--fonte-titulos);
+    font-size: 0.9rem;
+    background-color: var(--logo-laranja);
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.322);
+    margin-bottom: 5px;
+}
 @keyframes pulsar {
   0% {
     transform: scale(1);

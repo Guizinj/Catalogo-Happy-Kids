@@ -145,6 +145,25 @@ export function controlarVisibilidadeBotaoPaginacao(deveMostrar) {
 
 
 /**
+ * Mostra ou esconde o botão "← Ver catálogo completo", que só faz sentido
+ * quando o cliente está vendo resultado de busca ou do filtro mágico —
+ * é o caminho de volta pro catálogo paginado normal, sem precisar dar F5.
+ *
+ * Chamada por: cordenador.js
+ *   - configurarPesquisa() / configurarFiltroMagico() → mostra (true) depois
+ *     de um resultado de busca/filtro
+ *   - voltarParaCatalogoCompleto() → esconde (false) ao voltar pro catálogo normal
+ *   - iniciarLoja() → garante que começa escondido (false)
+ */
+export function controlarVisibilidadeBotaoCatalogoCompleto(deveMostrar) {
+    const btnVerCatalogoCompleto = document.getElementById('btn-ver-catalogo-completo');
+    if (btnVerCatalogoCompleto) {
+        btnVerCatalogoCompleto.style.display = deveMostrar ? 'inline-block' : 'none';
+    }
+}
+
+
+/**
  * Remove o overlay de carregamento da tela após a loja estar pronta.
  *
  * Chamada por: cordenador.js → iniciarLoja()
@@ -222,7 +241,7 @@ export function mostrarToast(mensagem, tipo = 'sucesso') {
     toast.timer = setTimeout(() => {
         toast.classList.remove('mostrar');
         setTimeout(() => { if (toast.parentElement) toast.remove(); }, 300);
-    }, 1000);
+    }, 500);
 }
 
 
