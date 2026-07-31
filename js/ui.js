@@ -316,7 +316,7 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
     imagemPrincipal.alt = produtoSelecionado.nome;
 
     // Monta as 3 miniaturas do produto e habilita clique pra trocar a imagem principal
-    for (let i = 1; i <= 3; i++) {
+    for (let i = 1; i <= 2; i++) {
         const urlImagem = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_${i}.webp`;
         imagensDosProdutos.push(urlImagem); // monta na ordem certa, sem depender do load
 
