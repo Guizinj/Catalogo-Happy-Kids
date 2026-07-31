@@ -1,4 +1,4 @@
-import { URL_BUCKET_PRODUTOS } from "./config.js";
+import { URL_BUCKET_PRODUTOS, NUMERO_WHATSAPP } from "./config.js";
 import { configurarGestosGaleria } from './gestos.js';
 
 
@@ -262,17 +262,27 @@ export function enviarOrcamentoWhatsApp(listaFavoritos) {
     }
 
     // Iniciamos o texto usando \n para pular linha no JavaScript de forma limpa
-    let texto = "Olá! Gostaria de consultar a disponibilidade dos seguintes brinquedos:\n";
+    let texto = "Olá! Vim pelo site da Happy Kids Brinquedos e gostaria de consultar a disponibilidade dos seguintes brinquedos:\n";
 
     listaFavoritos.forEach(produto => {
         const qtd = produto.quantidade || 1; // segurança caso venha zerado/nulo
-        texto += `\n• ${qtd}x ${produto.nome} (Ref: ${produto.codigo})`;
+
+        // Só escrevemos "cada" quando tem MAIS DE 1 unidade — com quantidade 1,
+        // o preço do item já É o preço "cada" sozinho, então "cada" viraria
+        // redundante ("1x Boneca — R$ 149,90 cada" soa estranho).
+        const precoFormatado = qtd > 1
+            ? `R$ ${produto.preco.toFixed(2)} cada`
+            : `R$ ${produto.preco.toFixed(2)}`;
+
+        texto += `\n• ${qtd}x ${produto.nome} (Ref: ${produto.codigo}) — ${precoFormatado}`;
     });
 
     const valorTotal = listaFavoritos.reduce((acc, p) => acc + (p.preco * (p.quantidade || 1)), 0);
     texto += `\n\n*Total estimado: R$ ${valorTotal.toFixed(2)}*`;
+    texto += `\n\nAguardo confirmação, obrigado!`;
 
-    const numeroWhatsApp = "558130463443";
+    // Vem de config.js agora — não é mais um valor "solto" dentro da lógica de apresentação
+    const numeroWhatsApp = NUMERO_WHATSAPP;
 
     // encodeURIComponent transforma \n em %0A e protege os espaços na URL
     const urlFormatada = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;

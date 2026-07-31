@@ -4,3 +4,9 @@ export const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 export const URL_BUCKET_PRODUTOS =
     'https://thyxhystomblrimokbxi.supabase.co/storage/v1/object/public/produtos/';
+
+// Número do WhatsApp da loja (usado no orçamento de favoritos).
+// Antes estava hardcoded dentro de ui.js, dentro da função enviarOrcamentoWhatsApp
+// — mas é configuração do negócio, não lógica de apresentação. Se o número mudar
+// um dia, essa é a ÚNICA linha que precisa mudar.
+export const NUMERO_WHATSAPP = '558130463443';

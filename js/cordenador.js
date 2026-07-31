@@ -415,10 +415,8 @@ function configurarCliqueNoGrid() {
             if (produtoSelecionado) {
                 const { foiAdicionado } = favoritarComFeedback(produtoSelecionado, e.target);
 
-                // Parte específica deste fluxo: aqui não existe outro modal
-                // pra fechar antes, então abre na hora, sem atraso.
                 if (foiAdicionado) {
-                    modalFav.showModal();
+                   setTimeout(() => { modalFav.showModal(); }, 500);
                 }
             }
         }
