@@ -1,4 +1,4 @@
-import { URL_BUCKET_PRODUTOS, NUMERO_WHATSAPP } from "./config.js";
+import { URL_BUCKET_PRODUTOS } from "./config.js";
 import { configurarGestosGaleria } from './gestos.js';
 
 
@@ -145,25 +145,6 @@ export function controlarVisibilidadeBotaoPaginacao(deveMostrar) {
 
 
 /**
- * Mostra ou esconde o botão "← Ver catálogo completo", que só faz sentido
- * quando o cliente está vendo resultado de busca ou do filtro mágico —
- * é o caminho de volta pro catálogo paginado normal, sem precisar dar F5.
- *
- * Chamada por: cordenador.js
- *   - configurarPesquisa() / configurarFiltroMagico() → mostra (true) depois
- *     de um resultado de busca/filtro
- *   - voltarParaCatalogoCompleto() → esconde (false) ao voltar pro catálogo normal
- *   - iniciarLoja() → garante que começa escondido (false)
- */
-export function controlarVisibilidadeBotaoCatalogoCompleto(deveMostrar) {
-    const btnVerCatalogoCompleto = document.getElementById('btn-ver-catalogo-completo');
-    if (btnVerCatalogoCompleto) {
-        btnVerCatalogoCompleto.style.display = deveMostrar ? 'inline-block' : 'none';
-    }
-}
-
-
-/**
  * Remove o overlay de carregamento da tela após a loja estar pronta.
  *
  * Chamada por: cordenador.js → iniciarLoja()
@@ -241,7 +222,7 @@ export function mostrarToast(mensagem, tipo = 'sucesso') {
     toast.timer = setTimeout(() => {
         toast.classList.remove('mostrar');
         setTimeout(() => { if (toast.parentElement) toast.remove(); }, 300);
-    }, 500);
+    }, 1000);
 }
 
 
@@ -262,27 +243,17 @@ export function enviarOrcamentoWhatsApp(listaFavoritos) {
     }
 
     // Iniciamos o texto usando \n para pular linha no JavaScript de forma limpa
-    let texto = "Olá! Vim pelo site da Happy Kids Brinquedos e gostaria de consultar a disponibilidade dos seguintes brinquedos:\n";
+    let texto = "Olá! Gostaria de consultar a disponibilidade dos seguintes brinquedos:\n";
 
     listaFavoritos.forEach(produto => {
         const qtd = produto.quantidade || 1; // segurança caso venha zerado/nulo
-
-        // Só escrevemos "cada" quando tem MAIS DE 1 unidade — com quantidade 1,
-        // o preço do item já É o preço "cada" sozinho, então "cada" viraria
-        // redundante ("1x Boneca — R$ 149,90 cada" soa estranho).
-        const precoFormatado = qtd > 1
-            ? `R$ ${produto.preco.toFixed(2)} cada`
-            : `R$ ${produto.preco.toFixed(2)}`;
-
-        texto += `\n• ${qtd}x ${produto.nome} (Ref: ${produto.codigo}) — ${precoFormatado}`;
+        texto += `\n• ${qtd}x ${produto.nome} (Ref: ${produto.codigo})`;
     });
 
     const valorTotal = listaFavoritos.reduce((acc, p) => acc + (p.preco * (p.quantidade || 1)), 0);
     texto += `\n\n*Total estimado: R$ ${valorTotal.toFixed(2)}*`;
-    texto += `\n\nAguardo confirmação, obrigado!`;
 
-    // Vem de config.js agora — não é mais um valor "solto" dentro da lógica de apresentação
-    const numeroWhatsApp = NUMERO_WHATSAPP;
+    const numeroWhatsApp = "558130463443";
 
     // encodeURIComponent transforma \n em %0A e protege os espaços na URL
     const urlFormatada = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
@@ -316,7 +287,7 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
     imagemPrincipal.alt = produtoSelecionado.nome;
 
     // Monta as 3 miniaturas do produto e habilita clique pra trocar a imagem principal
-    for (let i = 1; i <= 2; i++) {
+    for (let i = 1; i <= 3; i++) {
         const urlImagem = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_${i}.webp`;
         imagensDosProdutos.push(urlImagem); // monta na ordem certa, sem depender do load
 
