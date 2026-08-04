@@ -10,3 +10,10 @@ export const URL_BUCKET_PRODUTOS =
 // — mas é configuração do negócio, não lógica de apresentação. Se o número mudar
 // um dia, essa é a ÚNICA linha que precisa mudar.
 export const NUMERO_WHATSAPP = '558130463443';
+
+// Códigos dos produtos que aparecem nos 3 cards de destaque do menu ("Nossos
+// Destaques"). Escolha manual — troque os números abaixo pelos códigos reais
+// dos produtos que você quer destacar (mais vendido, promoção, lançamento,
+// o que fizer sentido no momento). Pode ter menos de 3 códigos, se quiser.
+
+//export const CODIGOS_DESTAQUES_MENU = [4091, 2702, 2698];
