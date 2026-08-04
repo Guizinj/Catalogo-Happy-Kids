@@ -118,35 +118,37 @@
     border-bottom: 2px solid #f0f0f5; /* Linha sutil divisória */
 }
 
-/* A lista limpa e organizada em Grid */
+/* Grid ajustado para 2 colunas */
 .lista-modal-categoria {
-    list-style: none;         /* Remove as bolinhas da lista */
-    padding: 0;               /* Reseta o padding padrão do HTML */
+    list-style: none;
+    padding: 0;
     margin: 0;
     display: grid;
-    /* Cria colunas automáticas de no mínimo 150px. Se couber mais, ele alinha lado a lado */
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
-    gap: 12px;                /* Espaçamento perfeito entre as categorias */
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas dão espaço para o texto */
+    gap: 12px;
 }
 
-/* Estilo de cada caixinha de categoria */
+/* Cards com visual mais leve, legível e moderno */
 .item-categoria-modal {
+    /* Fundo suave com o tom da marca nos detalhes */
     background-color: var(--logo-laranja);
-    color: #131212;
-    font-size: 15px;
-    font-weight: 650;
-    padding: 14px 18px; 
-    border-radius: 14px;     
-    border: 1px solid #eef0f3;
+    color: #000000;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+    padding: 12px 16px; 
+    border-radius: 12px;     
+    border: 1px solid #ffd8c2;
     cursor: pointer;
-    text-align: left;
     
-    /* Transição suave para quando o mouse passar por cima */
-    transition: all 0.25s ease;
-    
-    /* Garante que o texto fique centralizado verticalmente se quebrar linha */
+    /* Centralização de conteúdo */
     display: flex;
     align-items: center; 
+    justify-content: center;
+    text-align: center;
+    min-height: 60px; /* Garante altura uniforme para todos os cards */
+    
+    transition: all 0.2s ease;
 }
 
 /* Efeito Hover (Quando passa o mouse ou toca no celular) */

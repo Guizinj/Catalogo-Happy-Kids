@@ -1,5 +1,5 @@
 import { URL_BUCKET_PRODUTOS } from "./config.js";
-import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros, buscarProdutosPorCodigos } from "./api.js";
+import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros, buscarProdutosPorCodigos, buscarProdutosPorCategoria } from "./api.js";
 import { renderizarListaFavoritos, renderizarProdutos, controlarVisibilidadeBotaoPaginacao, controlarVisibilidadeBotaoCatalogoCompleto, ocultarLoader, favNavbar, atualizarTotalFavoritos, mostrarToast, enviarOrcamentoWhatsApp, atualizarModalProdutoUI } from "./ui.js";
 import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } from "./modais.js";
 import { mensagensNoTopo } from "./banner.js";
@@ -220,6 +220,60 @@ function configurarBotaoVerCatalogoCompleto() {
 
 
 /* FILTROS E BUSCAS */
+
+/**
+ * Configura os cliques nos itens de categoria dentro do modal de menu.
+ *
+ * Ao clicar em uma categoria (ex: Bonecos, Carros):
+ * 1. Pega o nome da categoria clicada.
+ * 2. Chama a API para buscar os produtos dessa categoria.
+ * 3. Atualiza o grid de produtos e ajusta a visibilidade dos botões.
+ * 4. Fecha o menu e rola a tela até os produtos.
+ *
+ * Chamada por: DOMContentLoaded no final deste arquivo.
+ */
+function configurarFiltroCategoria() {
+    const listaCategoriasModal = document.querySelector('.lista-modal-categoria');
+    const modalMenu = document.getElementById('modal-menu');
+
+    if (!listaCategoriasModal) return;
+
+    // Usamos delegação de evento: um único listener na lista <ul> pai escuta 
+    // o clique em qualquer um dos itens <li> filhos
+    listaCategoriasModal.addEventListener('click', async (evento) => {
+        // Verifica se o clique foi em um item de categoria
+        const itemClicado = evento.target.closest('.item-categoria-modal');
+        if (!itemClicado) return;
+
+        // Pega o texto de dentro do <li> (ex: "Bonecos", "Carros")
+        const nomeCategoria = itemClicado.textContent.trim();
+
+        try {
+            // Puxa os produtos da categoria escolhida através da API
+            produtosAtuais = await buscarProdutosPorCategoria(nomeCategoria);
+        } catch (erro) {
+            console.error('Falha ao filtrar por categoria:', erro);
+            mostrarToast('Não foi possível carregar esta categoria. Tente novamente.', 'removido');
+            return;
+        }
+
+        // Desenha os novos produtos no grid principal (false = substitui o grid atual)
+        renderizarProdutos(produtosAtuais, false, obterFavoritos());
+
+        // Ajusta a navegação: esconde botão de carregar mais e mostra botão de voltar ao catálogo
+        controlarVisibilidadeBotaoPaginacao(false);
+        controlarVisibilidadeBotaoCatalogoCompleto(true);
+
+        // Fecha o modal de menu
+        if (modalMenu) modalMenu.close();
+
+        // Rola a página suavemente até o grid de produtos para o cliente ver o resultado
+        const gridProdutos = document.querySelector('.conteudo');
+        if (gridProdutos) {
+            gridProdutos.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+}
 
 /**
  * Configura o formulário de busca por nome (a lupa).
@@ -499,6 +553,7 @@ function configurarBotaoConsultar() {
 document.addEventListener('DOMContentLoaded', () => {
     iniciarLoja();
     configurarPesquisa();
+    configurarFiltroCategoria();
     configurarCliqueNoGrid();
     configurarModalProduto();
     configurarModalFavoritos();               // vem de modais.js

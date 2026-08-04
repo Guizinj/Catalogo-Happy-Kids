@@ -154,3 +154,31 @@ export async function buscarProdutosPorCodigos(codigos) {
         return [];
     }
 }
+
+/**
+ * Busca produtos em estoque que pertençam a uma categoria específica.
+ *
+ * Chamada por: cordenador.js → configurarFiltroCategoria()
+ *
+ * Recebe: nome da categoria desejada (ex: "Bonecos", "Carros")
+ * Retorna: array de produtos daquela categoria em caso de sucesso.
+ *
+ * Em caso de falha na consulta (sem internet ou erro no banco), lança uma exceção 
+ * (throw new Error) para que o coordenador trate o erro e avise o usuário com um toast.
+ */
+export async function buscarProdutosPorCategoria(categoria) {
+    const { data, error } = await supabase
+        .from('produtos')
+        .select('*')
+        .eq('estoque', true)
+        // Usamos .ilike para ignorar maiúsculas/minúsculas e garantir que ache a categoria
+        // Exemplo: se no banco estiver "bonecos" e você passar "Bonecos", ele encontra normal.
+        .ilike('categoria', `%${categoria}%`);
+
+    if (error) {
+        console.error('Erro ao buscar por categoria:', error.message);
+        throw new Error('Não foi possível buscar os produtos desta categoria.');
+    }
+
+    return data;
+}
