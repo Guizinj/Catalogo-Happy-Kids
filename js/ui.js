@@ -339,6 +339,7 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
 
     document.getElementById('modal-nome').textContent = produtoSelecionado.nome;
     document.getElementById('modal-preco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
+    /*document.getElementById('modal-categoria').textContent = `Categoria: ${produtoSelecionado.categoria}`*/
 
     // Define a condição de parcelamento de acordo com a faixa de preço
     if (produtoSelecionado.preco > 200) {
