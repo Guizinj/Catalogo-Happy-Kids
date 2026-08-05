@@ -344,6 +344,7 @@ function configurarFiltroMagico() {
         const filtros = {
             idade: Number(dadosForm.get('idade')),   // Number() converte a string do input pra número
             genero: dadosForm.get('para_quem'),
+            marca: dadosForm.get('marca'),
         };
 
         // Mesmo raciocínio da busca por nome: se a consulta falhar de verdade,

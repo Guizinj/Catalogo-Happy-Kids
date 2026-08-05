@@ -94,6 +94,9 @@ export async function buscarProdutosPorFiltros(filtros) {
     if (filtros.idade !== null && filtros.idade !== undefined) {
         consulta = consulta.lte('idade_recomendada', filtros.idade);
     }
+    if(filtros.marca){
+        consulta = consulta.eq('marca', filtros.marca);
+    }
 
     // Filtro de gênero é opcional
     if (filtros.genero) {
