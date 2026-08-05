@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Presentes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+    <section id="tela-login">
+
+        <h1>Lista de Presentes</h1>
+        <form id="form-login">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" required>
+
+            <button type="submit">Entrar</button>
+        </form>
+        <p id="erro-login"></p>
+
+    </section>
+
+
+
+    <section id="tela-app">
+
+        <header>
+            <h2>Nova Lista de Presentes</h2>
+            <button type="button" id="btn-logout">Sair</button>
+        </header>
+
+        <form id="form-aniversariante">
+            <label for="nome-aniversariante">Nome do Aniversariante</label>
+            <input type="text" id="nome-aniversariante" name="nome-aniversariante" required>
+
+            <label for="data-festa">Data da Festa</label>
+            <input type="date" id="data-festa" name="data-festa" required>
+        </form>
+
+        <hr>
+
+        <h3>Adicionar Produto</h3>
+        <form id="form-produto">
+            <label for="foto-produto">Foto do Brinquedo</label>
+            <input type="file" id="foto-produto" name="foto-produto" accept="image/*" capture="environment">
+
+            <label for="nome-produto">Nome do Produto</label>
+            <input type="text" id="nome-produto" name="nome-produto" required>
+
+            <label for="preco-produto">Preço (R$)</label>
+            <input type="number" id="preco-produto" name="preco-produto" step="0.01" min="0" required>
+
+            <button type="submit">Adicionar à Lista</button>
+        </form>
+
+        <hr>
+
+        <h3>Itens da Lista</h3>
+        <ul id="lista-produtos">
+        </ul>
+
+        <button type="button" id="btn-finalizar">Finalizar Lista</button>
+
+    </section>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
