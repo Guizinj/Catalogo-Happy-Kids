@@ -6,20 +6,22 @@
 
 :root {
     --cor-primaria: #ff6f61;
-    --cor-fundo: #f9f9f9;
+    --cor-fundo: #f4f6f8;
+    --cor-card: #ffffff;
     --cor-texto: #333333;
     --cor-erro: #d32f2f;
     --cor-sucesso: #388e3c;
+    --cor-borda: #e0e0e0;
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--cor-fundo);
     color: var(--cor-texto);
     line-height: 1.5;
 }
 
-
+/* TELA DE LOGIN */
 #tela-login {
     display: flex;
     flex-direction: column;
@@ -33,36 +35,41 @@ body {
     margin-bottom: 24px;
     color: var(--cor-primaria);
     text-align: center;
+    font-size: 28px;
 }
 
 #form-login {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 320px;
+    max-width: 340px;
+    background: var(--cor-card);
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 #form-login label {
     margin-top: 12px;
     margin-bottom: 4px;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 14px;
 }
 
 #form-login input {
     padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
     font-size: 16px;
 }
 
 #form-login button {
-    margin-top: 20px;
+    margin-top: 24px;
     padding: 14px;
     background-color: var(--cor-primaria);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
@@ -75,65 +82,75 @@ body {
     text-align: center;
 }
 
-
+/* TELA PRINCIPAL (APP) */
 #tela-app {
-    max-width: 480px;
+    display: none; /* Controlado pelo JavaScript */
+    max-width: 500px;
     margin: 0 auto;
     padding: 16px;
+    padding-bottom: 40px;
 }
 
 #tela-app header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 #tela-app h2 {
-    font-size: 20px;
+    font-size: 22px;
+    color: var(--cor-primaria);
 }
 
 #btn-logout {
-    padding: 8px 14px;
+    padding: 6px 12px;
     background-color: transparent;
     border: 1px solid var(--cor-erro);
     color: var(--cor-erro);
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
 }
 
 #tela-app h3 {
     margin-bottom: 12px;
     font-size: 16px;
+    color: #555;
 }
 
 #tela-app hr {
     border: none;
-    border-top: 1px solid #ddd;
-    margin: 20px 0;
+    border-top: 1px solid var(--cor-borda);
+    margin: 24px 0;
 }
 
+/* FORMULÁRIOS */
 #form-aniversariante,
 #form-produto {
     display: flex;
     flex-direction: column;
+    background: var(--cor-card);
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 #form-aniversariante label,
 #form-produto label {
     margin-top: 10px;
     margin-bottom: 4px;
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 #form-aniversariante input,
 #form-produto input {
-    padding: 10px;
-    border: 1px solid #ccc;
+    padding: 10px 12px;
+    border: 1px solid var(--cor-borda);
     border-radius: 6px;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 #form-produto button {
@@ -144,5 +161,73 @@ body {
     border: none;
     border-radius: 6px;
     font-size: 15px;
+    font-weight: bold;
     cursor: pointer;
+}
+
+/* LISTA DE PRODUTOS (CARDS) */
+#lista-produtos {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+#lista-produtos li {
+    display: flex;
+    align-items: center;
+    background: var(--cor-card);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--cor-borda);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+#lista-produtos li img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 12px;
+}
+
+.info-produto {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.nome-item {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.preco-item {
+    color: var(--cor-sucesso);
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.btn-remover {
+    background-color: transparent;
+    border: none;
+    color: var(--cor-erro);
+    font-size: 13px;
+    cursor: pointer;
+    padding: 8px;
+}
+
+/* BOTÃO DE FINALIZAR */
+#btn-finalizar {
+    width: 100%;
+    padding: 16px;
+    background-color: var(--cor-sucesso);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
 }
