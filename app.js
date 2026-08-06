@@ -114,3 +114,4 @@ function resetarAplicacao() {
     localStorage.clear();
     console.log('Todos os dados locais foram apagados.');
 }
+
