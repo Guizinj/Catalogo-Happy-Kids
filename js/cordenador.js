@@ -243,10 +243,10 @@ function configurarFiltroCategoria() {
     listaCategoriasModal.addEventListener('click', async (evento) => {
         // Verifica se o clique foi em um item de categoria
         const itemClicado = evento.target.closest('.item-categoria-modal');
-        if (!itemClicado) return;
+        if (itemClicado){
 
         // Pega o texto de dentro do <li> (ex: "Bonecos", "Carros")
-        const nomeCategoria = itemClicado.textContent.trim();
+        const nomeCategoria = itemClicado.querySelector('.texto-categoria').textContent.trim();
 
         try {
             // Puxa os produtos da categoria escolhida através da API
@@ -263,6 +263,7 @@ function configurarFiltroCategoria() {
         // Ajusta a navegação: esconde botão de carregar mais e mostra botão de voltar ao catálogo
         controlarVisibilidadeBotaoPaginacao(false);
         controlarVisibilidadeBotaoCatalogoCompleto(true);
+        }
 
         // Fecha o modal de menu
         if (modalMenu) modalMenu.close();

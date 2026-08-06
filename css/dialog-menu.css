@@ -118,20 +118,19 @@
     border-bottom: 2px solid #f0f0f5; /* Linha sutil divisória */
 }
 
+
 /* Grid ajustado para 2 colunas */
 .lista-modal-categoria {
     list-style: none;
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas dão espaço para o texto */
-    gap: 12px;
+    grid-template-columns: repeat(1, 1fr); /* 2 colunas dão espaço para o texto */
+    gap: 8px;
 }
 
 /* Cards com visual mais leve, legível e moderno */
 .item-categoria-modal {
-    /* Fundo suave com o tom da marca nos detalhes */
-    background-color: var(--logo-laranja);
     color: #000000;
     font-size: 14px;
     font-weight: 700;
@@ -139,20 +138,23 @@
     padding: 12px 16px; 
     border-radius: 12px;     
     cursor: pointer;
+    border: 1px solid black;
+    gap: 10px;
     
     /* Centralização de conteúdo */
     display: flex;
     align-items: center; 
-    justify-content: center;
+    justify-content: start;
     text-align: center;
-    min-height: 60px; /* Garante altura uniforme para todos os cards */
+    min-height: 50px; /* Garante altura uniforme para todos os cards */
     
     transition: all 0.2s ease;
 }
 
 /* Efeito Hover (Quando passa o mouse ou toca no celular) */
 .item-categoria-modal:hover {
-    transform: translateY(-2px); /* Efeito flutuar leve */
+    transform: translateY(-1px); /* Efeito flutuar leve */
+    background-color: var(--logo-laranja);
 }
 
 
