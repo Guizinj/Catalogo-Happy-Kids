@@ -26,9 +26,12 @@ formProduto.addEventListener('submit', function (evento) {
 
     const leitor = new FileReader();
 
-    leitor.onload = function () {
-        const fotoBase64 = leitor.result;
-        adicionarProduto(nome, preco, fotoBase64);
+   leitor.onload = function () {
+    const fotoBase64 = leitor.result;
+
+    comprimirImagem(fotoBase64, function (fotoComprimida) {
+        adicionarProduto(nome, preco, fotoComprimida);
+        });
     };
 
     leitor.readAsDataURL(arquivoFoto);
@@ -51,10 +54,35 @@ function adicionarProduto(nome, preco, fotoBase64) {
     formProduto.reset();
 }
 
+function comprimirImagem(fotoBase64, callback) {
+    const imagem = new Image();
+
+    imagem.onload = function () {
+        const larguraMaxima = 800;
+        const escala = larguraMaxima / imagem.width;
+        const novaLargura = larguraMaxima;
+        const novaAltura = imagem.height * escala;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = novaLargura;
+        canvas.height = novaAltura;
+
+        const contexto = canvas.getContext('2d');
+        contexto.drawImage(imagem, 0, 0, novaLargura, novaAltura);
+
+        const fotoComprimida = canvas.toDataURL('image/jpeg', 0.7);
+
+        callback(fotoComprimida);
+    };
+
+    imagem.src = fotoBase64;
+}
+
+
 function renderizarLista() {
     listaProdutos.innerHTML = '';
 
-    produtos.forEach((produto) => {
+    produtos.forEach( function (produto) {
         const item = document.createElement('li');
 
         item.innerHTML = `
@@ -86,4 +114,3 @@ function resetarAplicacao() {
     localStorage.clear();
     console.log('Todos os dados locais foram apagados.');
 }
-
