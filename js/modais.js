@@ -1,16 +1,21 @@
      /*ABRIR E FECHAR O MODAL DIALOG DO MENU */
 export function configurarModalMenu() {
     const modalMenu = document.getElementById('modal-menu');
-    const btnAbrirMenu = document.getElementById('bar');
+    const btnsAbrirMenu = document.querySelectorAll('.abrir-menu');
     const btnFecharMenu = document.getElementById('btn-fechar-menu');
     const search =  document.getElementById('search');
     const campoLupa = document.getElementById('campo-lupa');
 
     fecharAoClicarFora(modalMenu);
 
-    btnAbrirMenu.addEventListener('click', () => {
-        modalMenu.showModal();
-    });
+    if (btnsAbrirMenu.length > 0) {
+        btnsAbrirMenu.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault(); // Evita recarregar a página
+                modalMenu.showModal(); // Abre o modal nativo
+            });
+        });
+    }
     btnFecharMenu.addEventListener('click', () => {
         modalMenu.close();
     });
@@ -93,12 +98,15 @@ export function configurarFaq(){
     const btnFecharAjuda = document.getElementById('btn-fechar-ajuda');
     
     // Seleciona o link/botão "Ajuda" que fica dentro do .footer-menu
-    const btnAbrirAjuda = document.getElementById('faq');
+    const btnsAbrirAjuda = document.querySelectorAll('.faqui');
     
-    if (btnAbrirAjuda && modalAjuda) {
-        btnAbrirAjuda.addEventListener('click', (e) => {
-            e.preventDefault(); // Evita recarregar a página
-            modalAjuda.showModal(); // Abre o modal nativo
+    // Percorre cada botão da lista e adiciona o evento
+    if (btnsAbrirAjuda.length > 0 && modalAjuda) {
+        btnsAbrirAjuda.forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault(); // Evita recarregar a página
+                modalAjuda.showModal(); // Abre o modal nativo
+            });
         });
     }
     
