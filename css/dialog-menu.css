@@ -9,8 +9,8 @@
     padding: 0;
     width: 85%;
     max-width: 360px; /* Evita que em tablets fique largo demais */
-    height: 100vh;
-    max-height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
     top: 0;
     margin: 0;
     right: auto;
