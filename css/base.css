@@ -12,6 +12,8 @@ body{
 }
 body:has(dialog[open]){
     overflow: hidden;
+    position: fixed;
+    width: 100%;
 }
 button, input {
     -webkit-tap-highlight-color: transparent;
