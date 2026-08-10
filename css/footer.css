@@ -255,11 +255,14 @@
 
 /* --- 1.4 BARRA INFERIOR (COPYRIGHT E PAGAMENTO) --- */
 .footer-bottom {
-    background-color: var(--logo-laranja);
+    background-image: url('../fundo.jpg');
+    background-repeat: repeat;
+    background-size: contain;
     color: #282727;
     padding: 20px;
     font-size: 13px;
-    font-family: var(--fonte-titulos);
+    font-family: var(--fonte-textos);
+    font-weight: 700;
 }
 
 .footer-bottom {

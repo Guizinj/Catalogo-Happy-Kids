@@ -181,7 +181,6 @@
             <div style="text-align: center; margin: 30px;">
                 <button id="btn-proxima-pagina" class="btn-cta">Carregar mais</button>
             </div>
-
             <footer class="footer-principal">
                 <!-- 1. BARRA DE BENEFÍCIOS / CONFIANÇA -->
                 <div class="footer-beneficios">
@@ -195,7 +194,7 @@
                 <div class="beneficio-item">
                 <span class="material-symbols-outlined beneficio-icone icono-azul">credit_card</span>
                 <div class="beneficio-texto">
-                <h4>Até 10x sem Juros</h4>
+                <h4>Parcelamento sem Juros</h4>
                 <p>Ou desconto especial no Pix</p>
                 </div>
                 </div>
@@ -299,7 +298,7 @@
                 <div class="pagamento-tags">
                 <span class="tag-pagamento">PIX</span>
                 <span class="tag-pagamento">Cartão</span>
-                <span class="tag-pagamento">Boleto</span>
+                <span class="tag-pagamento">Espécie</span>
                 </div>
                 </div>
                 <div class="footer-copy">
@@ -384,124 +383,122 @@
     </dialog>
 
     <dialog class="dialog-menu" id="modal-menu">
-    <div class="modal-menu">
+        <div class="modal-menu">
 
-    <!-- CABEÇALHO FIXO DO MENU -->
-    <div class="header-menu">
-    <div class="topo-menu">
-    <a href="./lista-presentes/index.html">
-        <h2 class="titulos">Menu</h2>
-    </a>
-    <button id="btn-fechar-menu" style="background-color: transparent; border: none; cursor: pointer;">
-        <span class="material-symbols-outlined btn-fechar-menu">close</span>
-    </button>
-    </div>
-    <div class="buscar">
-    <form id="form-pesquisa">
-        <input type="text" id="campo-lupa" placeholder="Encontre seu brinquedo aqui...">
-        <button class="btn-header" id="lupa" type="submit">
-            <span class="material-symbols-outlined lupa">search</span>
+        <!-- CABEÇALHO FIXO DO MENU -->
+        <div class="header-menu">
+        <div class="topo-menu">
+            <h2 class="titulos">Menu</h2>
+        <button id="btn-fechar-menu" style="background-color: transparent; border: none; cursor: pointer;">
+            <span class="material-symbols-outlined btn-fechar-menu">close</span>
         </button>
-    </form>
-    </div>
-    </div>
+        </div>
+        <div class="buscar">
+        <form id="form-pesquisa">
+            <input type="text" id="campo-lupa" placeholder="Encontre seu brinquedo aqui...">
+            <button class="btn-header" id="lupa" type="submit">
+                <span class="material-symbols-outlined lupa">search</span>
+            </button>
+        </form>
+        </div>
+        </div>
 
-    <!-- ÁREA COM ROLAGEM INDEPENDENTE -->
-    <div class="corpo-menu-scroll">
-    <section class="modal-categorias">
-    <h2 id="h2-categoria">Busque por Categorias</h2>
-    <ul class="lista-modal-categoria">
-        <li class="item-categoria-modal">
-            <div class="categoria-info">
-                <span class="emoji-cat">👶</span>
-                <span class="texto-categoria">Primeira Infância e Bebês</span>
-            </div>
-            <span class="material-symbols-outlined seta-cat">chevron_right</span>
-        </li>
-        <li class="item-categoria-modal">
-            <div class="categoria-info">
-                <span class="emoji-cat">🎮</span>
-                <span class="texto-categoria">Jogos e Quebra-Cabeças</span>
-            </div>
-            <span class="material-symbols-outlined seta-cat">chevron_right</span>
-        </li>
-        <li class="item-categoria-modal">
-            <div class="categoria-info">
-                <span class="emoji-cat">🧠</span>
-                <span class="texto-categoria">Brinquedos Educativos</span>
-            </div>
-            <span class="material-symbols-outlined seta-cat">chevron_right</span>
-        </li>
-        <li class="item-categoria-modal">
-            <div class="categoria-info">
-                <span class="emoji-cat">🧸</span>
-                <span class="texto-categoria">Bonecos e Acessórios</span>
-            </div>
-            <span class="material-symbols-outlined seta-cat">chevron_right</span>
-        </li>
-        <li class="item-categoria-modal">
-            <div class="categoria-info">
-                <span class="emoji-cat">🎨</span>
-                <span class="texto-categoria">Artes e Criatividade</span>
-            </div>
-            <span class="material-symbols-outlined seta-cat">chevron_right</span>
-        </li>
-        <li class="item-categoria-modal">
-            <div class="categoria-info">
-                <span class="emoji-cat">⚽</span>
-                <span class="texto-categoria">Esportes e Ar Livre</span>
-            </div>
-            <span class="material-symbols-outlined seta-cat">chevron_right</span>
-        </li>
-        <li class="item-categoria-modal">
-            <div class="categoria-info">
-                <span class="emoji-cat">🚗</span>
-                <span class="texto-categoria">Carrinhos e Veículos</span>
-            </div>
-            <span class="material-symbols-outlined seta-cat">chevron_right</span>
-        </li>
-        <li class="item-categoria-modal">
-            <div class="categoria-info">
-                <span class="emoji-cat">👑</span>
-                <span class="texto-categoria">Faz de Conta</span>
-            </div>
-            <span class="material-symbols-outlined seta-cat">chevron_right</span>
-        </li>
-    </ul>
-    </section>
-    </div>
+        <!-- ÁREA COM ROLAGEM INDEPENDENTE -->
+        <div class="corpo-menu-scroll">
+        <section class="modal-categorias">
+        <h2 id="h2-categoria">Busque por Categorias</h2>
+        <ul class="lista-modal-categoria">
+            <li class="item-categoria-modal">
+                <div class="categoria-info">
+                    <span class="emoji-cat">👶</span>
+                    <span class="texto-categoria">Primeira Infância e Bebês</span>
+                </div>
+                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+            </li>
+            <li class="item-categoria-modal">
+                <div class="categoria-info">
+                    <span class="emoji-cat">🎮</span>
+                    <span class="texto-categoria">Jogos e Quebra-Cabeças</span>
+                </div>
+                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+            </li>
+            <li class="item-categoria-modal">
+                <div class="categoria-info">
+                    <span class="emoji-cat">🧠</span>
+                    <span class="texto-categoria">Brinquedos Educativos</span>
+                </div>
+                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+            </li>
+            <li class="item-categoria-modal">
+                <div class="categoria-info">
+                    <span class="emoji-cat">🧸</span>
+                    <span class="texto-categoria">Bonecos e Acessórios</span>
+                </div>
+                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+            </li>
+            <li class="item-categoria-modal">
+                <div class="categoria-info">
+                    <span class="emoji-cat">🎨</span>
+                    <span class="texto-categoria">Artes e Criatividade</span>
+                </div>
+                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+            </li>
+            <li class="item-categoria-modal">
+                <div class="categoria-info">
+                    <span class="emoji-cat">⚽</span>
+                    <span class="texto-categoria">Esportes e Ar Livre</span>
+                </div>
+                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+            </li>
+            <li class="item-categoria-modal">
+                <div class="categoria-info">
+                    <span class="emoji-cat">🚗</span>
+                    <span class="texto-categoria">Carrinhos e Veículos</span>
+                </div>
+                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+            </li>
+            <li class="item-categoria-modal">
+                <div class="categoria-info">
+                    <span class="emoji-cat">👑</span>
+                    <span class="texto-categoria">Faz de Conta</span>
+                </div>
+                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+            </li>
+        </ul>
+        </section>
+        </div>
 
-    <!-- RODAPÉ FIXO DO MENU -->
-    <div class="footer-menu">
-    <div class="menu-footer-suporte">
-    <a href="https://wa.me/558130463443" target="_blank" class="btn-whatsapp-menu">
-        <span class="material-symbols-outlined">chat</span>
-        Fale no WhatsApp
-    </a>
-    </div>
+        <!-- RODAPÉ FIXO DO MENU -->
+        <div class="footer-menu">
+        <div class="menu-footer-suporte">
+        <a href="https://wa.me/558130463443" target="_blank" class="btn-whatsapp-menu">
+            <span class="material-symbols-outlined">chat</span>
+            Fale no WhatsApp
+        </a>
+        </div>
 
-    <div class="menu-footer-links">
-    <a href="#" class="faqui"><span class="material-symbols-outlined">help</span> Ajuda</a>
-    <a href="https://wa.me/558130463443?text=Ol%C3%A1!%20Gostaria%20de%20saber%20o%20status%20do%20meu%20pedido,%20por%20favor.", target="_blank"><span class="material-symbols-outlined">local_shipping</span> Pedidos</a>
-    <a href="#" id="abrir-lojas"><span class="material-symbols-outlined">store</span> Lojas</a>
-    </div>
+        <div class="menu-footer-links">
+        <a href="#" class="faqui"><span class="material-symbols-outlined">help</span> Ajuda</a>
+        <a href="https://wa.me/558130463443?text=Ol%C3%A1!%20Gostaria%20de%20saber%20o%20status%20do%20meu%20pedido,%20por%20favor.", target="_blank"><span class="material-symbols-outlined">local_shipping</span> Pedidos</a>
+        <a href="#" id="abrir-lojas"><span class="material-symbols-outlined">store</span> Lojas</a>
+        </div>
 
-    <div class="menu-footer-redes">
-    <a href="https://instagram.com/happykidsbrinquedos" target="_blank" aria-label="Instagram">
-        <span class="material-symbols-outlined">photo_camera</span>
-    </a>
-    <a href="#" aria-label="Facebook">
-        <span class="material-symbols-outlined">thumb_up</span>
-    </a>
-    <a href="https://www.youtube.com/@happykidsbrinquedos6659", target="_blank" aria-label="YouTube">
-        <span class="material-symbols-outlined">smart_display</span>
-    </a>
-    </div>
+        <div class="menu-footer-redes">
+        <a href="https://instagram.com/happykidsbrinquedos" target="_blank" aria-label="Instagram">
+            <span class="material-symbols-outlined">photo_camera</span>
+        </a>
+        <a href="#" aria-label="Facebook">
+            <span class="material-symbols-outlined">thumb_up</span>
+        </a>
+        <a href="https://www.youtube.com/@happykidsbrinquedos6659", target="_blank" aria-label="YouTube">
+            <span class="material-symbols-outlined">smart_display</span>
+        </a>
+        </div>
 
-    <p class="menu-footer-copy">Happy Kids &copy; • Diversão garantida! 🧸</p>
-    </div>
+        <p class="menu-footer-copy">Happy Kids &copy; • Diversão garantida! 🧸</p>
+        </div>
 
-    </div>
+        </div>
     </dialog>
 
     <dialog id="modal-produto" class="dialog-produto">
@@ -592,7 +589,7 @@
                         <span class="material-symbols-outlined seta-faq">expand_more</span>
                     </summary>
                     <div class="faq-resposta">
-                        <p>Aceitamos <strong>Pix</strong> (com desconto ou aprovação imediata), Dinehiro em espécie e Cartões de Crédito em até <strong>10x sem juros</strong>.</p>
+                        <p>Aceitamos <strong>Pix</strong> (com desconto ou aprovação imediata), Dinehiro em espécie e Cartões de Crédito. <strong> Com parcelamento sem juros</strong>.</p>
                     </div>
                 </details>
 

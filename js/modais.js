@@ -116,3 +116,26 @@ export function configurarFaq(){
         });
     }
 }
+
+export function configurarModalLoja(){
+    // Seleciona os elementos da loja
+    const modalLojas = document.getElementById('modal-lojas');
+    const btnAbrirLojas = document.getElementById('abrir-lojas');
+    const btnFecharLojas = document.querySelector('.btn-fechar-modal-lojas');
+    
+    // Abrir modal
+    if (btnAbrirLojas && modalLojas) {
+        btnAbrirLojas.addEventListener('click', (e) => {
+            e.preventDefault();
+            modalLojas.showModal();
+        });
+    }
+    
+    // Fechar modal no botão (X)
+    if (btnFecharLojas && modalLojas) {
+        btnFecharLojas.addEventListener('click', (e) => {
+            e.preventDefault();
+            modalLojas.close();
+        });
+    }
+}
