@@ -1,7 +1,7 @@
 import { URL_BUCKET_PRODUTOS } from "./config.js";
 import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros, buscarProdutosPorCodigos, buscarProdutosPorCategoria } from "./api.js";
 import { renderizarListaFavoritos, renderizarProdutos, controlarVisibilidadeBotaoPaginacao, controlarVisibilidadeBotaoCatalogoCompleto, ocultarLoader, favNavbar, atualizarTotalFavoritos, mostrarToast, enviarOrcamentoWhatsApp, atualizarModalProdutoUI } from "./ui.js";
-import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic } from "./modais.js";
+import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic, configurarFaq } from "./modais.js";
 import { mensagensNoTopo } from "./banner.js";
 import { carregarFavoritos, obterFavoritos, verificarFavorito, buscarFavorito, alternarFavorito, removerFavorito, alterarQuantidade, obterQuantidade, atualizarPrecosFavoritos } from "./storage.js";
 
@@ -547,6 +547,26 @@ function configurarBotaoConsultar() {
     }
 }
 
+// Seleciona os elementos da loja
+const modalLojas = document.getElementById('modal-lojas');
+const btnAbrirLojas = document.getElementById('abrir-lojas');
+const btnFecharLojas = document.querySelector('.btn-fechar-modal-lojas');
+
+// Abrir modal
+if (btnAbrirLojas && modalLojas) {
+    btnAbrirLojas.addEventListener('click', (e) => {
+        e.preventDefault();
+        modalLojas.showModal();
+    });
+}
+
+// Fechar modal no botão (X)
+if (btnFecharLojas && modalLojas) {
+    btnFecharLojas.addEventListener('click', (e) => {
+        e.preventDefault();
+        modalLojas.close();
+    });
+}
 
 /* INICIALIZAÇÃO GERAL */
 // DOMContentLoaded dispara quando o HTML terminou de ser carregado e montado
@@ -557,6 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
     configurarPesquisa();
     configurarFiltroCategoria();
     configurarCliqueNoGrid();
+    configurarFaq();
     configurarModalProduto();
     configurarModalFavoritos();               // vem de modais.js
     configurarEventosModalFavoritosConteudo();

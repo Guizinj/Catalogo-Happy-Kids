@@ -1,0 +1,205 @@
+/* ==========================================================================
+   MODAL DE AJUDA (DIALOG-AJUDA)
+   ========================================================================== */
+
+.dialog-ajuda {
+    border: none;
+    outline: none;
+    padding: 0;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 480px;
+    max-height: 85vh;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    background-color: #ffffff;
+    overflow: hidden;
+
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.3s ease, transform 0.3s ease, display 0.3s allow-discrete, overlay 0.3s allow-discrete;
+}
+
+.dialog-ajuda[open] {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@starting-style {
+    .dialog-ajuda[open] {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+.dialog-ajuda::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.dialog-ajuda[open]::backdrop {
+    opacity: 1;
+}
+
+/* Estrutura Interna */
+.modal-ajuda-container {
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+}
+
+/* Cabeçalho */
+.header-ajuda {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    background-color: #fff9f5;
+    border-bottom: 2px solid #f0e6df;
+}
+
+.titulo-ajuda-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icone-ajuda {
+    color: var(--logo-laranja);
+    font-size: 26px !important;
+}
+
+.header-ajuda .titulos {
+    font-family: var(--fonte-titulos);
+    font-size: 20px;
+    color: #222222;
+    margin: 0;
+}
+
+.btn-fechar-modal-ajuda {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666666;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.btn-fechar-modal-ajuda:hover {
+    color: var(--logo-rosa);
+}
+
+/* Corpo / Perguntas Frequentes */
+.conteudo-ajuda {
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.subtitulo-ajuda {
+    font-family: var(--fonte-textos);
+    font-size: 13px;
+    color: #666666;
+    margin: 0 0 6px 0;
+}
+
+/* Accordion (Details / Summary Nativo) */
+.faq-item {
+    background-color: #fcfbf9;
+    border: 1px solid #eee5dd;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.faq-item[open] {
+    border-color: var(--logo-azul);
+    background-color: #ffffff;
+}
+
+.faq-pergunta {
+    padding: 14px 16px;
+    font-family: var(--fonte-textos);
+    font-size: 14px;
+    font-weight: 700;
+    color: #333333;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none; /* Remove a seta padrão do navegador */
+}
+
+.faq-pergunta::-webkit-details-marker {
+    display: none; /* Remove seta no Safari/Chrome */
+}
+
+.seta-faq {
+    color: var(--logo-azul);
+    transition: transform 0.2s ease;
+}
+
+.faq-item[open] .seta-faq {
+    transform: rotate(180deg);
+    color: var(--logo-rosa);
+}
+
+.faq-resposta {
+    padding: 0 16px 14px 16px;
+    font-family: var(--fonte-textos);
+    font-size: 13px;
+    color: #555555;
+    line-height: 1.5;
+}
+
+.faq-resposta p {
+    margin: 0;
+}
+
+/* Rodapé do Modal */
+.footer-ajuda {
+    padding: 16px 20px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eeeeee;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-ajuda p {
+    margin: 0;
+    font-family: var(--fonte-textos);
+    font-size: 12px;
+    color: #777777;
+}
+
+.btn-suporte-ajuda {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: var(--logo-verde);
+    color: #ffffff;
+    text-decoration: none;
+    font-family: var(--fonte-titulos);
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 20px;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-suporte-ajuda:hover {
+    background-color: #6ba834;
+    transform: scale(1.02);
+}

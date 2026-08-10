@@ -86,3 +86,25 @@ export function fecharAoClicarFora(modalElement) {
         }
     });
 }
+
+export function configurarFaq(){
+    // Seleciona os elementos do modal de ajuda
+    const modalAjuda = document.getElementById('modal-ajuda');
+    const btnFecharAjuda = document.getElementById('btn-fechar-ajuda');
+    
+    // Seleciona o link/botão "Ajuda" que fica dentro do .footer-menu
+    const btnAbrirAjuda = document.getElementById('faq');
+    
+    if (btnAbrirAjuda && modalAjuda) {
+        btnAbrirAjuda.addEventListener('click', (e) => {
+            e.preventDefault(); // Evita recarregar a página
+            modalAjuda.showModal(); // Abre o modal nativo
+        });
+    }
+    
+    if (btnFecharAjuda && modalAjuda) {
+        btnFecharAjuda.addEventListener('click', () => {
+            modalAjuda.close(); // Fecha o modal nativo
+        });
+    }
+}

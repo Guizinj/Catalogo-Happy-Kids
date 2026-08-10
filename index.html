@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/produtos.css">
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/faqajuda.css">
+    <link rel="stylesheet" href="css/lojas.css">
     <link rel="shortcut icon" href="logo.png" type="image/x-icon">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -176,13 +178,135 @@
 
             <div class="grid-produtos" id="grid"></div>
 
-            <div class="footer-principal">
-                
-            </div>
-
             <div style="text-align: center; margin: 30px;">
                 <button id="btn-proxima-pagina" class="btn-cta">Carregar mais</button>
             </div>
+
+            <footer class="footer-principal">
+                <!-- 1. BARRA DE BENEFÍCIOS / CONFIANÇA -->
+                <div class="footer-beneficios">
+                <div class="beneficio-item">
+                <span class="material-symbols-outlined beneficio-icone icono-laranja">local_shipping</span>
+                <div class="beneficio-texto">
+                <h4>Entrega Rápida</h4>
+                <p>Enviamos para todo o Brasil</p>
+                </div>
+                </div>
+                <div class="beneficio-item">
+                <span class="material-symbols-outlined beneficio-icone icono-azul">credit_card</span>
+                <div class="beneficio-texto">
+                <h4>Até 10x sem Juros</h4>
+                <p>Ou desconto especial no Pix</p>
+                </div>
+                </div>
+                <div class="beneficio-item">
+                <span class="material-symbols-outlined beneficio-icone icono-verde">published_with_changes</span>
+                <div class="beneficio-texto">
+                <h4>Troca sem Complicação</h4>
+                <p>Até 15 dias para trocar</p>
+                </div>
+                </div>
+                <div class="beneficio-item">
+                <span class="material-symbols-outlined beneficio-icone icono-rosa">verified_user</span>
+                <div class="beneficio-texto">
+                <h4>100% Seguro</h4>
+                <p>Seus dados protegidos</p>
+                </div>
+                </div>
+                </div>
+
+                <!-- 2. NEWSLETTER DA DIVERSÃO -->
+                <div class="footer-newsletter">
+                <div class="newsletter-conteudo">
+                <div class="newsletter-info">
+                <h3>Faça parte do nosso Clube da Diversão! 🎈</h3>
+                <p>Cadastre seu e-mail e ganhe <strong>10% OFF</strong> na sua primeira compra + novidades exclusivas.</p>
+                </div>
+                <form class="newsletter-form" onsubmit="event.preventDefault();">
+                <input type="email" placeholder="Digite seu melhor e-mail..." required>
+                <button type="submit" class="btn-newsletter">Garantir Desconto</button>
+                </form>
+                </div>
+                </div>
+
+                <!-- 3. GRID DE LINKS E CONTEÚDO PRINCIPAL -->
+                <div class="footer-conteudo">
+                <div class="footer-coluna sobre-loja">
+                <img src="logo_ofc.png" alt="Happy Kids" class="footer-logo">
+                <p class="footer-descricao">
+                Sua loja de brinquedos preferida! Trazendo sorrisos, imaginação e momentos inesquecíveis para toda a família.
+                </p>
+                <div class="footer-redes">
+                <a href="#" aria-label="Instagram" class="rede-icon"><span class="material-symbols-outlined">photo_camera</span></a>
+                <a href="#" aria-label="Facebook" class="rede-icon"><span class="material-symbols-outlined">thumb_up</span></a>
+                <a href="#" aria-label="YouTube" class="rede-icon"><span class="material-symbols-outlined">smart_display</span></a>
+                </div>
+                </div>
+
+                <div class="footer-coluna">
+                <h4 class="coluna-titulo titulo-laranja">Atendimento</h4>
+                <ul class="footer-links">
+                <li><a href="#">Central de Ajuda (FAQ)</a></li>
+                <li><a href="#">Trocas e Devoluções</a></li>
+                <li><a href="#">Prazos e Entregas</a></li>
+                <li><a href="#">Acompanhar Pedido</a></li>
+                <li><a href="#">Política de Privacidade</a></li>
+                </ul>
+                </div>
+
+                <div class="footer-coluna">
+                <h4 class="coluna-titulo titulo-azul">Categorias</h4>
+                <ul class="footer-links">
+                <li><a href="#">Primeira Infância</a></li>
+                <li><a href="#">Brinquedos Educativos</a></li>
+                <li><a href="#">Jogos e Quebra-Cabeças</a></li>
+                <li><a href="#">Bonecos e Acessórios</a></li>
+                <li><a href="#">Carrinhos e Veículos</a></li>
+                </ul>
+                </div>
+
+                <div class="footer-coluna contato-coluna">
+                <h4 class="coluna-titulo titulo-verde">Fale Conosco</h4>
+                <div class="contato-item">
+                <span class="material-symbols-outlined">chat</span>
+                <div>
+                <strong>WhatsApp:</strong>
+                <p>(11) 99999-9999</p>
+                </div>
+                </div>
+                <div class="contato-item">
+                <span class="material-symbols-outlined">mail</span>
+                <div>
+                <strong>E-mail:</strong>
+                <p>atendimento@happykids.com.br</p>
+                </div>
+                </div>
+                <div class="contato-item">
+                <span class="material-symbols-outlined">schedule</span>
+                <div>
+                <strong>Horário:</strong>
+                <p>Seg. a Sex. das 8h às 18h</p>
+                </div>
+                </div>
+                </div>
+                </div>
+
+                <!-- 4. RODAPÉ INFERIOR (COPYRIGHT E PAGAMENTO) -->
+                <div class="footer-bottom">
+                <div class="footer-pagamento">
+                <span>Formas de Pagamento:</span>
+                <div class="pagamento-tags">
+                <span class="tag-pagamento">PIX</span>
+                <span class="tag-pagamento">Cartão</span>
+                <span class="tag-pagamento">Boleto</span>
+                </div>
+                </div>
+                <div class="footer-copy">
+                <p>&copy; Happy Kids Brinquedos. Todos os direitos reservados. Feito com ❤️ para espalhar alegria.</p>
+                </div>
+                </div>
+            </footer>
+
         </section>
     </div>
 
@@ -259,57 +383,124 @@
     </dialog>
 
     <dialog class="dialog-menu" id="modal-menu">
-        <div class="modal-menu">
-            <div class="header-menu">
-                <div class="topo-menu">
-                    <a href="./lista-presentes/index.html">
-                        <h2 class="titulos">Menu</h2>
-                    </a>
-                    <button id="btn-fechar-menu" style="background-color: transparent;"><span class="material-symbols-outlined btn-fechar-menu">close</span></button>
-                </div>
-                 <div class="buscar">
-                    <form id="form-pesquisa">
-                        <input type="text" name="" id="campo-lupa"
-                        placeholder="Encontre seu brinquedo aqui...">
-                        <button class="btn-header" id="lupa"><span class="material-symbols-outlined lupa">search</span></button>
-                    </form>
-                </div>
+    <div class="modal-menu">
+
+    <!-- CABEÇALHO FIXO DO MENU -->
+    <div class="header-menu">
+    <div class="topo-menu">
+    <a href="./lista-presentes/index.html">
+        <h2 class="titulos">Menu</h2>
+    </a>
+    <button id="btn-fechar-menu" style="background-color: transparent; border: none; cursor: pointer;">
+        <span class="material-symbols-outlined btn-fechar-menu">close</span>
+    </button>
+    </div>
+    <div class="buscar">
+    <form id="form-pesquisa">
+        <input type="text" id="campo-lupa" placeholder="Encontre seu brinquedo aqui...">
+        <button class="btn-header" id="lupa" type="submit">
+            <span class="material-symbols-outlined lupa">search</span>
+        </button>
+    </form>
+    </div>
+    </div>
+
+    <!-- ÁREA COM ROLAGEM INDEPENDENTE -->
+    <div class="corpo-menu-scroll">
+    <section class="modal-categorias">
+    <h2 id="h2-categoria">Busque por Categorias</h2>
+    <ul class="lista-modal-categoria">
+        <li class="item-categoria-modal">
+            <div class="categoria-info">
+                <span class="emoji-cat">👶</span>
+                <span class="texto-categoria">Primeira Infância e Bebês</span>
             </div>
-            <!--<section class="grid-visual">
-                <h2 id="h2-menu">Mais Vendidos</h2>
-                <div class="cards-container">
-                    <div class="card"></div>
-                    <div class="card"></div>
-                    <div class="card"></div>
-                </div>
-            </section>-->
-            <section class="modal-categorias">
-                <h2 id="h2-categoria">Busque por Categorias</h2>
-                <ul class="lista-modal-categoria">
-                    <li class="item-categoria-modal"><span>👶 </span> <span class="texto-categoria"> Primeira Infância e Bebês</span></li>
-                    <li class="item-categoria-modal"><span>🎮</span> <span class="texto-categoria">Jogos e Quebra-Cabeças</span></li>
-                    <li class="item-categoria-modal"><span>🧠</span> <span class="texto-categoria">Brinquedos Educativos</span></li>
-                    <li class="item-categoria-modal"><span>🪆</span> <span class="texto-categoria">Bonecos e Acessórios</span></li>
-                    <li class="item-categoria-modal"><span>🎨</span> <span class="texto-categoria">Artes e Criatividade</span></li>
-                    <li class="item-categoria-modal"><span>⚽</span> <span class="texto-categoria">Esportes e Ar Livre</span></li>
-                    <li class="item-categoria-modal"><span>🚗</span> <span class="texto-categoria">Carrinhos e Veículos</span></li>
-                    <li class="item-categoria-modal"><span>👑</span> <span class="texto-categoria">Faz de Conta</span></li>
-                </ul>
-            </section>
-            <!--<section class="modal-marcas">
-            <h2 id="h2-marcas">Busque por Marcas</h2>
-            <ul class="lista-modal-marcas">
-                <li class="item-categoria-marcas">ELKA</li>
-                <li class="item-categoria-marcas">TA TE TI</li>
-                <li class="item-categoria-marcas">CALESITA</li>
-                <li class="item-categoria-marcas">DISMAT</li>
-            </ul>
-        </section>-->
-        </div>
+            <span class="material-symbols-outlined seta-cat">chevron_right</span>
+        </li>
+        <li class="item-categoria-modal">
+            <div class="categoria-info">
+                <span class="emoji-cat">🎮</span>
+                <span class="texto-categoria">Jogos e Quebra-Cabeças</span>
+            </div>
+            <span class="material-symbols-outlined seta-cat">chevron_right</span>
+        </li>
+        <li class="item-categoria-modal">
+            <div class="categoria-info">
+                <span class="emoji-cat">🧠</span>
+                <span class="texto-categoria">Brinquedos Educativos</span>
+            </div>
+            <span class="material-symbols-outlined seta-cat">chevron_right</span>
+        </li>
+        <li class="item-categoria-modal">
+            <div class="categoria-info">
+                <span class="emoji-cat">🧸</span>
+                <span class="texto-categoria">Bonecos e Acessórios</span>
+            </div>
+            <span class="material-symbols-outlined seta-cat">chevron_right</span>
+        </li>
+        <li class="item-categoria-modal">
+            <div class="categoria-info">
+                <span class="emoji-cat">🎨</span>
+                <span class="texto-categoria">Artes e Criatividade</span>
+            </div>
+            <span class="material-symbols-outlined seta-cat">chevron_right</span>
+        </li>
+        <li class="item-categoria-modal">
+            <div class="categoria-info">
+                <span class="emoji-cat">⚽</span>
+                <span class="texto-categoria">Esportes e Ar Livre</span>
+            </div>
+            <span class="material-symbols-outlined seta-cat">chevron_right</span>
+        </li>
+        <li class="item-categoria-modal">
+            <div class="categoria-info">
+                <span class="emoji-cat">🚗</span>
+                <span class="texto-categoria">Carrinhos e Veículos</span>
+            </div>
+            <span class="material-symbols-outlined seta-cat">chevron_right</span>
+        </li>
+        <li class="item-categoria-modal">
+            <div class="categoria-info">
+                <span class="emoji-cat">👑</span>
+                <span class="texto-categoria">Faz de Conta</span>
+            </div>
+            <span class="material-symbols-outlined seta-cat">chevron_right</span>
+        </li>
+    </ul>
+    </section>
+    </div>
 
-        <div class="footer-menu">
+    <!-- RODAPÉ FIXO DO MENU -->
+    <div class="footer-menu">
+    <div class="menu-footer-suporte">
+    <a href="https://wa.me/558130463443" target="_blank" class="btn-whatsapp-menu">
+        <span class="material-symbols-outlined">chat</span>
+        Fale no WhatsApp
+    </a>
+    </div>
 
-        </div>
+    <div class="menu-footer-links">
+    <a href="#" id="faq"><span class="material-symbols-outlined">help</span> Ajuda</a>
+    <a href="https://wa.me/558130463443?text=Ol%C3%A1!%20Gostaria%20de%20saber%20o%20status%20do%20meu%20pedido,%20por%20favor.", target="_blank"><span class="material-symbols-outlined">local_shipping</span> Pedidos</a>
+    <a href="#" id="abrir-lojas"><span class="material-symbols-outlined">store</span> Lojas</a>
+    </div>
+
+    <div class="menu-footer-redes">
+    <a href="https://instagram.com/happykidsbrinquedos" target="_blank" aria-label="Instagram">
+        <span class="material-symbols-outlined">photo_camera</span>
+    </a>
+    <a href="#" aria-label="Facebook">
+        <span class="material-symbols-outlined">thumb_up</span>
+    </a>
+    <a href="#" aria-label="YouTube">
+        <span class="material-symbols-outlined">smart_display</span>
+    </a>
+    </div>
+
+    <p class="menu-footer-copy">Happy Kids &copy; • Diversão garantida! 🧸</p>
+    </div>
+
+    </div>
     </dialog>
 
     <dialog id="modal-produto" class="dialog-produto">
@@ -356,8 +547,192 @@
             </div>
         </div>
     </dialog>
-    
 
+    <dialog class="dialog-ajuda" id="modal-ajuda">
+        <div class="modal-ajuda-container">
+            <!-- Cabeçalho -->
+            <div class="header-ajuda">
+                <div class="titulo-ajuda-box">
+                    <span class="material-symbols-outlined icone-ajuda">help</span>
+                    <h2 class="titulos">Central de Ajuda</h2>
+                </div>
+                <button id="btn-fechar-ajuda" class="btn-fechar-modal-ajuda">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <!-- Conteúdo Rolável (FAQ em Sanfona/Accordion) -->
+            <div class="conteudo-ajuda">
+                <p class="subtitulo-ajuda">Tire suas dúvidas mais comuns abaixo:</p>
+
+                <details class="faq-item">
+                    <summary class="faq-pergunta">
+                        <span>🚚 Qual o prazo e valor da entrega?</span>
+                        <span class="material-symbols-outlined seta-faq">expand_more</span>
+                    </summary>
+                    <div class="faq-resposta">
+                        <p>O prazo varia de acordo com o seu CEP. Você pode simular o frete diretamente com nossas atendentes. Enviamos para todo o Brasil via Transportadora e Correios!</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-pergunta">
+                        <span>🔄 Como funciona a troca de presentes?</span>
+                        <span class="material-symbols-outlined seta-faq">expand_more</span>
+                    </summary>
+                    <div class="faq-resposta">
+                        <p>A criança já tem o brinquedo? Não se preocupe! Você tem até <strong>15 dias</strong> após o recebimento para solicitar a troca do produto sem complicações.</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-pergunta">
+                        <span>💳 Quais são as formas de pagamento?</span>
+                        <span class="material-symbols-outlined seta-faq">expand_more</span>
+                    </summary>
+                    <div class="faq-resposta">
+                        <p>Aceitamos <strong>Pix</strong> (com desconto ou aprovação imediata), Dinehiro em espécie e Cartões de Crédito em até <strong>10x sem juros</strong>.</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-pergunta">
+                        <span>🧸 Os brinquedos são originais e seguros?</span>
+                        <span class="material-symbols-outlined seta-faq">expand_more</span>
+                    </summary>
+                    <div class="faq-resposta">
+                        <p>Sim! Todos os nossos brinquedos são 100% originais, adquiridos diretamente dos fabricantes e possuem o selo de segurança do <strong>INMETRO</strong>.</p>
+                    </div>
+                </details>
+
+                <details class="faq-item">
+                    <summary class="faq-pergunta">
+                        <span>🎈 Como funciona o Filtro Mágico de Presentes?</span>
+                        <span class="material-symbols-outlined seta-faq">expand_more</span>
+                    </summary>
+                    <div class="faq-resposta">
+                        <p>Nosso Filtro Mágico te ajuda a escolher o presente perfeito! Basta selecionar a idade e preferência da criança e nós recomendamos os melhores brinquedos do catálogo.</p>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Rodapé do Modal com CTA para Atendimento -->
+            <div class="footer-ajuda">
+                <p>Ainda precisa de ajuda?</p>
+                <a href="https://wa.me/558130463443" target="_blank" class="btn-suporte-ajuda">
+                    <span class="material-symbols-outlined">chat</span>
+                    Falar com Atendente
+                </a>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog class="dialog-lojas" id="modal-lojas">
+        <div class="modal-lojas-container">
+            
+            <!-- CABEÇALHO DO MODAL -->
+            <div class="header-lojas">
+                <div class="titulo-lojas-box">
+                    <span class="material-symbols-outlined icone-lojas">storefront</span>
+                    <h2 class="titulos">Nossas Lojas</h2>
+                </div>
+                <a href="#" class="btn-fechar-modal-lojas" aria-label="Fechar">
+                    <span class="material-symbols-outlined">close</span>
+                </a>
+            </div>
+
+            <!-- CONTEÚDO ROLÁVEL (LISTA DE UNIDADES) -->
+            <div class="conteudo-lojas">
+                <p class="subtitulo-lojas">Encontre a Happy Kids mais próxima de você:</p>
+
+                <!-- CARD LOJA 1 -->
+                <div class="card-loja">
+                    <div class="card-loja-topo">
+                        <div>
+                            <h3>Happy Kids Loja (Matriz)</h3>
+                        </div>
+                        <span class="material-symbols-outlined icone-pin">location_on</span>
+                    </div>
+
+                    <div class="card-loja-info">
+                        <p class="endereco-loja">
+                            <strong>Av. Agamenon Magalhães, 1060</strong> — Maurucio de Nassau<br>
+                            Caruaru - PE • CEP: 55014-000
+                        </p>
+                        <p class="horario-loja">
+                            <span class="material-symbols-outlined">schedule</span>
+                            Seg. a Sex: 09h às 19h | Sáb: 09h às 14h
+                        </p>
+                    </div>
+
+                    <div class="card-loja-beneficios">
+                        <span class="selo-beneficio">📦 Retire na Loja</span>
+                        <span class="selo-beneficio">🅿️ Estacionamento</span>
+                    </div>
+
+                    <div class="card-loja-acoes">
+                        <a href="https://maps.google.com" target="_blank" class="btn-loja btn-outline">
+                            <span class="material-symbols-outlined">near_me</span>
+                            Como Chegar
+                        </a>
+                        <a href="https://wa.me/558130463443" target="_blank" class="btn-loja btn-whats">
+                            <span class="material-symbols-outlined">chat</span>
+                            WhatsApp Loja
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CARD LOJA 2 -->
+                <div class="card-loja">
+                    <div class="card-loja-topo">
+                        <div>
+                            <h3>Shopping Difusora (Happy Kids)</h3>
+                        </div>
+                        <span class="material-symbols-outlined icone-pin">location_on</span>
+                    </div>
+
+                    <div class="card-loja-info">
+                        <p class="endereco-loja">
+                            <strong>Avenida Agamenon Magalhães, 444, Mauricio de Nassau</strong> —  (Piso 2)<br>
+                            Caruaru - PE • CEP: 55012-290
+                        </p>
+                        <p class="horario-loja">
+                            <span class="material-symbols-outlined">schedule</span>
+                            Seg. a Sáb: 10h às 22h | Dom: 12h às 21h
+                        </p>
+                    </div>
+
+                    <div class="card-loja-beneficios">
+                        <span class="selo-beneficio">📦 Retire na Loja</span>
+                        <span class="selo-beneficio">❄️ Ar Condicionado</span>
+                    </div>
+
+                    <div class="card-loja-acoes">
+                        <a href="https://maps.google.com" target="_blank" class="btn-loja btn-outline">
+                            <span class="material-symbols-outlined">near_me</span>
+                            Como Chegar
+                        </a>
+                        <a href="https://wa.me/558130463443" target="_blank" class="btn-loja btn-whats">
+                            <span class="material-symbols-outlined">chat</span>
+                            WhatsApp Loja
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RODAPÉ DO MODAL -->
+            <div class="footer-lojas">
+                <p>Quer consultar o estoque de um produto em uma loja física?</p>
+                <a href="https://wa.me/558130463443" target="_blank" class="btn-suporte-lojas">
+                    <span class="material-symbols-outlined">inventory_2</span>
+                    Consultar Vendedoras
+                </a>
+            </div>
+
+        </div>
+    </dialog>
+    
     <script type="module" src="js/cordenador.js"></script>
 </body>
 </html>
