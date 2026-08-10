@@ -312,18 +312,31 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
     containerMiniaturas.innerHTML = '';
     const imagensDosProdutos = [];
 
+    // Otimização da imagem principal
+    imagemPrincipal.decoding = 'async';
     imagemPrincipal.src = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_1.webp`;
     imagemPrincipal.alt = produtoSelecionado.nome;
 
-    // Monta as 3 miniaturas do produto e habilita clique pra trocar a imagem principal
+    // Monta as 3 miniaturas
     for (let i = 1; i <= 2; i++) {
         const urlImagem = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_${i}.webp`;
-        imagensDosProdutos.push(urlImagem); // monta na ordem certa, sem depender do load
+        imagensDosProdutos.push(urlImagem);
+
+        // Container wrapper com classe de Skeleton/Carregamento
+        const miniaturaWrapper = document.createElement('div');
+        miniaturaWrapper.classList.add('miniatura-wrapper', 'skeleton');
 
         const miniatura = document.createElement('img');
-        miniatura.src = urlImagem;
         miniatura.alt = produtoSelecionado.nome;
+        miniatura.decoding = 'async';
         if (i === 1) miniatura.classList.add('ativa');
+
+        // Quando a imagem termina de carregar, remove o efeito de skeleton
+        miniatura.onload = () => miniaturaWrapper.classList.remove('skeleton');
+        miniatura.onerror = () => miniaturaWrapper.classList.remove('skeleton');
+
+        // Define a URL após ligar os eventos
+        miniatura.src = urlImagem;
 
         miniatura.addEventListener('click', () => {
             imagemPrincipal.src = urlImagem;
@@ -331,17 +344,17 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
             miniatura.classList.add('ativa');
         });
 
-        containerMiniaturas.appendChild(miniatura); // aparece na tela na ordem, mesmo com carregamento assíncrono
+        miniaturaWrapper.appendChild(miniatura);
+        containerMiniaturas.appendChild(miniaturaWrapper);
     }
 
-    // Habilita o swipe (arrastar o dedo) na galeria de imagens do modal → gestos.js
+    // Habilita o swipe
     configurarGestosGaleria(imagemPrincipal, imagensDosProdutos);
 
     document.getElementById('modal-nome').textContent = produtoSelecionado.nome;
     document.getElementById('modal-preco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
-    /*document.getElementById('modal-categoria').textContent = `Categoria: ${produtoSelecionado.categoria}`*/
 
-    // Define a condição de parcelamento de acordo com a faixa de preço
+    // Condição de parcelamento
     if (produtoSelecionado.preco > 200) {
         parcelaModal.textContent = `ou até 3x de R$ ${(produtoSelecionado.preco / 3).toFixed(2)} sem juros`;
     } else if (produtoSelecionado.preco > 100) {
@@ -352,7 +365,7 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
 
     document.getElementById('modal-descricao').textContent = produtoSelecionado.descricao || "Descrição não informada.";
 
-    // Atualização visual do botão de favoritos interno do modal
+    // Botão de favoritos
     const jaEhFavorito = verificarFavorito(produtoSelecionado.codigo);
     if (jaEhFavorito) {
         btnFavoritarModal.textContent = "Remover dos Favoritos";
