@@ -34,9 +34,9 @@
     margin-bottom: 20px;
 }
 .card-produto h3 {
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: var(--fonte-textos);
     font-size: 0.85rem;
-    font-weight: 500;
+    font-weight: 700;
     color: #444444; 
     margin-bottom: 8px;
     line-height: 1.2;
@@ -47,17 +47,11 @@
     min-height: 2rem;
 }
 .card-produto .preco {
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: var(--fonte-titulos);
     font-size: 1.15rem;
     font-weight: 800; 
     color: var(--logo-laranja);
     margin-bottom: 15px;
-}
-.card-produto .preco-antigo{
-    font-size: 0.8rem;
-    color: #7a7979;
-    text-decoration: line-through;
-    margin-bottom: 0px;
 }
 .card-produto .btn-comprar {
     width: 80%;
@@ -79,4 +73,13 @@
 }
 .favoritado{
     font-variation-settings:'FILL' 1;
+}
+.card-produto .btn-comprar:active {
+    opacity: 0.8;
+}
+.card-produto .btn-comprar:hover {
+    transform: scale(1.03);
+}
+.card-produto:hover{
+    transform: scale(1.02);
 }

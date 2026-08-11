@@ -232,6 +232,7 @@
     font-weight: bold;
     color: var(--logo-laranja);
     margin: 0;
+    font-family: var(--fonte-titulos);
 }
 @media (min-width: 768px) {
     .modal-produto-direita .preco {

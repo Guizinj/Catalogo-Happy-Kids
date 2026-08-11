@@ -45,15 +45,6 @@ header{
     gap: 5px;
     
 }
-.card-produto .btn-comprar:active {
-    opacity: 0.8;
-}
-.card-produto .btn-comprar:hover {
-    transform: scale(1.03);
-}
-.card-produto:hover{
-    transform: scale(1.02);
-}
 /* Estilo da barra principal no topo */
 .top-banner {
   position: relative;
