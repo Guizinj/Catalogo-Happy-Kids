@@ -115,6 +115,8 @@ export function configurarFaq(){
             modalAjuda.close(); // Fecha o modal nativo
         });
     }
+
+    fecharAoClicarFora(modalAjuda);
 }
 
 export function configurarModalLoja(){
@@ -138,4 +140,5 @@ export function configurarModalLoja(){
             modalLojas.close();
         });
     }
+    fecharAoClicarFora(modalLojas);
 }

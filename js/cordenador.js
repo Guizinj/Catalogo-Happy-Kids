@@ -1,7 +1,7 @@
 import { URL_BUCKET_PRODUTOS } from "./config.js";
 import { buscarTodosOsProdutos, buscarProdutosPorNome, buscarProdutosPorFiltros, buscarProdutosPorCodigos, buscarProdutosPorCategoria } from "./api.js";
 import { renderizarListaFavoritos, renderizarProdutos, controlarVisibilidadeBotaoPaginacao, controlarVisibilidadeBotaoCatalogoCompleto, ocultarLoader, favNavbar, atualizarTotalFavoritos, mostrarToast, enviarOrcamentoWhatsApp, atualizarModalProdutoUI } from "./ui.js";
-import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic, configurarFaq, configurarModalLoja } from "./modais.js";
+import { configurarModalMenu, configurarModalFavoritos, configurarModalMagic, configurarFaq, configurarModalLoja, fecharAoClicarFora } from "./modais.js";
 import { mensagensNoTopo } from "./banner.js";
 import { carregarFavoritos, obterFavoritos, verificarFavorito, buscarFavorito, alternarFavorito, removerFavorito, alterarQuantidade, obterQuantidade, atualizarPrecosFavoritos } from "./storage.js";
 
@@ -534,6 +534,8 @@ function configurarEventosModalFavoritosConteudo() {
             sincronizarInterfaceFavoritos();
         }
     });
+
+    fecharAoClicarFora(modalConfirmacao);
 }
 
 
