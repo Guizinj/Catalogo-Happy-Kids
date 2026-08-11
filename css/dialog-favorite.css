@@ -166,13 +166,12 @@
 
 /* Imagem do produto */
 .img-favorito-mini {
-    width: 20%;
-    height: 20%;
-    object-fit: contain;
+    width: 60px;
+    height: 60px;
+    object-fit: cover; /* Evita que a foto estique e garante padronização */
     border-radius: 8px;
-    max-height: 100px;
+    flex-shrink: 0;   /* Impede que a imagem encolha se o título for longo */
 }
-
 /* Área de texto (Nome e Preço) */
 .info-favorito-mini {
     flex-grow: 1;
@@ -198,6 +197,7 @@
     font-size: 14px;
     font-weight: 700;
     color: var(--logo-laranja);
+    font-family: var(--fonte-titulos);
 }
 
 /* Ícone da lixeira */

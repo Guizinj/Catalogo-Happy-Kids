@@ -11,9 +11,7 @@ body{
     -moz-osx-font-smoothing: grayscale;
 }
 body:has(dialog[open]){
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
+    overflow: hidden !important;
 }
 button, input {
     -webkit-tap-highlight-color: transparent;
