@@ -44,6 +44,12 @@ O site é uma aplicação estática, pública e sem autenticação. O Supabase �
 
 A API seleciona somente esses campos. Isso reduz tráfego, mas não substitui restrição de coluna e RLS no banco.
 
+### Exposição pública aprovada
+
+A tabela `produtos` possui RLS ativo e uma policy pública de `SELECT` com regra `true`. A decisão atual do projeto é aceitar a leitura pública de todas as colunas existentes, incluindo `quantidade` e `ref`, pois elas são dados operacionais do catálogo e não são consideradas sensíveis. O front-end continua solicitando apenas os campos necessários para renderização.
+
+Não incluir nesta tabela informações de clientes, pedidos, fornecedores, custo, margem, credenciais ou qualquer outro dado que não possa ser público. Caso isso mude, separar os dados internos em outra tabela ou criar uma view pública antes de adicioná-los.
+
 ### Favorito local
 
     {
@@ -106,7 +112,7 @@ Esta lista deve ser executada no Dashboard ou por migration revisada antes de pu
 - [ ] Papel anon possui somente SELECT no catálogo público.
 - [ ] anon não possui INSERT, UPDATE, DELETE, RPC administrativa ou acesso a tabelas internas.
 - [ ] A política de SELECT define explicitamente as linhas que podem ser públicas.
-- [ ] A exposição de colunas usa view pública ou privilégios de coluna; incluir apenas o contrato de produto listado neste documento.
+- [x] A tabela `produtos` foi revisada: todas as colunas atuais são aprovadas para leitura pública. Novos campos devem passar por esta mesma revisão antes de serem adicionados.
 - [ ] Chaves secret, service_role e credenciais SQL estão somente em backend/Edge Function seguro.
 - [ ] Security Advisor do Supabase revisado sem alertas críticos ignorados.
 - [ ] Logs e auditoria revisados após a publicação.
