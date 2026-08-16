@@ -16,12 +16,12 @@ export function configurarModalMenu() {
             });
         });
     }
-    btnFecharMenu.addEventListener('click', () => {
-        modalMenu.close();
+    btnFecharMenu?.addEventListener('click', () => {
+        modalMenu?.close();
     });
-    search.addEventListener('click', () => {
-        modalMenu.showModal();
-        campoLupa.focus();
+    search?.addEventListener('click', () => {
+        modalMenu?.showModal();
+        campoLupa?.focus();
     });
 };
 
@@ -30,27 +30,15 @@ export function configurarModalFavoritos() {
     const modalFav = document.getElementById('dialog-favorite');
     const btnAbrirFav = document.getElementById('btn-favorite');
     const btnFecharFav = document.getElementById('btn-fechar-fav');
-    const btnExplorar = document.getElementById('btn-explorar-favoritos');
 
     fecharAoClicarFora(modalFav);
 
-    btnAbrirFav.addEventListener('click', () =>{
-        modalFav.showModal();
+    btnAbrirFav?.addEventListener('click', () =>{
+        modalFav?.showModal();
     })
-    btnFecharFav.addEventListener('click', () =>{
-        modalFav.close();
+    btnFecharFav?.addEventListener('click', () =>{
+        modalFav?.close();
     })
-    if(btnExplorar){
-        btnExplorar.addEventListener('click', () =>{
-        modalFav.close();
-        const gridProdutos = document.querySelector('.conteudo');
-                if (gridProdutos) {
-                    gridProdutos.scrollIntoView({ 
-                        behavior: 'smooth'
-                    });
-                };
-    });
-    }
 };
 
     /*ABRIR E FECHAR O MODAL DIALOG DO MAGIC */
@@ -61,11 +49,11 @@ export function configurarModalMagic(){
 
     fecharAoClicarFora(modalMagic);
 
-    btnAbrirMagic.addEventListener('click', () => {
-        modalMagic.showModal()
+    btnAbrirMagic?.addEventListener('click', () => {
+        modalMagic?.showModal()
     });
-    btnFecharMagic.addEventListener('click', () => {
-        modalMagic.close()
+    btnFecharMagic?.addEventListener('click', () => {
+        modalMagic?.close()
     });
 
 };
@@ -77,6 +65,8 @@ export function configurarModalMagic(){
 
 
 export function fecharAoClicarFora(modalElement) {
+    if (!modalElement) return;
+
     // Adicionamos o ouvinte de evento 'click' DIRETAMENTE no modal passado
     modalElement.addEventListener('click', (evento) => {
         // A MÁGICA DA TAG <DIALOG>:

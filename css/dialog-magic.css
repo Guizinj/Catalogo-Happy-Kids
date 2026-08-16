@@ -149,7 +149,7 @@
     width: 100%;
     padding: 14px 20px;
     font-size: 15px;
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--fonte-textos);
     color: #333333; 
     background-color: #ffffff; 
     border: 1px solid var(--logo-laranja);
@@ -184,7 +184,7 @@
     color: #ffffff; 
     font-size: 16px;
     font-weight: 700; 
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--fonte-titulos);
     border: none;
     border-radius: 30px; 
     padding: 14px;

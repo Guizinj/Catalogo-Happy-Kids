@@ -1,379 +1,405 @@
-import { URL_BUCKET_PRODUTOS, NUMERO_WHATSAPP } from "./config.js";
+import { URL_BUCKET_PRODUTOS } from './config.js';
+import {
+    criarUrlImagem,
+    formatarMoeda,
+    normalizarListaFavoritos,
+    normalizarListaProdutos,
+    normalizarProduto
+} from './domain.js';
 import { configurarGestosGaleria } from './gestos.js';
+import { criarUrlWhatsApp, montarMensagemOrcamento } from './whatsapp.js';
 
+let temporizadorToast;
 
-/**
- * Renderiza os cards de produto no grid principal da loja.
- * Pode substituir o grid inteiro ou apenas acrescentar (paginação).
- *
- * Chamada por: cordenador.js
- *   - iniciarLoja() → primeira renderização (deveAcrescentar = false)
- *   - carregarProximaPagina() → acrescenta itens (deveAcrescentar = true)
- *   - configurarPesquisa() → resultado da busca por nome
- *   - configurarFiltroMagico() → resultado do filtro de idade/gênero
- *
- * Recebe: produtosAtuais (vindo de api.js) + obterFavoritos() (vindo de storage.js)
- * para saber quais corações já devem aparecer marcados.
- */
+function criarElemento(tag, { classes = [], texto, atributos = {} } = {}) {
+    const elemento = document.createElement(tag);
+
+    classes.filter(Boolean).forEach((classe) => elemento.classList.add(classe));
+
+    if (texto !== undefined) {
+        elemento.textContent = texto;
+    }
+
+    Object.entries(atributos).forEach(([nome, valor]) => {
+        if (valor !== undefined && valor !== null) {
+            elemento.setAttribute(nome, String(valor));
+        }
+    });
+
+    return elemento;
+}
+
+function configurarImagemDeProduto(imagem, codigo, nome, indice = 1) {
+    const url = criarUrlImagem(URL_BUCKET_PRODUTOS, codigo, indice);
+
+    imagem.classList.remove('imagem-indisponivel');
+    imagem.parentElement?.removeAttribute('data-imagem-indisponivel');
+    imagem.alt = nome;
+    imagem.decoding = 'async';
+    imagem.onerror = () => {
+        imagem.classList.add('imagem-indisponivel');
+        imagem.removeAttribute('src');
+        imagem.parentElement?.setAttribute('data-imagem-indisponivel', 'true');
+    };
+
+    if (url) {
+        imagem.src = url;
+    }
+}
+
+function criarIcone(nome, classes = []) {
+    return criarElemento('span', {
+        classes: ['material-symbols-outlined', ...classes],
+        texto: nome,
+        atributos: { 'aria-hidden': 'true' }
+    });
+}
+
+function criarBotao({ classes = [], texto, rotulo, acao, titulo } = {}) {
+    const botao = criarElemento('button', {
+        classes,
+        texto,
+        atributos: {
+            type: 'button',
+            'aria-label': rotulo,
+            'data-action': acao,
+            title: titulo
+        }
+    });
+
+    return botao;
+}
+
 export function renderizarProdutos(listaDeProdutos, deveAcrescentar = false, listaFavoritos = []) {
     const grid = document.getElementById('grid');
+    if (!grid) return;
 
-    if (listaDeProdutos.length === 0) {
+    const produtos = normalizarListaProdutos(listaDeProdutos);
+    const codigosFavoritos = new Set(
+        normalizarListaFavoritos(listaFavoritos).map((favorito) => favorito.codigo)
+    );
+
+    if (!deveAcrescentar) {
+        grid.replaceChildren();
+    }
+
+    if (produtos.length === 0) {
         if (!deveAcrescentar) {
-            grid.textContent = 'Nenhum produto encontrado na loja';
-        }
-        return;
-    }
-
-    const htmlCards = listaDeProdutos.map(produto => {
-        // Verifica se o produto atual existe na array de favoritos
-        const ehFavorito = listaFavoritos.some(fav => fav.codigo == produto.codigo);
-        const classeFavorito = ehFavorito ? 'favoritado' : '';
-        const imagem = `${URL_BUCKET_PRODUTOS}${produto.codigo}_1.webp`;
-
-        return `
-            <div class="card-produto" data-id="${produto.codigo}">
-                <img class="img-card" src="${imagem}" alt="${produto.nome}">
-                <h3>${produto.nome}</h3>
-                <p class="preco">R$ ${produto.preco.toFixed(2)}</p>
-                <button class="btn-comprar">Ver detalhes</button>
-                <button class="btn-header"><span class="material-symbols-outlined favorite ${classeFavorito}">favorite</span></button>
-            </div>
-        `;
-    }).join('');
-
-    if (deveAcrescentar) {
-        grid.insertAdjacentHTML('beforeend', htmlCards);
-    } else {
-        grid.innerHTML = htmlCards;
-    }
-}
-
-
-/**
- * Desenha os itens dentro do modal de favoritos.
- * Se a lista estiver vazia, mostra o "empty state" (ursinho triste).
- *
- * Chamada por: cordenador.js → sincronizarInterfaceFavoritos()
- * (disparada toda vez que a lista de favoritos muda: adicionar, remover, alterar quantidade)
- *
- * Recebe: obterFavoritos() vindo de storage.js
- * Dispara: clique em "Explorar brinquedos" fecha #dialog-favorite e rola até .conteudo
- */
-export function renderizarListaFavoritos(favoritos = []) {
-    const containerFavoritos = document.querySelector('.modal-favoritos-conteudo');
-    const footerFav = document.querySelector('.footer-modal-favoritos');
-
-    if (favoritos.length === 0) {
-        footerFav.style.display = 'none';
-
-        containerFavoritos.innerHTML = `
-            <div class="empty-state-favoritos" id="empty-state">
-                <div class="ilustracao-ursinho">
-                    <span class="material-symbols-outlined">sentiment_dissatisfied</span>
-                </div>
-                <h3 class="titulo-empty">Seu coração está vazio!</h3>
-                <p class="texto-empty">Você ainda não escolheu nenhum brinquedo favorito para a sua criança.</p>
-                <button class="btn-explorar" id="btn-explorar-favoritos">Explorar brinquedos</button>
-            </div>
-        `;
-
-        const btnExplorar = document.getElementById('btn-explorar-favoritos');
-        if (btnExplorar) {
-            btnExplorar.addEventListener('click', () => {
-                document.getElementById('dialog-favorite').close();
-
-                const gridProdutos = document.querySelector('.conteudo');
-                if (gridProdutos) {
-                    gridProdutos.scrollIntoView({ behavior: 'smooth' });
-                }
+            const estadoVazio = criarElemento('p', {
+                classes: ['estado-catalogo'],
+                texto: 'Nenhum produto encontrado na loja.',
+                atributos: { role: 'status' }
             });
+            grid.appendChild(estadoVazio);
         }
         return;
     }
 
-    const htmlFavoritos = favoritos.map(produto => {
-        const qtd = produto.quantidade || 1;
-        const imagem = `${URL_BUCKET_PRODUTOS}${produto.codigo}_1.webp`;
+    const fragmento = document.createDocumentFragment();
 
-        return `
-            <div class="card-favorito-mini" data-id="${produto.codigo}">
-                <img class="img-favorito-mini" src="${imagem}" alt="${produto.nome}">
+    produtos.forEach((produto) => {
+        const card = criarElemento('article', {
+            classes: ['card-produto'],
+            atributos: { 'data-id': produto.codigo }
+        });
 
-                <div class="info-favorito-mini">
-                    <h4>${produto.nome}</h4>
-                    <!-- Opcional e muito usado: multiplica o preço pela quantidade -->
-                    <p>R$ ${(produto.preco * qtd).toFixed(2)}</p>
-                </div>
+        const imagem = criarElemento('img', {
+            classes: ['img-card'],
+            atributos: {
+                loading: 'lazy',
+                width: 200,
+                height: 200
+            }
+        });
+        configurarImagemDeProduto(imagem, produto.codigo, produto.nome);
 
-                <div class="pilula-quantidade">
-                    <button class="btn-qtd btn-menos" title="Diminuir">
-                        <span class="material-symbols-outlined">${qtd === 1 ? 'delete' : 'remove'}</span>
-                    </button>
-                    <span class="qtd-numero">${qtd}</span>
-                    <button class="btn-qtd btn-mais" title="Aumentar">
-                        <span class="material-symbols-outlined">add</span>
-                    </button>
-                </div>
-            </div>
-        `;
-        // Nota: os cliques em .btn-menos/.btn-mais/.pilula-quantidade NÃO são
-        // tratados aqui — o listener fica em cordenador.js →
-        // configurarEventosModalFavoritosConteudo() (delegação de evento)
-    }).join('');
+        const titulo = criarElemento('h3', { texto: produto.nome });
+        const preco = criarElemento('p', {
+            classes: ['preco'],
+            texto: formatarMoeda(produto.preco)
+        });
+        const botaoDetalhes = criarBotao({
+            classes: ['btn-comprar'],
+            texto: 'Ver detalhes',
+            rotulo: 'Ver detalhes de ' + produto.nome,
+            acao: 'ver-detalhes'
+        });
+        const botaoFavorito = criarBotao({
+            classes: ['btn-header', 'btn-favorito-produto'],
+            rotulo: (codigosFavoritos.has(produto.codigo) ? 'Remover' : 'Adicionar')
+                + ' ' + produto.nome + ' dos favoritos',
+            acao: 'favoritar'
+        });
+        const iconeFavorito = criarIcone('favorite', [
+            'favorite',
+            codigosFavoritos.has(produto.codigo) ? 'favoritado' : ''
+        ]);
 
-    containerFavoritos.innerHTML = htmlFavoritos;
-    footerFav.style.display = 'flex';
+        botaoFavorito.appendChild(iconeFavorito);
+        card.append(imagem, titulo, preco, botaoDetalhes, botaoFavorito);
+        fragmento.appendChild(card);
+    });
+
+    grid.appendChild(fragmento);
 }
 
+export function renderizarListaFavoritos(favoritos = []) {
+    const container = document.querySelector('.modal-favoritos-conteudo');
+    const rodape = document.querySelector('.footer-modal-favoritos');
+    if (!container || !rodape) return;
 
-/**
- * Mostra ou esconde o botão de "carregar mais produtos" (paginação).
- *
- * Chamada por: cordenador.js
- *   - iniciarLoja() → mostra (true) após carregar a primeira página
- *   - carregarProximaPagina() → esconde (false) quando não há mais produtos
- *   - configurarPesquisa() / configurarFiltroMagico() → esconde (false),
- *     pois busca/filtro trazem resultado único, sem paginação
- */
-export function controlarVisibilidadeBotaoPaginacao(deveMostrar) {
-    const btnProximaPagina = document.getElementById('btn-proxima-pagina');
-    if (btnProximaPagina) {
-        btnProximaPagina.style.display = deveMostrar ? 'inline-block' : 'none';
+    const lista = normalizarListaFavoritos(favoritos);
+    container.replaceChildren();
+
+    if (lista.length === 0) {
+        rodape.hidden = true;
+
+        const estadoVazio = criarElemento('div', {
+            classes: ['empty-state-favoritos'],
+            atributos: { id: 'empty-state' }
+        });
+        const ilustracao = criarElemento('div', { classes: ['ilustracao-ursinho'] });
+        ilustracao.appendChild(criarIcone('sentiment_dissatisfied'));
+
+        const titulo = criarElemento('h3', {
+            classes: ['titulo-empty'],
+            texto: 'Seu coração está vazio!'
+        });
+        const texto = criarElemento('p', {
+            classes: ['texto-empty'],
+            texto: 'Você ainda não escolheu nenhum brinquedo favorito para a sua criança.'
+        });
+        const explorar = criarBotao({
+            classes: ['btn-explorar'],
+            texto: 'Explorar brinquedos',
+            rotulo: 'Fechar favoritos e explorar brinquedos',
+            acao: 'explorar-favoritos'
+        });
+
+        explorar.addEventListener('click', () => {
+            document.getElementById('dialog-favorite')?.close();
+            document.querySelector('.conteudo')?.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        estadoVazio.append(ilustracao, titulo, texto, explorar);
+        container.appendChild(estadoVazio);
+        return;
     }
+
+    rodape.hidden = false;
+    const fragmento = document.createDocumentFragment();
+
+    lista.forEach((produto) => {
+        const card = criarElemento('article', {
+            classes: ['card-favorito-mini'],
+            atributos: { 'data-id': produto.codigo }
+        });
+        const detalhes = criarBotao({
+            classes: ['btn-detalhe-favorito'],
+            rotulo: 'Ver detalhes de ' + produto.nome,
+            acao: 'ver-detalhes-favorito'
+        });
+        const imagem = criarElemento('img', {
+            classes: ['img-favorito-mini'],
+            atributos: { loading: 'lazy', width: 60, height: 60 }
+        });
+        configurarImagemDeProduto(imagem, produto.codigo, produto.nome);
+
+        const informacoes = criarElemento('div', { classes: ['info-favorito-mini'] });
+        informacoes.append(
+            criarElemento('h4', { texto: produto.nome }),
+            criarElemento('p', { texto: formatarMoeda(produto.preco * produto.quantidade) })
+        );
+        detalhes.append(imagem, informacoes);
+
+        const quantidade = criarElemento('div', {
+            classes: ['pilula-quantidade'],
+            atributos: { 'aria-label': 'Quantidade de ' + produto.nome }
+        });
+        const diminuir = criarBotao({
+            classes: ['btn-qtd', 'btn-menos'],
+            rotulo: produto.quantidade === 1 ? 'Remover ' + produto.nome : 'Diminuir quantidade de ' + produto.nome,
+            acao: 'diminuir-favorito',
+            titulo: produto.quantidade === 1 ? 'Remover' : 'Diminuir'
+        });
+        diminuir.appendChild(criarIcone(produto.quantidade === 1 ? 'delete' : 'remove'));
+
+        const numero = criarElemento('span', {
+            classes: ['qtd-numero'],
+            texto: produto.quantidade,
+            atributos: { 'aria-live': 'polite' }
+        });
+        const aumentar = criarBotao({
+            classes: ['btn-qtd', 'btn-mais'],
+            rotulo: 'Aumentar quantidade de ' + produto.nome,
+            acao: 'aumentar-favorito',
+            titulo: 'Aumentar'
+        });
+        aumentar.appendChild(criarIcone('add'));
+
+        quantidade.append(diminuir, numero, aumentar);
+        card.append(detalhes, quantidade);
+        fragmento.appendChild(card);
+    });
+
+    container.appendChild(fragmento);
 }
 
+export function controlarVisibilidadeBotaoPaginacao(deveMostrar, carregando = false) {
+    const botao = document.getElementById('btn-proxima-pagina');
+    if (!botao) return;
 
-/**
- * Mostra ou esconde o botão "← Ver catálogo completo", que só faz sentido
- * quando o cliente está vendo resultado de busca ou do filtro mágico —
- * é o caminho de volta pro catálogo paginado normal, sem precisar dar F5.
- *
- * Chamada por: cordenador.js
- *   - configurarPesquisa() / configurarFiltroMagico() → mostra (true) depois
- *     de um resultado de busca/filtro
- *   - voltarParaCatalogoCompleto() → esconde (false) ao voltar pro catálogo normal
- *   - iniciarLoja() → garante que começa escondido (false)
- */
+    botao.hidden = !deveMostrar;
+    botao.disabled = carregando;
+    botao.textContent = carregando ? 'Carregando...' : 'Carregar mais';
+    botao.setAttribute('aria-busy', String(carregando));
+}
+
 export function controlarVisibilidadeBotaoCatalogoCompleto(deveMostrar) {
-    const btnVerCatalogoCompleto = document.getElementById('btn-ver-catalogo-completo');
-    if (btnVerCatalogoCompleto) {
-        btnVerCatalogoCompleto.style.display = deveMostrar ? 'inline-block' : 'none';
+    const botao = document.getElementById('btn-ver-catalogo-completo');
+    if (botao) {
+        botao.hidden = !deveMostrar;
     }
 }
 
-
-/**
- * Remove o overlay de carregamento da tela após a loja estar pronta.
- *
- * Chamada por: cordenador.js → iniciarLoja()
- * (tanto no fluxo de sucesso quanto no catch de erro, pra não travar o usuário no loader)
- */
 export function ocultarLoader() {
     const loader = document.getElementById('loader-overlay');
-    if (loader) {
-        loader.classList.add('oculto');
-        setTimeout(() => loader.remove(), 400);
-    }
+    if (!loader) return;
+
+    loader.classList.add('oculto');
+    setTimeout(() => loader.remove(), 400);
 }
 
-
-/**
- * Ativa/desativa o destaque visual do ícone de favoritos na navbar (#btn-favorite).
- *
- * Chamada por: cordenador.js → sincronizarInterfaceFavoritos()
- * Recebe: lista.length (vindo de obterFavoritos() em storage.js)
- */
 export function favNavbar(quantidade) {
-    const btnFavorite = document.getElementById('btn-favorite');
-    if (btnFavorite) {
-        btnFavorite.classList.toggle('favoritado', quantidade > 0);
-    }
+    const botao = document.getElementById('btn-favorite');
+    if (!botao) return;
+
+    botao.classList.toggle('favoritado', quantidade > 0);
+    botao.setAttribute('aria-label', quantidade > 0
+        ? 'Abrir favoritos, ' + quantidade + ' itens'
+        : 'Abrir favoritos');
 }
 
-
-/**
- * Calcula e exibe o valor total (preço x quantidade) dos favoritos.
- *
- * Chamada por: cordenador.js → sincronizarInterfaceFavoritos()
- * Recebe: obterFavoritos() vindo de storage.js
- */
 export function atualizarTotalFavoritos(listaFavoritos) {
-    const elTotal = document.getElementById('total-favoritos');
-    if (!elTotal) return;
+    const total = document.getElementById('total-favoritos');
+    if (!total) return;
 
-    const valorTotal = listaFavoritos.reduce((acumulador, produto) => {
-        return acumulador + (produto.preco * (produto.quantidade || 1));
+    const valorTotal = normalizarListaFavoritos(listaFavoritos).reduce((acumulador, produto) => {
+        return acumulador + (produto.preco * produto.quantidade);
     }, 0);
 
-    elTotal.textContent = `R$ ${valorTotal.toFixed(2)}`;
+    total.textContent = formatarMoeda(valorTotal);
 }
 
-
-/**
- * Exibe uma notificação temporária (toast) de sucesso ou remoção.
- * Se já existir um toast na tela, remove antes de criar outro.
- *
- * Chamada por: cordenador.js
- *   - configurarModalProduto() → ao favoritar/desfavoritar pelo modal de detalhes
- *   - configurarCliqueNoGrid() → ao favoritar/desfavoritar direto no card do grid
- *   - configurarEventosModalFavoritosConteudo() → ao confirmar remoção de favorito
- * Chamada internamente por: enviarOrcamentoWhatsApp() (nesse mesmo arquivo), quando a lista está vazia
- */
 export function mostrarToast(mensagem, tipo = 'sucesso') {
-    const toastAntigo = document.getElementById('toast-feedback');
-    if (toastAntigo) toastAntigo.remove();
+    document.getElementById('toast-feedback')?.remove();
+    clearTimeout(temporizadorToast);
 
-    const toast = document.createElement('div');
-    toast.id = 'toast-feedback';
-    toast.className = `mostrar ${tipo}`;
-    toast.textContent = mensagem;
+    const toast = criarElemento('div', {
+        atributos: {
+            id: 'toast-feedback',
+            role: 'status',
+            'aria-live': 'polite'
+        },
+        texto: mensagem
+    });
+    toast.className = 'mostrar ' + tipo;
 
-    // Se tiver um modal aberto, o toast entra dentro dele (senão fica escondido atrás)
     const dialogAberto = document.querySelector('dialog[open]');
-    if (dialogAberto) {
-        dialogAberto.appendChild(toast);
-    } else {
-        document.body.appendChild(toast);
-    }
+    (dialogAberto || document.body).appendChild(toast);
 
-    clearTimeout(toast.timer);
-    toast.timer = setTimeout(() => {
+    temporizadorToast = setTimeout(() => {
         toast.classList.remove('mostrar');
-        setTimeout(() => { if (toast.parentElement) toast.remove(); }, 300);
-    }, 500);
+        setTimeout(() => toast.remove(), 300);
+    }, 3200);
 }
 
-
-/**
- * Monta a mensagem de orçamento com os itens favoritados
- * e abre o WhatsApp já com o texto preenchido.
- *
- * Chamada por: cordenador.js → configurarBotaoConsultar()
- * (listener do clique em #btn-consultar-favoritos)
- *
- * Recebe: obterFavoritos() vindo de storage.js
- * Vai para: window.open() abrindo o wa.me em nova aba — fim do fluxo, não retorna nada pro chamador
- */
 export function enviarOrcamentoWhatsApp(listaFavoritos) {
-    if (listaFavoritos.length === 0) {
+    const mensagem = montarMensagemOrcamento(listaFavoritos);
+
+    if (!mensagem) {
         mostrarToast('Sua lista de favoritos está vazia!', 'removido');
         return;
     }
 
-    // Iniciamos o texto usando \n para pular linha no JavaScript de forma limpa
-    let texto = "Olá! Vim pelo site da Happy Kids Brinquedos e gostaria de consultar a disponibilidade dos seguintes brinquedos:\n";
-
-    listaFavoritos.forEach(produto => {
-        const qtd = produto.quantidade || 1; // segurança caso venha zerado/nulo
-
-        // Só escrevemos "cada" quando tem MAIS DE 1 unidade — com quantidade 1,
-        // o preço do item já É o preço "cada" sozinho, então "cada" viraria
-        // redundante ("1x Boneca — R$ 149,90 cada" soa estranho).
-        const precoFormatado = qtd > 1
-            ? `R$ ${produto.preco.toFixed(2)} cada`
-            : `R$ ${produto.preco.toFixed(2)}`;
-
-        texto += `\n• ${qtd}x ${produto.nome} (Ref: ${produto.codigo}) — ${precoFormatado}`;
-    });
-
-    const valorTotal = listaFavoritos.reduce((acc, p) => acc + (p.preco * (p.quantidade || 1)), 0);
-    texto += `\n\n*Total estimado: R$ ${valorTotal.toFixed(2)}*`;
-    texto += `\n\nAguardo confirmação, obrigado!`;
-
-    // Vem de config.js agora — não é mais um valor "solto" dentro da lógica de apresentação
-    const numeroWhatsApp = NUMERO_WHATSAPP;
-
-    // encodeURIComponent transforma \n em %0A e protege os espaços na URL
-    const urlFormatada = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(texto)}`;
-
-    window.open(urlFormatada, '_blank');
+    const url = criarUrlWhatsApp('principal', mensagem);
+    window.open(url, '_blank', 'noopener,noreferrer');
 }
 
-
-/**
- * Preenche o modal de detalhes do produto: imagem principal, miniaturas,
- * nome, preço, condição de parcelamento, descrição e estado do botão de favorito.
- *
- * Chamada por: cordenador.js → configurarModalProduto()
- *   - exibirDetalhes() → ao abrir o modal (clique em card do grid ou mini-card de favorito)
- *   - listener de btnFavoritarModal → pra atualizar o texto/cor do botão após favoritar/desfavoritar
- *
- * Recebe: produtoSelecionado (objeto do produto) + verificarFavorito (função vinda de storage.js,
- * passada como parâmetro para checar se o produto já está nos favoritos)
- * Usa: configurarGestosGaleria() de gestos.js para habilitar o swipe nas imagens
- */
 export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
+    const produto = normalizarProduto(produtoSelecionado);
     const imagemPrincipal = document.getElementById('modal-img');
     const containerMiniaturas = document.getElementById('miniaturas');
-    const btnFavoritarModal = document.getElementById('btn-favoritar-modal');
-    const parcelaModal = document.getElementById('modal-parcela');
+    const botaoFavoritar = document.getElementById('btn-favoritar-modal');
+    const parcela = document.getElementById('modal-parcela');
 
-    containerMiniaturas.innerHTML = '';
-    const imagensDosProdutos = [];
+    if (!produto || !imagemPrincipal || !containerMiniaturas || !botaoFavoritar || !parcela) {
+        return;
+    }
 
-    // Otimização da imagem principal
-    imagemPrincipal.decoding = 'async';
-    imagemPrincipal.src = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_1.webp`;
-    imagemPrincipal.alt = produtoSelecionado.nome;
+    containerMiniaturas.replaceChildren();
+    configurarImagemDeProduto(imagemPrincipal, produto.codigo, produto.nome);
 
-    // Monta as 3 miniaturas
-    for (let i = 1; i <= 2; i++) {
-        const urlImagem = `${URL_BUCKET_PRODUTOS}${produtoSelecionado.codigo}_${i}.webp`;
-        imagensDosProdutos.push(urlImagem);
+    const imagens = [1, 2].map((indice) => criarUrlImagem(URL_BUCKET_PRODUTOS, produto.codigo, indice));
+    const fragmento = document.createDocumentFragment();
 
-        // Container wrapper com classe de Skeleton/Carregamento
-        const miniaturaWrapper = document.createElement('div');
-        miniaturaWrapper.classList.add('miniatura-wrapper', 'skeleton');
+    imagens.forEach((urlImagem, indice) => {
+        const wrapper = criarElemento('div', {
+            classes: ['miniatura-wrapper', 'skeleton']
+        });
+        const miniatura = criarElemento('img', {
+            atributos: {
+                alt: produto.nome,
+                loading: 'lazy',
+                width: 60,
+                height: 60
+            }
+        });
 
-        const miniatura = document.createElement('img');
-        miniatura.alt = produtoSelecionado.nome;
+        if (indice === 0) {
+            miniatura.classList.add('ativa');
+        }
+
         miniatura.decoding = 'async';
-        if (i === 1) miniatura.classList.add('ativa');
-
-        // Quando a imagem termina de carregar, remove o efeito de skeleton
-        miniatura.onload = () => miniaturaWrapper.classList.remove('skeleton');
-        miniatura.onerror = () => miniaturaWrapper.classList.remove('skeleton');
-
-        // Define a URL após ligar os eventos
+        miniatura.addEventListener('load', () => wrapper.classList.remove('skeleton'), { once: true });
+        miniatura.addEventListener('error', () => {
+            wrapper.classList.remove('skeleton');
+            wrapper.setAttribute('data-imagem-indisponivel', 'true');
+            miniatura.remove();
+        }, { once: true });
         miniatura.src = urlImagem;
 
         miniatura.addEventListener('click', () => {
             imagemPrincipal.src = urlImagem;
-            document.querySelectorAll('#miniaturas img').forEach(img => img.classList.remove('ativa'));
+            containerMiniaturas.querySelectorAll('img').forEach((imagem) => imagem.classList.remove('ativa'));
             miniatura.classList.add('ativa');
         });
 
-        miniaturaWrapper.appendChild(miniatura);
-        containerMiniaturas.appendChild(miniaturaWrapper);
-    }
+        wrapper.appendChild(miniatura);
+        fragmento.appendChild(wrapper);
+    });
 
-    // Habilita o swipe
-    configurarGestosGaleria(imagemPrincipal, imagensDosProdutos);
+    containerMiniaturas.appendChild(fragmento);
+    configurarGestosGaleria(imagemPrincipal, imagens);
 
-    document.getElementById('modal-nome').textContent = produtoSelecionado.nome;
-    document.getElementById('modal-preco').textContent = `R$ ${produtoSelecionado.preco.toFixed(2)}`;
+    document.getElementById('modal-nome').textContent = produto.nome;
+    document.getElementById('modal-preco').textContent = formatarMoeda(produto.preco);
 
-    // Condição de parcelamento
-    if (produtoSelecionado.preco > 200) {
-        parcelaModal.textContent = `ou até 3x de R$ ${(produtoSelecionado.preco / 3).toFixed(2)} sem juros`;
-    } else if (produtoSelecionado.preco > 100) {
-        parcelaModal.textContent = `ou 2x de R$ ${(produtoSelecionado.preco / 2).toFixed(2)} sem juros`;
+    if (produto.preco > 200) {
+        parcela.textContent = 'ou até 3x de ' + formatarMoeda(produto.preco / 3) + ' sem juros';
+    } else if (produto.preco > 100) {
+        parcela.textContent = 'ou 2x de ' + formatarMoeda(produto.preco / 2) + ' sem juros';
     } else {
-        parcelaModal.textContent = 'pagamento à vista ou em 1x no cartão';
+        parcela.textContent = 'pagamento à vista ou em 1x no cartão';
     }
 
-    document.getElementById('modal-descricao').textContent = produtoSelecionado.descricao || "Descrição não informada.";
+    const categoria = document.getElementById('modal-categoria');
+    categoria.textContent = produto.categoria;
+    categoria.hidden = !produto.categoria;
+    document.getElementById('modal-descricao').textContent = produto.descricao || 'Descrição não informada.';
 
-    // Botão de favoritos
-    const jaEhFavorito = verificarFavorito(produtoSelecionado.codigo);
-    if (jaEhFavorito) {
-        btnFavoritarModal.textContent = "Remover dos Favoritos";
-        btnFavoritarModal.style.backgroundColor = "var(--logo-rosa)";
-        btnFavoritarModal.style.color = "#ffffff";
-    } else {
-        btnFavoritarModal.textContent = "Adicionar aos Favoritos";
-        btnFavoritarModal.style.backgroundColor = "";
-        btnFavoritarModal.style.color = "";
-    }
+    const jaEhFavorito = verificarFavorito(produto.codigo);
+    botaoFavoritar.textContent = jaEhFavorito ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos';
+    botaoFavoritar.classList.toggle('esta-favoritado', jaEhFavorito);
+    botaoFavoritar.setAttribute('aria-label', botaoFavoritar.textContent + ': ' + produto.nome);
 }

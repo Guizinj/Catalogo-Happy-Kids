@@ -163,6 +163,15 @@
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
+.btn-detalhe-favorito {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    min-width: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+}
 
 /* Imagem do produto */
 .img-favorito-mini {
@@ -171,6 +180,9 @@
     object-fit: cover; /* Evita que a foto estique e garante padronização */
     border-radius: 8px;
     flex-shrink: 0;   /* Impede que a imagem encolha se o título for longo */
+}
+.img-favorito-mini.imagem-indisponivel {
+    background: #f5f5f5;
 }
 /* Área de texto (Nome e Preço) */
 .info-favorito-mini {

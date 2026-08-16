@@ -38,6 +38,21 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.322);
     margin-bottom: 5px;
 }
+.btn-cta-voltar[hidden] {
+    display: none;
+}
+.btn-cta[disabled] {
+    cursor: wait;
+    opacity: 0.72;
+}
+.paginacao-container {
+    margin: 30px;
+    text-align: center;
+}
+.titulo-secao-catalogo {
+    margin-bottom: 15px;
+    color: var(--logo-laranja);
+}
 @keyframes pulsar {
   0% {
     transform: scale(1);

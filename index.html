@@ -2,83 +2,30 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Catálogo digital da Happy Kids Brinquedos. Encontre presentes, salve favoritos e consulte disponibilidade pelo WhatsApp.">
+    <meta name="theme-color" content="#b84b00">
     <title>Catálogo de Brinquedos</title>
-    <link rel="stylesheet" href="css/header.css?v=1.0">
-    <link rel="stylesheet" href="css/buscar.css?v=1.0">
-    <link rel="stylesheet" href="css/cta.css?v=1.0">
-    <link rel="stylesheet" href="css/categorias.css?v=1.0">
-    <link rel="stylesheet" href="css/dialog-magic.css?v=1.0">
-    <link rel="stylesheet" href="css/dialog-favorite.css?v=1.0">
-    <link rel="stylesheet" href="css/dialog-menu.css?v=1.0">
-    <link rel="stylesheet" href="css/dialog-produto.css?v=1.0">
-    <link rel="stylesheet" href="css/root.css?v=1.0">
-    <link rel="stylesheet" href="css/base.css?v=1.0">
-    <link rel="stylesheet" href="css/produtos.css?v=1.0">
-    <link rel="stylesheet" href="css/footer.css?v=1.0">
-    <link rel="stylesheet" href="css/faqajuda.css?v=1.0">
-    <link rel="stylesheet" href="css/lojas.css?v=1.0">
-    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/header.css?v=1.1.0">
+    <link rel="stylesheet" href="css/buscar.css?v=1.1.0">
+    <link rel="stylesheet" href="css/cta.css?v=1.1.0">
+    <link rel="stylesheet" href="css/dialog-magic.css?v=1.1.0">
+    <link rel="stylesheet" href="css/dialog-favorite.css?v=1.1.0">
+    <link rel="stylesheet" href="css/dialog-menu.css?v=1.1.0">
+    <link rel="stylesheet" href="css/dialog-produto.css?v=1.1.0">
+    <link rel="stylesheet" href="css/root.css?v=1.1.0">
+    <link rel="stylesheet" href="css/base.css?v=1.1.0">
+    <link rel="stylesheet" href="css/produtos.css?v=1.1.0">
+    <link rel="stylesheet" href="css/footer.css?v=1.1.0">
+    <link rel="stylesheet" href="css/faqajuda.css?v=1.1.0">
+    <link rel="stylesheet" href="css/lojas.css?v=1.1.0">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        #loader-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 99999;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
-        }
-
-        #loader-overlay.oculto {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-content {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .spinner {
-            width: 45px;
-            height: 45px;
-            border: 4px solid #f1f1f1;
-            border-top: 4px solid #FE5000; /* Cor laranja da sua paleta (--logo-laranja) */
-            border-radius: 50%;
-            animation: girarLoader 0.8s linear infinite;
-        }
-
-        @keyframes girarLoader {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .loader-content h2 {
-            margin: 0;
-            font-size: 18px;
-            color: #333333;
-            font-family: sans-serif;
-        }
-
-        .loader-content p {
-            margin: 0;
-            font-size: 14px;
-            color: #777777;
-            font-family: sans-serif;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0"></script>
 </head>
 <body>
 
@@ -98,88 +45,38 @@
                 <div class="message">Parcelamento sem juros</div>
             </div>
         </div>
-        <div class="nav-bar">
-            <button class="btn-header abrir-menu"><span class="material-symbols-outlined btn-nav">menu</span></button>
+        <nav class="nav-bar" aria-label="Navegação principal">
+            <button class="btn-header abrir-menu" type="button" aria-label="Abrir menu"><span class="material-symbols-outlined btn-nav" aria-hidden="true">menu</span></button>
             
             <div class="logo">
-                <a href=""><img class="img-logo" src="logoteste.png" alt="Logo Happy Kids"></a>
+                <a href="./" aria-label="Voltar ao início"><img class="img-logo" src="logoteste.png" alt="Happy Kids"></a>
             </div>
 
             <div class="favorito">
-                <button class="btn-header" id="search"> <span class="material-symbols-outlined btn-nav">search</span></button>
-                <button class="btn-header" id="btn-favorite"><span class="material-symbols-outlined btn-nav">favorite</span></button>
+                <button class="btn-header" id="search" type="button" aria-label="Abrir busca"> <span class="material-symbols-outlined btn-nav" aria-hidden="true">search</span></button>
+                <button class="btn-header" id="btn-favorite" type="button" aria-label="Abrir favoritos"><span class="material-symbols-outlined btn-nav" aria-hidden="true">favorite</span></button>
             </div>
-        </div>
+        </nav>
     </header>
 
-    <div class="principal">
+    <main class="principal">
 
         <section class="cta">
             <p class="info-cta">Escolha o presente ideal para sua criança.</p>
-            <button class="btn-cta" id="btn-cta">Filtro de presentes</button>
+            <button class="btn-cta" id="btn-cta" type="button">Filtro de presentes</button>
         </section>
 
-
-        <section class="categorias">
-            <h2 class="titulos h1-cat">Busque por categorias</h2>
-            <div class="carrosel-categorias">
-                <button class="btn-categoria">
-                    <div class="item-categoria">
-                        <p>Categoria</p>
-                    </div>
-                </button>
-                <button class="btn-categoria">
-                    <div class="item-categoria">
-                        <p>Categoria</p>
-                    </div>
-                </button>
-                <button class="btn-categoria">
-                    <div class="item-categoria">
-                        <p>Categoria</p>
-                    </div>
-                </button>
-                <button class="btn-categoria">
-                    <div class="item-categoria">
-                        <p>Categoria</p>
-                    </div>
-                </button>
-                <button class="btn-categoria">
-                    <div class="item-categoria">
-                        <p>Categoria</p>
-                    </div>
-                </button>
-                <button class="btn-categoria">
-                    <div class="item-categoria">
-                        <p>Categoria</p>
-                    </div>
-                </button>
-                <button class="btn-categoria">
-                    <div class="item-categoria">
-                        <p>Categoria</p>
-                    </div>
-                </button>
-            </div>
-        </section>
 
         <section class="conteudo">
-            <h1 style="color: var(--logo-laranja); margin-bottom: 15px;">Destaques</h1>
-            <!--
-                Botão que só aparece quando o cliente está vendo resultado de
-                busca ou do filtro mágico — permite voltar pro catálogo
-                paginado completo sem precisar recarregar a página (F5).
-                Começa escondido (display:none) porque, ao carregar a loja
-                pela primeira vez, ainda não tem busca/filtro nenhum ativo.
-                Quem mostra/esconde esse botão é o ui.js, junto com a mesma
-                lógica que já mostra/esconde o botão "Carregar mais".
-            -->
-            <button id="btn-ver-catalogo-completo" class="btn-cta-voltar" style="display:none; margin-bottom: 15px;">
+            <h1 class="titulo-secao-catalogo">Destaques</h1>
+            <button id="btn-ver-catalogo-completo" class="btn-cta-voltar" type="button" hidden>
                 ← Ver catálogo completo
             </button>
 
             <div class="grid-produtos" id="grid"></div>
 
-            <div style="text-align: center; margin: 30px;">
-                <button id="btn-proxima-pagina" class="btn-cta">Carregar mais</button>
+            <div class="paginacao-container">
+                <button id="btn-proxima-pagina" class="btn-cta" type="button">Carregar mais</button>
             </div>
             <footer class="footer-principal">
                 <!-- 1. BARRA DE BENEFÍCIOS / CONFIANÇA -->
@@ -214,21 +111,7 @@
                 </div>
                 </div>
 
-                <!-- 2. NEWSLETTER DA DIVERSÃO -->
-                <div class="footer-newsletter">
-                <div class="newsletter-conteudo">
-                <div class="newsletter-info">
-                <h3>Faça parte do nosso Clube da Diversão! 🎈</h3>
-                <p>Cadastre seu e-mail e ganhe <strong>10% OFF</strong> na sua primeira compra + novidades exclusivas.</p>
-                </div>
-                <form class="newsletter-form" onsubmit="event.preventDefault();">
-                <input type="email" placeholder="Digite seu melhor e-mail..." required>
-                <button type="submit" class="btn-newsletter">Garantir Desconto</button>
-                </form>
-                </div>
-                </div>
-
-                <!-- 3. GRID DE LINKS E CONTEÚDO PRINCIPAL -->
+                <!-- GRID DE LINKS E CONTEÚDO PRINCIPAL -->
                 <div class="footer-conteudo">
                 <div class="footer-coluna sobre-loja">
                 <img src="logoteste.png" alt="Happy Kids" class="footer-logo">
@@ -236,9 +119,8 @@
                 Sua loja de brinquedos preferida! Trazendo sorrisos, imaginação e momentos inesquecíveis para toda a família.
                 </p>
                 <div class="footer-redes">
-                <a href="https://www.instagram.com/happykidsbrinquedos", target="_blank" aria-label="Instagram" class="rede-icon"><span class="material-symbols-outlined">photo_camera</span></a>
-                <a href="#" aria-label="Facebook" class="rede-icon"><span class="material-symbols-outlined">thumb_up</span></a>
-                <a href="https://www.youtube.com/@happykidsbrinquedos6659", target="_blank" aria-label="YouTube" class="rede-icon"><span class="material-symbols-outlined">smart_display</span></a>
+                <a href="https://www.instagram.com/happykidsbrinquedos" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="rede-icon"><span class="material-symbols-outlined" aria-hidden="true">photo_camera</span></a>
+                <a href="https://www.youtube.com/@happykidsbrinquedos6659" target="_blank" rel="noopener noreferrer" aria-label="YouTube" class="rede-icon"><span class="material-symbols-outlined" aria-hidden="true">smart_display</span></a>
                 </div>
                 </div>
 
@@ -309,25 +191,26 @@
             </footer>
 
         </section>
-    </div>
+    </main>
 
-    <dialog class="dialog-magic" id="meuModal">
+    <dialog class="dialog-magic" id="meuModal" aria-labelledby="titulo-filtro-magico">
         <div class="modal">
             <header class="modal-topo">
                 <a href="#"><img class="img-modal" src="logoteste.png" alt="Logo Happy Kids"></a>
             </header>
-            <button id="btn-fechar" style="background-color: transparent;"><span class="material-symbols-outlined btn-fechar">close</span></button>
+            <button id="btn-fechar" class="btn-icon-close" type="button" aria-label="Fechar filtro de presentes"><span class="material-symbols-outlined btn-fechar" aria-hidden="true">close</span></button>
 
 
             <section class="modal-filtro-magico">
                 <div class="info">
-                    <h1 class="titulos"><span>Filtro mágico de presentes</span></h1>
+                    <h2 id="titulo-filtro-magico" class="titulos"><span>Filtro mágico de presentes</span></h2>
                     <p>Descubra opções sob medida para cada criança.</p>
                 </div>
             <form id="formFiltro">
         
                 <div class="select-grupo seta">
-                    <select name="idade" class="select-campo" required>
+                    <label class="sr-only" for="filtro-idade">Idade da criança</label>
+                    <select id="filtro-idade" name="idade" class="select-campo" required>
                     <option value="" disabled selected hidden>Idade</option>
                     <option value="6">0 a 6 meses</option>
                     <option value="12">6 a 12 meses</option>
@@ -340,7 +223,8 @@
                 </div>
         
                 <div class="select-grupo seta">
-                    <select name="para_quem" class="select-campo" required>
+                    <label class="sr-only" for="filtro-genero">Para quem é o presente</label>
+                    <select id="filtro-genero" name="para_quem" class="select-campo" required>
                     <option value="" disabled selected hidden>Para quem</option>
                     <option value="ambos">Ambos</option>
                     <option value="menino">Menino</option>
@@ -348,7 +232,8 @@
                     </select>
                 </div>
                 <div class="select-grupo seta">
-                    <select name="marca" class="select-campo">
+                    <label class="sr-only" for="filtro-marca">Marca preferida</label>
+                    <select id="filtro-marca" name="marca" class="select-campo">
                     <option value="" disabled selected hidden>Marca</option>
                     <option value="TA TE TI">TA TE TI</option>
                     <option value="ELKA">ELKA</option>
@@ -364,11 +249,11 @@
         </div>    
     </dialog>
 
-    <dialog class="dialog-favorite" id="dialog-favorite">
+    <dialog class="dialog-favorite" id="dialog-favorite" aria-labelledby="titulo-favoritos">
         <div class="modal-favorite">
             <div class="header-favorite">
-                <h2 class="titulos">Meus Favoritos</h2>
-                <button id="btn-fechar-fav" style="background-color: transparent;"><span class="material-symbols-outlined btn-fechar-fav">close</span></button>
+                <h2 id="titulo-favoritos" class="titulos">Meus Favoritos</h2>
+                <button id="btn-fechar-fav" class="btn-icon-close" type="button" aria-label="Fechar favoritos"><span class="material-symbols-outlined btn-fechar-fav" aria-hidden="true">close</span></button>
             </div>
             <div class="modal-favoritos-conteudo">
             </div>
@@ -377,29 +262,30 @@
                         <span>Total estimado:</span>
                         <strong id="total-favoritos">R$ 0,00</strong>
                     </div>
-                    <button id="btn-consultar-favoritos">
+                <button id="btn-consultar-favoritos" type="button">
                         Consultar
                     </button>
                 </div>
         </div>
     </dialog>
 
-    <dialog class="dialog-menu" id="modal-menu">
+    <dialog class="dialog-menu" id="modal-menu" aria-labelledby="titulo-menu">
         <div class="modal-menu">
 
         <!-- CABEÇALHO FIXO DO MENU -->
         <div class="header-menu">
         <div class="topo-menu">
-            <h2 class="titulos">Menu</h2>
-        <button id="btn-fechar-menu" style="background-color: transparent; border: none; cursor: pointer;">
-            <span class="material-symbols-outlined btn-fechar-menu">close</span>
+            <h2 id="titulo-menu" class="titulos">Menu</h2>
+        <button id="btn-fechar-menu" class="btn-icon-close" type="button" aria-label="Fechar menu">
+            <span class="material-symbols-outlined btn-fechar-menu" aria-hidden="true">close</span>
         </button>
         </div>
         <div class="buscar">
         <form id="form-pesquisa">
-            <input type="text" id="campo-lupa" placeholder="Encontre seu brinquedo aqui...">
-            <button class="btn-header" id="lupa" type="submit">
-                <span class="material-symbols-outlined lupa">search</span>
+            <label class="sr-only" for="campo-lupa">Buscar brinquedo</label>
+            <input type="search" id="campo-lupa" placeholder="Encontre seu brinquedo aqui..." autocomplete="off">
+            <button class="btn-header" id="lupa" type="submit" aria-label="Executar busca">
+                <span class="material-symbols-outlined lupa" aria-hidden="true">search</span>
             </button>
         </form>
         </div>
@@ -480,27 +366,24 @@
         <!-- RODAPÉ FIXO DO MENU -->
         <div class="footer-menu">
         <div class="menu-footer-suporte">
-        <a href="https://wa.me/558130463443" target="_blank" class="btn-whatsapp-menu">
-            <span class="material-symbols-outlined">chat</span>
+        <a href="#" data-whatsapp="principal" class="btn-whatsapp-menu">
+            <span class="material-symbols-outlined" aria-hidden="true">chat</span>
             Fale no WhatsApp
         </a>
         </div>
 
         <div class="menu-footer-links">
         <a href="#" class="faqui"><span class="material-symbols-outlined">help</span> Ajuda</a>
-        <a href="https://wa.me/558130463443?text=Ol%C3%A1!%20Gostaria%20de%20saber%20o%20status%20do%20meu%20pedido,%20por%20favor.", target="_blank"><span class="material-symbols-outlined">local_shipping</span> Pedidos</a>
+        <a href="#" data-whatsapp="principal" data-whatsapp-mensagem="Olá! Gostaria de saber o status do meu pedido, por favor."><span class="material-symbols-outlined" aria-hidden="true">local_shipping</span> Pedidos</a>
         <a href="#" id="abrir-lojas"><span class="material-symbols-outlined">store</span> Lojas</a>
         </div>
 
         <div class="menu-footer-redes">
-        <a href="https://instagram.com/happykidsbrinquedos" target="_blank" aria-label="Instagram">
-            <span class="material-symbols-outlined">photo_camera</span>
+        <a href="https://instagram.com/happykidsbrinquedos" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <span class="material-symbols-outlined" aria-hidden="true">photo_camera</span>
         </a>
-        <a href="#" aria-label="Facebook">
-            <span class="material-symbols-outlined">thumb_up</span>
-        </a>
-        <a href="https://www.youtube.com/@happykidsbrinquedos6659", target="_blank" aria-label="YouTube">
-            <span class="material-symbols-outlined">smart_display</span>
+        <a href="https://www.youtube.com/@happykidsbrinquedos6659" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+            <span class="material-symbols-outlined" aria-hidden="true">smart_display</span>
         </a>
         </div>
 
@@ -510,9 +393,9 @@
         </div>
     </dialog>
 
-    <dialog id="modal-produto" class="dialog-produto">
+    <dialog id="modal-produto" class="dialog-produto" aria-labelledby="modal-nome">
     <div class="modal-produto-container">
-        <button id="btn-fechar-modal" class="btn-fechar">&times;</button>
+        <button id="btn-fechar-modal" class="btn-fechar" type="button" aria-label="Fechar detalhes do produto">&times;</button>
         
         <div class="modal-produto-conteudo">
             <div class="modal-produto-esquerda">
@@ -529,7 +412,7 @@
                 <h2 id="modal-nome">Nome do Produto</h2>
                 <p id="modal-preco" class="preco">R$ 0,00</p>
                 <p id="modal-parcela" class="modal-parcelamento">ou até 10x sem juros</p>
-                <p id="modal-categoria"></p>
+                <p id="modal-categoria" class="modal-categoria" hidden></p>
                 
                 <div class="modal-descricao-secao">
                     <h4>Descrição do Produto</h4>
@@ -537,34 +420,34 @@
                 </div>
 
                 <div class="modal-acoes">
-                    <button class="btn-comprar-modal" id="btn-favoritar-modal" class="seu-botao-estilo">Adicionar aos Favoritos</button>
+                    <button class="btn-comprar-modal" id="btn-favoritar-modal" type="button">Adicionar aos Favoritos</button>
                 </div>
             </div>
         </div>
     </div>
     </dialog>
 
-    <dialog id="modal-confirmacao">
+    <dialog id="modal-confirmacao" aria-labelledby="titulo-confirmacao">
         <div class="conteudo-confirmacao">
-            <h3>Remover Favorito</h3>
+            <h3 id="titulo-confirmacao">Remover Favorito</h3>
             <p>Deseja realmente remover este brinquedo dos seus favoritos?</p>
             <div class="botoes-confirmacao">
-                <button id="btn-cancelar-remocao">Cancelar</button>
-                <button id="btn-confirmar-remocao">Sim, remover</button>
+            <button id="btn-cancelar-remocao" type="button">Cancelar</button>
+            <button id="btn-confirmar-remocao" type="button">Sim, remover</button>
             </div>
         </div>
     </dialog>
 
-    <dialog class="dialog-ajuda" id="modal-ajuda">
+    <dialog class="dialog-ajuda" id="modal-ajuda" aria-labelledby="titulo-ajuda">
         <div class="modal-ajuda-container">
             <!-- Cabeçalho -->
             <div class="header-ajuda">
                 <div class="titulo-ajuda-box">
                     <span class="material-symbols-outlined icone-ajuda">help</span>
-                    <h2 class="titulos">Central de Ajuda</h2>
+                    <h2 id="titulo-ajuda" class="titulos">Central de Ajuda</h2>
                 </div>
-                <button id="btn-fechar-ajuda" class="btn-fechar-modal-ajuda">
-                    <span class="material-symbols-outlined">close</span>
+                <button id="btn-fechar-ajuda" class="btn-fechar-modal-ajuda" type="button" aria-label="Fechar central de ajuda">
+                    <span class="material-symbols-outlined" aria-hidden="true">close</span>
                 </button>
             </div>
 
@@ -626,7 +509,7 @@
             <!-- Rodapé do Modal com CTA para Atendimento -->
             <div class="footer-ajuda">
                 <p>Ainda precisa de ajuda?</p>
-                <a href="https://wa.me/558130463443" target="_blank" class="btn-suporte-ajuda">
+                <a href="#" data-whatsapp="principal" class="btn-suporte-ajuda">
                     <span class="material-symbols-outlined">chat</span>
                     Falar com Atendente
                 </a>
@@ -634,14 +517,14 @@
         </div>
     </dialog>
 
-    <dialog class="dialog-lojas" id="modal-lojas">
+    <dialog class="dialog-lojas" id="modal-lojas" aria-labelledby="titulo-lojas">
         <div class="modal-lojas-container">
             
             <!-- CABEÇALHO DO MODAL -->
             <div class="header-lojas">
                 <div class="titulo-lojas-box">
                     <span class="material-symbols-outlined icone-lojas">storefront</span>
-                    <h2 class="titulos">Nossas Lojas</h2>
+                    <h2 id="titulo-lojas" class="titulos">Nossas Lojas</h2>
                 </div>
                 <a href="#" class="btn-fechar-modal-lojas" aria-label="Fechar">
                     <span class="material-symbols-outlined">close</span>
@@ -668,7 +551,7 @@
                         </p>
                         <p class="horario-loja">
                             <span class="material-symbols-outlined">schedule</span>
-                            Seg. a Sex: 09h às 19h | Sáb: 09h às 14h
+                            Seg. a Sex: 08:30h às 19h | Sáb: 09h às 14h
                         </p>
                     </div>
 
@@ -678,11 +561,11 @@
                     </div>
 
                     <div class="card-loja-acoes">
-                        <a href="https://maps.app.goo.gl/UVc1bhxhAnT49a5R7" target="_blank" class="btn-loja btn-outline">
+                        <a href="https://maps.app.goo.gl/UVc1bhxhAnT49a5R7" target="_blank" rel="noopener noreferrer" class="btn-loja btn-outline">
                             <span class="material-symbols-outlined">near_me</span>
                             Como Chegar
                         </a>
-                        <a href="https://wa.me/558130463443" target="_blank" class="btn-loja btn-whats">
+                        <a href="#" data-whatsapp="principal" class="btn-loja btn-whats">
                             <span class="material-symbols-outlined">chat</span>
                             WhatsApp Loja
                         </a>
@@ -715,11 +598,11 @@
                     </div>
 
                     <div class="card-loja-acoes">
-                        <a href="https://maps.app.goo.gl/dkfkcxLVqExwkjMB9" target="_blank" class="btn-loja btn-outline">
+                        <a href="https://maps.app.goo.gl/dkfkcxLVqExwkjMB9" target="_blank" rel="noopener noreferrer" class="btn-loja btn-outline">
                             <span class="material-symbols-outlined">near_me</span>
                             Como Chegar
                         </a>
-                        <a href="https://wa.me/5587991384045" target="_blank" class="btn-loja btn-whats">
+                        <a href="#" data-whatsapp="filialGaranhuns" class="btn-loja btn-whats">
                             <span class="material-symbols-outlined">chat</span>
                             WhatsApp Loja
                         </a>
@@ -731,7 +614,7 @@
             <!-- RODAPÉ DO MODAL -->
             <div class="footer-lojas">
                 <p>Quer consultar o estoque de um produto em uma loja física?</p>
-                <a href="https://wa.me/558130463443" target="_blank" class="btn-suporte-lojas">
+                <a href="#" data-whatsapp="principal" class="btn-suporte-lojas">
                     <span class="material-symbols-outlined">inventory_2</span>
                     Consultar Vendedoras
                 </a>

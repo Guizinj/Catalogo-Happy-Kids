@@ -324,6 +324,16 @@
 .btn-comprar-modal:hover { 
     background-color: #f38e00f3;
 }
+.btn-comprar-modal.esta-favoritado {
+    background-color: var(--logo-rosa);
+}
+.modal-categoria {
+    margin: 8px 0;
+    color: var(--logo-azul);
+    font-family: var(--fonte-textos);
+    font-size: 14px;
+    font-weight: var(--font-weight-bold);
+}
 
 .btn-favoritar-modal {
     background: #f0f0f5;

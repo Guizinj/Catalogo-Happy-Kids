@@ -5,11 +5,12 @@ export const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 export const URL_BUCKET_PRODUTOS =
     'https://thyxhystomblrimokbxi.supabase.co/storage/v1/object/public/produtos%20happy%20kids/';
 
-// Número do WhatsApp da loja (usado no orçamento de favoritos).
-// Antes estava hardcoded dentro de ui.js, dentro da função enviarOrcamentoWhatsApp
-// — mas é configuração do negócio, não lógica de apresentação. Se o número mudar
-// um dia, essa é a ÚNICA linha que precisa mudar.
-export const NUMERO_WHATSAPP = '558130463443';
+// Estes números são públicos e usados somente para montar links wa.me.
+// Chaves administrativas ou service_role nunca devem ser adicionadas ao cliente.
+export const NUMEROS_WHATSAPP = Object.freeze({
+    principal: '558130463443',
+    filialGaranhuns: '5587991384045'
+});
 
 // Códigos dos produtos que aparecem nos 3 cards de destaque do menu ("Nossos
 // Destaques"). Escolha manual — troque os números abaixo pelos códigos reais
