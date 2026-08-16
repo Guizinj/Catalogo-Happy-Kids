@@ -340,7 +340,7 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
     containerMiniaturas.replaceChildren();
     configurarImagemDeProduto(imagemPrincipal, produto.codigo, produto.nome);
 
-    const imagens = [1, 2].map((indice) => criarUrlImagem(URL_BUCKET_PRODUTOS, produto.codigo, indice));
+    const imagens = [1, 2, 3].map((indice) => criarUrlImagem(URL_BUCKET_PRODUTOS, produto.codigo, indice));
     const fragmento = document.createDocumentFragment();
 
     imagens.forEach((urlImagem, indice) => {
@@ -384,10 +384,19 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
 
     document.getElementById('modal-nome').textContent = produto.nome;
     document.getElementById('modal-preco').textContent = formatarMoeda(produto.preco);
-
-    if (produto.preco > 200) {
+    if (produto.preco > 600) {
+        parcela.textContent = 'ou até 6x de ' + formatarMoeda(produto.preco / 6) + ' sem juros';
+    }
+    else if (produto.preco > 500) {
+        parcela.textContent = 'ou até 5x de ' + formatarMoeda(produto.preco / 5) + ' sem juros';
+    }
+    else if (produto.preco > 300) {
+        parcela.textContent = 'ou até 4x de ' + formatarMoeda(produto.preco / 4) + ' sem juros';
+    }
+    else if (produto.preco > 120) {
         parcela.textContent = 'ou até 3x de ' + formatarMoeda(produto.preco / 3) + ' sem juros';
-    } else if (produto.preco > 100) {
+    } 
+    else if (produto.preco > 60) {
         parcela.textContent = 'ou 2x de ' + formatarMoeda(produto.preco / 2) + ' sem juros';
     } else {
         parcela.textContent = 'pagamento à vista ou em 1x no cartão';

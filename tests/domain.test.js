@@ -137,3 +137,29 @@ test('ignora clique concorrente em carregar mais', async () => {
     await primeiraChamada;
     assert.equal(chamadas, 2);
 });
+
+test('encerra a paginação quando a próxima página não retorna cards', async () => {
+    const fontesDeDados = {
+        buscarTodosOsProdutos: async (pagina) => {
+            if (pagina === 0) {
+                return {
+                    produtos: [{ codigo: '1', nome: 'Produto', preco: 10 }],
+                    temMais: true
+                };
+            }
+
+            return { produtos: [], temMais: true };
+        },
+        buscarProdutosPorNome: async () => ({ produtos: [], temMais: false }),
+        buscarProdutosPorFiltros: async () => ({ produtos: [], temMais: false }),
+        buscarProdutosPorCategoria: async () => ({ produtos: [], temMais: false })
+    };
+    const catalogo = criarControladorCatalogo({ fontesDeDados });
+
+    await catalogo.carregarCatalogo();
+    const resultado = await catalogo.carregarMais();
+
+    assert.equal(resultado.acrescentou, false);
+    assert.equal(resultado.temMais, false);
+    assert.equal(catalogo.obterEstado().carregando, false);
+});

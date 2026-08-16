@@ -41,6 +41,9 @@
 .btn-cta-voltar[hidden] {
     display: none;
 }
+.btn-cta[hidden] {
+    display: none;
+}
 .btn-cta[disabled] {
     cursor: wait;
     opacity: 0.72;

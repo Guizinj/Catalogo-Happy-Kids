@@ -146,7 +146,7 @@
 
 .miniaturas {
     display: flex;
-    gap: 8px;
+    gap: 3px;
     justify-content: center;
     flex-wrap: wrap;
 }

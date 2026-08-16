@@ -58,7 +58,13 @@ function sincronizarInterfaceFavoritos() {
 }
 
 function atualizarCatalogoNaTela(resultado) {
-    if (!resultado || resultado.desatualizada || resultado.ignorada) {
+    if (!resultado || resultado.desatualizada) {
+        return;
+    }
+
+    if (resultado.ignorada) {
+        const estadoAtual = catalogo.obterEstado();
+        controlarVisibilidadeBotaoPaginacao(estadoAtual.temMais, estadoAtual.carregando);
         return;
     }
 
@@ -116,6 +122,16 @@ async function iniciarLoja() {
 
 async function carregarProximaPagina() {
     const estadoAntes = catalogo.obterEstado();
+
+    if (estadoAntes.carregando) {
+        return;
+    }
+
+    if (!estadoAntes.temMais) {
+        controlarVisibilidadeBotaoPaginacao(false, false);
+        return;
+    }
+
     controlarVisibilidadeBotaoPaginacao(estadoAntes.temMais, true);
 
     try {

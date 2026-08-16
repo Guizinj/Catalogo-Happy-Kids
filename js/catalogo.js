@@ -59,6 +59,7 @@ export function criarControladorCatalogo({
 
         try {
             const resposta = await buscarPagina(modo, parametros, 0);
+            const produtosDaPagina = Array.isArray(resposta?.produtos) ? resposta.produtos : [];
 
             if (idDaRequisicao !== idDaRequisicaoAtual) {
                 return { ...obterEstado(), desatualizada: true };
@@ -66,14 +67,16 @@ export function criarControladorCatalogo({
 
             estado = {
                 ...estado,
-                produtos: resposta.produtos,
-                temMais: resposta.temMais,
+                produtos: produtosDaPagina,
+                // Uma página vazia sempre encerra a paginação, mesmo que a
+                // fonte de dados retorne uma indicação inconsistente.
+                temMais: produtosDaPagina.length > 0 && Boolean(resposta?.temMais),
                 carregando: false
             };
 
             return {
                 ...obterEstado(),
-                ultimaPagina: resposta.produtos,
+                ultimaPagina: produtosDaPagina,
                 acrescentou: false
             };
         } catch (erro) {
@@ -103,6 +106,7 @@ export function criarControladorCatalogo({
 
         try {
             const resposta = await buscarPagina(estado.modo, estado.parametros, paginaAlvo);
+            const produtosDaPagina = Array.isArray(resposta?.produtos) ? resposta.produtos : [];
 
             if (idDaRequisicao !== idDaRequisicaoAtual) {
                 return { ...obterEstado(), desatualizada: true };
@@ -111,15 +115,17 @@ export function criarControladorCatalogo({
             estado = {
                 ...estado,
                 pagina: paginaAlvo,
-                produtos: estado.produtos.concat(resposta.produtos),
-                temMais: resposta.temMais,
+                produtos: estado.produtos.concat(produtosDaPagina),
+                // Não mantém o botão ativo quando a próxima página não traz
+                // cards para acrescentar.
+                temMais: produtosDaPagina.length > 0 && Boolean(resposta?.temMais),
                 carregando: false
             };
 
             return {
                 ...obterEstado(),
-                ultimaPagina: resposta.produtos,
-                acrescentou: true
+                ultimaPagina: produtosDaPagina,
+                acrescentou: produtosDaPagina.length > 0
             };
         } catch (erro) {
             if (idDaRequisicao === idDaRequisicaoAtual) {

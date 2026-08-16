@@ -42,8 +42,8 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 summary:focus-visible {
-    outline: 3px solid var(--logo-azul);
-    outline-offset: 3px;
+    outline: 1px solid transparent;
+    outline-offset: 0px;
 }
 
 ul,
