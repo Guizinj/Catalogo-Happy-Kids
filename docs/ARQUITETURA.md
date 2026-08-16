@@ -63,6 +63,8 @@ A chave é happyKidsFavoritos. Ao carregar, JSON inválido, item malformado e du
 
 O bucket público deve conter {codigo}_1.webp e, opcionalmente, {codigo}_2.webp. A aplicação nunca aceita barra, espaço ou caracteres de caminho no código; isso protege a formação da URL.
 
+Assets institucionais estáticos — `logoteste.png`, `logo_ofc.png`, `fundo.jpg` e `favicon.svg` — ficam centralizados em `imagens/`. Eles não fazem parte da convenção de imagens de produto e não são buscados no Supabase.
+
 ### WhatsApp
 
 - principal: atendimento e orçamento.

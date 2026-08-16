@@ -24,6 +24,7 @@ Catálogo público de brinquedos da Happy Kids. O cliente pode pesquisar produto
 ## Estrutura
 
     index.html                 estrutura da página e dialogs
+    imagens/                   assets locais estáticos (logo, fundo e favicon)
     css/                       estilos globais e por componente
     js/config.js               cliente Supabase e telefones públicos
     js/domain.js               contrato, validação e formatação de dados
@@ -74,6 +75,8 @@ Cada produto precisa de um código seguro formado por letras, números, hífen o
     {codigo}_2.webp
 
 Elas são buscadas no bucket público definido em js/config.js. Se uma imagem falhar, a interface mantém o produto navegável e sinaliza indisponibilidade visual.
+
+Logo, fundo e favicon são assets estáticos locais e ficam em `imagens/`. Referências feitas por `index.html` usam `imagens/arquivo.ext`; arquivos CSS, por estarem em `css/`, usam `../imagens/arquivo.ext`.
 
 ## Antes de publicar
 
