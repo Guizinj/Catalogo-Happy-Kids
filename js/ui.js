@@ -311,7 +311,7 @@ export function mostrarToast(mensagem, tipo = 'sucesso') {
     temporizadorToast = setTimeout(() => {
         toast.classList.remove('mostrar');
         setTimeout(() => toast.remove(), 300);
-    }, 3200);
+    }, 2000);
 }
 
 export function enviarOrcamentoWhatsApp(listaFavoritos) {

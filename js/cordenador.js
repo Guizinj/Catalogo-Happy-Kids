@@ -186,9 +186,10 @@ function configurarFiltroCategoria() {
         if (!categoria) return;
 
         try {
+            fecharMenuERolar(modalMenu);
+            mostrarToast(`Carregando Categoria "${categoria}"...`, "sucesso")
             const resultado = await catalogo.aplicarCategoria(categoria);
             atualizarCatalogoNaTela(resultado);
-            fecharMenuERolar(modalMenu);
         } catch (erro) {
             console.error('Falha ao filtrar por categoria', erro);
             mostrarToast('Não foi possível carregar esta categoria. Tente novamente.', 'removido');
