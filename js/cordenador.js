@@ -217,11 +217,12 @@ function configurarPesquisa() {
         campo.setCustomValidity('');
 
         try {
+            fecharMenuERolar(modalMenu);
+            mostrarToast(`Pesquisando... "${termo}"`)
             const resultado = await catalogo.aplicarBusca(termo);
             atualizarCatalogoNaTela(resultado);
             campo.value = '';
             campo.blur();
-            fecharMenuERolar(modalMenu);
         } catch (erro) {
             console.error('Falha na busca por nome', erro);
             mostrarToast('Não foi possível buscar. Tente novamente.', 'removido');
