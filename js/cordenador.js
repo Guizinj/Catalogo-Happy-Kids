@@ -218,7 +218,7 @@ function configurarPesquisa() {
 
         try {
             fecharMenuERolar(modalMenu);
-            mostrarToast(`Pesquisando... "${termo}"`)
+            mostrarToast(`Buscando por... "${termo}"`)
             const resultado = await catalogo.aplicarBusca(termo);
             atualizarCatalogoNaTela(resultado);
             campo.value = '';
