@@ -262,6 +262,31 @@ export function controlarVisibilidadeBotaoCatalogoCompleto(deveMostrar) {
     }
 }
 
+export function atualizarTituloCatalogo(modo = 'catalogo', parametros = {}) {
+    const titulo = document.getElementById('titulo-catalogo');
+
+    if (!titulo) return;
+
+    switch (modo) {
+        case 'busca':
+            titulo.textContent = parametros.termo
+                ? `Resultados para “${parametros.termo}”`
+                : 'Resultados da busca';
+            break;
+
+        case 'filtro':
+            titulo.textContent = 'Presentes escolhidos para você';
+            break;
+
+        case 'categoria':
+            titulo.textContent = parametros.categoria || 'Produtos da categoria';
+            break;
+
+        default:
+            titulo.textContent = 'Destaques';
+    }
+}
+
 export function ocultarLoader() {
     const loader = document.getElementById('loader-overlay');
     if (!loader) return;
@@ -363,9 +388,7 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
         miniatura.decoding = 'async';
         miniatura.addEventListener('load', () => wrapper.classList.remove('skeleton'), { once: true });
         miniatura.addEventListener('error', () => {
-            wrapper.classList.remove('skeleton');
-            wrapper.setAttribute('data-imagem-indisponivel', 'true');
-            miniatura.remove();
+            wrapper.remove();
         }, { once: true });
         miniatura.src = urlImagem;
 

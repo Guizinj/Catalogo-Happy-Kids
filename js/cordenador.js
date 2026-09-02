@@ -8,6 +8,7 @@ import {
 import { criarControladorCatalogo, possuiConsultaAtiva } from './catalogo.js';
 import {
     atualizarModalProdutoUI,
+    atualizarTituloCatalogo,
     atualizarTotalFavoritos,
     controlarVisibilidadeBotaoCatalogoCompleto,
     controlarVisibilidadeBotaoPaginacao,
@@ -67,6 +68,8 @@ function atualizarCatalogoNaTela(resultado) {
         controlarVisibilidadeBotaoPaginacao(estadoAtual.temMais, estadoAtual.carregando);
         return;
     }
+
+    atualizarTituloCatalogo(resultado.modo, resultado.parametros);
 
     produtosAtuais = resultado.produtos;
     renderizarProdutos(
