@@ -1,191 +1,244 @@
 # Arquitetura e operação do Catálogo Happy Kids
 
-Este documento é a referência contínua para manutenção do catálogo. Ele descreve o comportamento implementado, os contratos que não podem ser quebrados e as verificações necessárias antes de produção.
+Esta é a referência técnica do comportamento atual. O guia de tarefas do dia a dia está em [GUIA-DE-MANUTENCAO.md](GUIA-DE-MANUTENCAO.md).
 
-## 1. Visão de solução
+## 1. Visão da solução
 
-    Cliente
-      -> cordenador.js
-         -> catalogo.js -> api.js -> Supabase Database: produtos
-         -> storage.js -> localStorage: happyKidsFavoritos
-         -> ui.js / modais.js / gestos.js -> DOM
-         -> whatsapp.js -> wa.me
+```text
+Navegador
+└── coordenador.js
+    ├── catalogo.js ── api.js ── Supabase Database: produtos
+    ├── carrossel.js ─────────── seção Mais vendidos
+    ├── storage.js ───────────── localStorage: happyKidsFavoritos
+    ├── ui.js / modais.js / gestos.js / banner.js ── DOM
+    └── whatsapp.js ──────────── wa.me
+```
 
-O site é uma aplicação estática, pública e sem autenticação. O Supabase é acessado no navegador somente com chave publishable e, portanto, toda proteção de dados depende de RLS e do conjunto de colunas expostas.
+O site é uma aplicação estática, pública e sem autenticação. O navegador consulta o Supabase com uma chave publishable. A proteção real dos dados depende das policies de RLS e Storage configuradas fora deste repositório.
+
+Na inicialização, o catálogo principal, os favoritos atualizados e os mais vendidos são buscados em paralelo. Uma falha exclusiva no carrossel não impede o restante da loja de abrir.
 
 ## 2. Responsabilidade dos módulos
 
-| Módulo | Responsabilidade | Não deve fazer |
-|---|---|---|
-| config.js | Cliente Supabase, bucket público e telefones | Guardar segredo administrativo |
-| domain.js | Validar produto/favorito, formatar moeda, imagem e busca | Tocar DOM ou chamar rede |
-| api.js | Consultas públicas, campos explícitos e paginação | Renderizar ou persistir favoritos |
-| catalogo.js | Modo atual, página, concorrência e retry seguro | Conhecer seletores do HTML |
-| storage.js | Estado local validado e persistência de favoritos | Consultar Supabase |
-| ui.js | Criar DOM, dialog visual, toast e formatação | Confiar em HTML de dados externos |
-| whatsapp.js | Montar links e mensagem de consulta | Definir números fora de config.js |
-| cordenador.js | Bootstrap, eventos e coordenação dos fluxos | Concentrar regras puras de domínio |
-| modais.js, gestos.js, banner.js | Interações específicas | Buscar produtos |
+| Módulo           | Responsabilidade                                             | Não deve fazer                        |
+| ---------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `config.js`      | Criar o cliente Supabase e expor bucket e telefones públicos | Guardar segredo administrativo        |
+| `domain.js`      | Validar, normalizar e formatar produtos e favoritos          | Acessar DOM ou rede                   |
+| `api.js`         | Construir consultas públicas e paginação                     | Renderizar ou salvar favoritos        |
+| `catalogo.js`    | Manter modo, página, concorrência e retry                    | Conhecer elementos do HTML            |
+| `carrossel.js`   | Controlar setas, autoplay e pausa por hover                  | Buscar produtos ou criar cards        |
+| `storage.js`     | Validar e persistir favoritos no navegador                   | Consultar Supabase                    |
+| `ui.js`          | Criar elementos, preencher dialogs, toast e totais           | Inserir HTML externo sem validação    |
+| `modais.js`      | Abrir, fechar e restaurar foco dos dialogs                   | Aplicar regra de negócio              |
+| `gestos.js`      | Trocar imagens por gesto e clique                            | Consultar banco                       |
+| `banner.js`      | Alternar as mensagens do topo                                | Controlar outras áreas da página      |
+| `whatsapp.js`    | Montar URLs e mensagem de consulta                           | Repetir telefones fora de `config.js` |
+| `coordenador.js` | Inicializar a loja e conectar eventos aos módulos            | Concentrar funções puras de domínio   |
 
 ## 3. Contratos de dados
 
 ### Produto público
 
-| Campo | Tipo esperado | Regra |
-|---|---|---|
-| codigo | string ou número seguro | 1 a 64 caracteres: letras, números, hífen ou sublinhado |
-| nome | texto | obrigatório na prática; fallback visual Produto sem nome |
-| preco | número não negativo | exibido em BRL |
-| descricao | texto opcional | exibido como texto simples |
-| estoque | booleano | catálogo público mostra somente true |
-| destaque | número opcional | ordenação crescente, null ao final |
-| idade_recomendada | número opcional | filtro atual usa menor ou igual à idade selecionada |
-| genero, marca, categoria | texto opcional | filtros comerciais atuais |
+| Campo               | Tipo esperado    | Regra atual                                                    |
+| ------------------- | ---------------- | -------------------------------------------------------------- |
+| `codigo`            | texto ou número  | 1 a 64 caracteres; somente letras, números, hífen e sublinhado |
+| `nome`              | texto            | Vazio recebe o fallback `Produto sem nome`                     |
+| `preco`             | número           | Precisa ser finito e não negativo                              |
+| `descricao`         | texto ou `null`  | Exibido como texto simples                                     |
+| `estoque`           | booleano         | Consultas públicas exigem `true`                               |
+| `destaque`          | número ou `null` | Ordem crescente; `null` fica no final                          |
+| `idade_recomendada` | número ou `null` | Filtro usa `idade_recomendada <= idade selecionada`            |
+| `genero`            | texto            | Comparação exata no filtro mágico                              |
+| `marca`             | texto            | Comparação exata no filtro mágico                              |
+| `categoria`         | texto            | Comparação parcial, com curingas escapados                     |
+| `termos_busca`      | texto            | Comparação parcial da busca, com curingas escapados            |
+| `mais_vendido`      | booleano         | `true` inclui o produto no carrossel se também houver estoque  |
 
-A API seleciona somente esses campos. Isso reduz tráfego, mas não substitui restrição de coluna e RLS no banco.
+`CAMPOS_PRODUTO_PUBLICOS`, em `domain.js`, define as colunas devolvidas ao navegador. `termos_busca` e `mais_vendido` participam dos filtros da consulta, mas não são selecionados porque não são necessários para renderizar os cards.
 
-### Exposição pública aprovada
-
-A tabela `produtos` possui RLS ativo e uma policy pública de `SELECT` com regra `true`. A decisão atual do projeto é aceitar a leitura pública de todas as colunas existentes, incluindo `quantidade` e `ref`, pois elas são dados operacionais do catálogo e não são consideradas sensíveis. O front-end continua solicitando apenas os campos necessários para renderização.
-
-Não incluir nesta tabela informações de clientes, pedidos, fornecedores, custo, margem, credenciais ou qualquer outro dado que não possa ser público. Caso isso mude, separar os dados internos em outra tabela ou criar uma view pública antes de adicioná-los.
+Um registro com `codigo` inválido ou `preco` inválido é descartado pela normalização. Dados vindos do Supabase ou `localStorage` entram na interface por APIs DOM seguras, principalmente `textContent`.
 
 ### Favorito local
 
-    {
-      ...produtoPublico,
-      quantidade: inteiro de 1 a 99
-    }
+```js
+{
+  ...produtoPublico,
+  quantidade: 1 // inteiro entre 1 e 99
+}
+```
 
-A chave é happyKidsFavoritos. Ao carregar, JSON inválido, item malformado e duplicidade são removidos de forma segura. Os dados de produto são atualizados uma vez pelo código; a quantidade continua sendo do cliente.
+A chave usada é `happyKidsFavoritos`. Durante a abertura da loja:
+
+1. JSON inválido é removido com segurança.
+2. Registros malformados são descartados.
+3. Duplicidades são consolidadas pelo `codigo`.
+4. Dados atuais do produto são consultados novamente no Supabase.
+5. A quantidade escolhida pelo cliente é preservada.
 
 ### Imagens
 
-O bucket público deve conter {codigo}_1.webp e, opcionalmente, {codigo}_2.webp. A aplicação nunca aceita barra, espaço ou caracteres de caminho no código; isso protege a formação da URL.
+O Storage público pode conter até três imagens conhecidas pela interface:
 
-Assets institucionais estáticos — `logoteste.png`, `logo_ofc.png`, `fundo.jpg` e `favicon.svg` — ficam centralizados em `imagens/`. Eles não fazem parte da convenção de imagens de produto e não são buscados no Supabase.
+```text
+{codigo}_1.webp
+{codigo}_2.webp
+{codigo}_3.webp
+```
 
-### WhatsApp
+A primeira é a principal. A segunda e a terceira são opcionais. Uma miniatura cujo carregamento falha é removida do modal. Atualmente, a lista usada pelo gesto de deslizar ainda é criada antes dessa confirmação e pode tentar uma imagem opcional ausente.
 
-- principal: atendimento e orçamento.
-- filialGaranhuns: atendimento da filial.
-- A mensagem de orçamento é URL-encoded.
-- O total é estimado e precisa de confirmação humana.
+O código do produto nunca aceita barra, espaço ou caracteres de caminho. Assets institucionais como logo, fundo e favicon ficam em `imagens/` e não usam essa convenção.
 
-Todos os links usam data-whatsapp no HTML e são configurados por whatsapp.js. Não repetir telefones em hrefs estáticos.
+### Exposição pública aprovada
 
-## 4. Fluxos operacionais
+A tabela `produtos` possui RLS ativo e uma policy pública de `SELECT`. A decisão registrada no projeto é permitir a leitura das colunas atuais, inclusive campos operacionais já existentes, desde que não contenham informação sensível.
 
-### Catálogo e paginação
+Não adicione à tabela pública dados de clientes, pedidos, custo, margem, fornecedor, credenciais ou administração. Se surgir essa necessidade, use uma tabela interna ou uma view pública com colunas explícitas.
 
-1. A loja carrega favoritos locais e primeira página em paralelo.
-2. A API pede limite mais um registro, permitindo saber se há próxima página sem count extra.
-3. catalogo.js só confirma a nova página depois de sucesso.
-4. Enquanto uma página adicional carrega, o botão é desabilitado.
-5. Falha mantém página e produtos anteriores; novo clique repete a página correta.
+## 4. Fluxos principais
 
-Busca, filtro mágico e categoria usam o mesmo controlador e também podem carregar mais resultados. Voltar ao catálogo descarta o modo filtrado e solicita novamente a página inicial.
+### Inicialização
 
-### Retorno ao catálogo completo
+1. `coordenador.js` lê os favoritos locais.
+2. Em paralelo, solicita a primeira página, atualiza os produtos favoritados e busca até dez mais vendidos.
+3. `domain.js` normaliza as respostas.
+4. `ui.js` renderiza catálogo, carrossel e favoritos.
+5. `carrossel.js` configura o movimento uma única vez.
+6. O loader é ocultado mesmo quando ocorre uma falha.
 
-O botão **Ver catálogo completo** é contextual. Ele começa oculto no modo `catalogo` e só fica disponível nos modos `busca`, `filtro` e `categoria`. Ao acioná-lo, o controlador descarta a consulta ativa, recarrega a primeira página do catálogo e volta a ocultar o botão. A regra existe tanto no estado JavaScript quanto no CSS (`[hidden]`), para evitar que estilos visuais exponham um controle indisponível.
+### Catálogo, busca, filtro e categoria
 
-### Favoritos
+`catalogo.js` trabalha com quatro modos: `catalogo`, `busca`, `filtro` e `categoria`.
 
-1. Card ou modal solicita alternância.
-2. storage.js normaliza e grava o estado.
-3. cordenador.js sincroniza modal, total, ícone da navegação e card.
-4. Consultar chama wa.me em nova aba sem transferir controle da página.
+- A API solicita 15 registros para exibir 14. O item extra informa se existe próxima página sem executar `count`.
+- Uma troca de modo sempre começa na página zero.
+- Respostas antigas são ignoradas por um identificador de requisição.
+- A página só avança depois de uma resposta bem-sucedida.
+- Em erro, produtos e página anteriores permanecem disponíveis para retry.
+- O título muda conforme o modo ativo.
+- **Ver catálogo completo** aparece apenas em busca, filtro e categoria.
 
-### Regras comerciais que precisam de confirmação
+A busca usa `termos_busca`, não apenas `nome`. Categoria usa o texto visível no menu como filtro parcial da coluna `categoria`.
 
-- O filtro de idade atual entende idade_recomendada como idade máxima recomendada.
-- O valor ambos em genero precisa existir exatamente no banco.
-- Favorito sem estoque continua visível até a loja confirmar disponibilidade.
-- Categoria usa o rótulo comercial completo em busca parcial escapada. Evoluir para category_id quando houver apoio no banco.
+### Mais vendidos
 
-## 5. Segurança — checklist obrigatório de RLS
-
-Esta lista deve ser executada no Dashboard ou por migration revisada antes de publicar. Ela não pode ser considerada concluída apenas por este repositório.
-
-### Banco
-
-- [ ] RLS ativado em todas as tabelas do schema exposto, inclusive produtos.
-- [ ] Papel anon possui somente SELECT no catálogo público.
-- [ ] anon não possui INSERT, UPDATE, DELETE, RPC administrativa ou acesso a tabelas internas.
-- [ ] A política de SELECT define explicitamente as linhas que podem ser públicas.
-- [x] A tabela `produtos` foi revisada: todas as colunas atuais são aprovadas para leitura pública. Novos campos devem passar por esta mesma revisão antes de serem adicionados.
-- [ ] Chaves secret, service_role e credenciais SQL estão somente em backend/Edge Function seguro.
-- [ ] Security Advisor do Supabase revisado sem alertas críticos ignorados.
-- [ ] Logs e auditoria revisados após a publicação.
-
-### Storage
-
-- [ ] O bucket de produtos é público apenas se as imagens forem realmente públicas.
-- [ ] Bucket público não permite upload, overwrite ou delete por anon.
-- [ ] Buckets de documentos, pedidos, clientes ou administração não são públicos.
-- [ ] Nomes de objetos seguem a convenção documentada.
-
-### Teste anônimo
-
-- [ ] Sem login, listar catálogo retorna apenas colunas públicas.
-- [ ] Sem login, tentar criar, editar ou apagar produto falha.
-- [ ] Sem login, tentar ler tabela interna ou bucket privado falha.
-- [ ] Um produto contendo HTML no nome aparece como texto e não executa script.
-
-## 6. Regras de interface e acessibilidade
-
-- Usar elementos semânticos, botão real para ação e label real para campo.
-- Nunca desabilitar zoom do navegador.
-- Manter foco visível com focus-visible.
-- Para texto normal, contraste mínimo é 4.5:1; para texto grande, 3:1.
-- Respeitar prefers-reduced-motion em animações.
-- Todo link externo em nova aba usa rel noopener noreferrer.
-- Dados externos entram no DOM via textContent, atributos controlados ou APIs DOM; não usar innerHTML.
-
-## 7. Matriz de regressão
-
-### Dados e rede
-
-- Catálogo normal, sem resultado e erro inicial.
-- Ver catálogo completo oculto no carregamento inicial e visível apenas depois de busca, filtro mágico ou categoria.
-- Carregar mais, erro, retry e clique rápido repetido.
-- Busca com acentos, porcentagem, sublinhado e sem resultado.
-- Filtro mágico e categoria; retorno ao catálogo completo.
-- Produto sem imagem secundária.
+1. `api.js` filtra `estoque = true` e `mais_vendido = true`.
+2. A ordenação continua sendo `destaque` crescente e depois `codigo` crescente.
+3. `ui.js` reaproveita o mesmo tipo de card do catálogo.
+4. Se a lista estiver vazia, a seção não é exibida.
+5. O carrossel avança um card a cada 6 segundos e volta ao início no final.
+6. As setas permitem controle manual e reiniciam o intervalo.
+7. Em desktop com mouse, passar o cursor sobre a seção pausa o movimento.
+8. Em dispositivos touch, não existe pausa por hover.
+9. `prefers-reduced-motion: reduce` desativa o autoplay.
+10. Uma aba oculta interrompe o intervalo até voltar a ficar visível.
 
 ### Favoritos e WhatsApp
 
-- Adicionar/remover no card e no modal.
-- Alterar quantidade entre 1 e 99.
-- JSON inválido em localStorage.
-- Preço atualizado e produto removido de estoque.
-- Nome com caracteres especiais e mensagem de WhatsApp com múltiplos itens.
+1. O coração do card ou do modal chama `alternarFavorito`.
+2. `storage.js` normaliza e persiste a lista.
+3. `coordenador.js` sincroniza os corações do catálogo e do carrossel.
+4. O dialog de favoritos atualiza quantidade e total estimado.
+5. **Consultar** abre `wa.me` em outra aba com a mensagem codificada.
+
+O site não confirma estoque, reserva ou fecha pedido. A mensagem é somente uma consulta e o total precisa de confirmação humana.
+
+### Modais e foco
+
+Os dialogs usam `showModal()` e `close()`, permitindo que o navegador controle o foco modal e a tecla Escape. Ao abrir a busca, o código move o foco diretamente para o campo. O clique no backdrop também fecha o dialog. Controles acionáveis continuam sendo elementos `button` ou `a` reais.
+
+## 5. Regras comerciais que exigem atenção
+
+- O valor salvo em `idade_recomendada` é comparado numericamente com a idade selecionada, usando `<=`.
+- `genero` precisa corresponder exatamente a `ambos`, `menino` ou `menina` conforme as opções atuais.
+- `marca` precisa corresponder exatamente ao valor do `<option>` no HTML.
+- Categoria depende do rótulo comercial. Uma evolução futura é usar um `categoria_id` estável.
+- Um favorito que deixou de ter estoque não é removido automaticamente do navegador; a loja confirma a disponibilidade.
+- Alterar o nome de campo no Supabase exige alterar a consulta e esta documentação em conjunto.
+
+## 6. Segurança e acessibilidade
+
+### Checklist de Supabase
+
+- [ ] RLS está ativo em toda tabela do schema exposto.
+- [ ] O papel `anon` possui somente o `SELECT` necessário no catálogo.
+- [ ] `anon` não pode executar `INSERT`, `UPDATE`, `DELETE` ou RPC administrativa.
+- [ ] O bucket público permite leitura, mas não upload, substituição ou exclusão por `anon`.
+- [ ] Nenhuma chave `service_role`, secret ou credencial SQL está no front-end.
+- [ ] O Security Advisor não possui alerta crítico ignorado.
+- [ ] Um teste sem login confirma que tabelas e buckets internos continuam inacessíveis.
+
+### Regras da interface
+
+- Manter foco visível com `:focus-visible`.
+- Não desabilitar o zoom do navegador.
+- Respeitar `prefers-reduced-motion`.
+- Manter contraste mínimo de 4.5:1 para texto comum e 3:1 para texto grande.
+- Links em nova aba devem usar `rel="noopener noreferrer"`.
+- Não usar `innerHTML` com banco, formulário, URL ou `localStorage`.
+- Manter `aria-label`, labels de formulário e retorno de foco nos dialogs.
+
+## 7. Matriz de regressão
+
+### Dados e navegação
+
+- [ ] Catálogo inicial com resultados, vazio e erro de rede.
+- [ ] Título **Destaques** no catálogo inicial.
+- [ ] Títulos corretos em busca, filtro e categoria.
+- [ ] **Ver catálogo completo** oculto inicialmente e visível nos três modos filtrados.
+- [ ] Carregar mais, clique repetido, erro e retry da mesma página.
+- [ ] Busca com acentos, `%`, `_`, barra invertida e nenhum resultado.
+- [ ] Filtro mágico com e sem marca.
+- [ ] Todas as categorias retornam ao catálogo corretamente.
+
+### Mais vendidos
+
+- [ ] Produto com `mais_vendido = true` e `estoque = true` aparece.
+- [ ] Produto sem estoque ou com flag falsa não aparece.
+- [ ] Seção fica oculta quando a consulta retorna lista vazia.
+- [ ] Setas avançam e retornam circularmente.
+- [ ] Autoplay ocorre em cerca de 6 segundos.
+- [ ] Hover pausa apenas em desktop com mouse.
+- [ ] Touch continua navegável e `prefers-reduced-motion` desativa autoplay.
+
+### Produto, favoritos e WhatsApp
+
+- [ ] Produto com uma, duas e três imagens.
+- [ ] Imagem inexistente não deixa miniatura quebrada.
+- [ ] Adicionar e remover pelo catálogo, carrossel e modal.
+- [ ] Corações duplicados do mesmo produto ficam sincronizados.
+- [ ] Quantidade respeita os limites de 1 a 99.
+- [ ] JSON inválido no `localStorage` não quebra a loja.
+- [ ] Preço atualizado é refletido nos favoritos.
+- [ ] Mensagem do WhatsApp contém itens, referências e total estimado.
 
 ### Interface
 
-- Teclado: Tab, Enter, Espaço, Escape e retorno de foco nos dialogs.
-- Zoom de 200%, viewport pequeno e desktop.
-- Leitor de tela em busca, filtros, favoritos e feedback.
-- prefers-reduced-motion ativo.
-- Todos os links externos, mapas, lojas e WhatsApp.
+- [ ] Teclas Tab, Enter, Espaço e Escape funcionam nos dialogs.
+- [ ] O foco retorna ao controle que abriu o dialog.
+- [ ] Layout funciona com zoom de 200%, celular e desktop.
+- [ ] Leitor de tela anuncia busca, filtros, favoritos e feedback.
+- [ ] Links externos, mapas, lojas e números de WhatsApp estão corretos.
 
 ## 8. Publicação e cabeçalhos
 
-Publicar via HTTPS e configurar, conforme a hospedagem:
+Publicar por HTTPS e configurar, conforme o provedor:
 
-- Content-Security-Policy com origens mínimas para self, jsdelivr, Google Fonts e o projeto Supabase.
-- X-Content-Type-Options: nosniff.
-- Referrer-Policy: strict-origin-when-cross-origin.
-- Permissions-Policy restritiva para recursos não usados.
+- `Content-Security-Policy` limitada a `self`, jsDelivr, Google Fonts e ao projeto Supabase.
+- `X-Content-Type-Options: nosniff`.
+- `Referrer-Policy: strict-origin-when-cross-origin`.
+- `Permissions-Policy` restritiva para recursos não usados.
 
-Teste a CSP primeiro em modo report-only. A origem do bucket de imagens e do endpoint Supabase deve ser incluída explicitamente; não liberar curingas desnecessários.
+Teste a CSP primeiro em modo `Report-Only`. O endpoint do banco e a origem do bucket precisam estar explicitamente liberados; evite curingas.
 
 ## 9. Procedimento para mudanças
 
-1. Identifique se muda contrato, interface, configuração ou regra comercial.
-2. Atualize este documento e README quando necessário.
-3. Para alteração de schema/policy, registre migration revisável antes de alterar o front-end.
-4. Para dado novo do catálogo, adicione validação em domain.js e seleção explícita em api.js.
-5. Execute npm run check, npm test e a matriz de regressão.
-6. Revise segurança e acessibilidade antes de publicar.
+1. Identifique se a mudança afeta contrato, regra comercial, interface ou configuração.
+2. Faça a alteração no módulo responsável, sem duplicar a regra em vários arquivos.
+3. Se adicionar dado público, atualize a normalização em `domain.js` e os campos explícitos em `api.js`.
+4. Atualize o README e os documentos relacionados.
+5. Execute `npm run format`, `npm run check` e `npm test`.
+6. Percorra a parte afetada da matriz de regressão.
+7. Revise RLS, segurança e acessibilidade antes de publicar.
+
+Alterações no schema e nas policies devem ser registradas por migration revisável quando o projeto passar a versionar o banco. Atualmente essa infraestrutura não faz parte do repositório.

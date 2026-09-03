@@ -1,21 +1,24 @@
-export function mensagensNoTopo(){
-    const messages = document.querySelectorAll('.message');
-    let currentIndex = 0;
+export function mensagensNoTopo() {
+  const mensagens = document.querySelectorAll('.message');
+  const tempoLeitura = 2500;
+  const tempoAnimacao = 300;
+  let indiceAtual = 0;
 
-    const tempoLeitura = 2500; 
-    const tempoAnimacao = 300; 
+  if (mensagens.length < 2) return;
 
-    function trocarMensagem() {
-    const currentMsg = messages[currentIndex];
-    currentMsg.classList.remove('active');
-    currentMsg.classList.add('exit');
-    currentIndex = (currentIndex + 1) % messages.length;
-    const nextMsg = messages[currentIndex];
-    nextMsg.classList.remove('exit');
+  function trocarMensagem() {
+    const mensagemAtual = mensagens[indiceAtual];
+    mensagemAtual.classList.remove('active');
+    mensagemAtual.classList.add('exit');
+
+    indiceAtual = (indiceAtual + 1) % mensagens.length;
+    const proximaMensagem = mensagens[indiceAtual];
+    proximaMensagem.classList.remove('exit');
+
     setTimeout(() => {
-        nextMsg.classList.add('active');
+      proximaMensagem.classList.add('active');
     }, tempoAnimacao);
-    };
+  }
 
-    setInterval(trocarMensagem, tempoLeitura + tempoAnimacao);
-};
+  setInterval(trocarMensagem, tempoLeitura + tempoAnimacao);
+}

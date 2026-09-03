@@ -1,104 +1,106 @@
 .secao-mais-vendidos[hidden] {
-    display: none;
+  display: none;
 }
 
 .secao-mais-vendidos {
-    margin: 35px 10px;
-    padding: 22px 18px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #fff8f0, #f4fbfa);
-    border: 1px solid rgba(246, 106, 9, 0.18);
-    border-radius: 24px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  margin: 35px 10px;
+  padding: 22px 18px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #fff8f0, #f4fbfa);
+  border: 1px solid rgba(246, 106, 9, 0.18);
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
 .cabecalho-mais-vendidos {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
 }
 
 .chamada-mais-vendidos {
-    margin-bottom: 3px;
-    color: var(--logo-rosa);
-    font-size: 0.8rem;
-    font-weight: var(--font-weight-bold);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+  margin-bottom: 3px;
+  color: var(--logo-rosa);
+  font-size: 0.8rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 #titulo-mais-vendidos {
-    color: var(--logo-laranja);
-    font-size: 1.7rem;
-    text-align: left;
+  color: var(--logo-laranja);
+  font-size: 1.7rem;
+  text-align: left;
 }
 
 .controles-mais-vendidos {
-    display: flex;
-    gap: 7px;
-    flex-shrink: 0;
+  display: flex;
+  gap: 7px;
+  flex-shrink: 0;
 }
 
 .controles-mais-vendidos button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    color: #ffffff;
-    background-color: var(--logo-laranja);
-    border-radius: 50%;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  color: #ffffff;
+  background-color: var(--logo-laranja);
+  border-radius: 50%;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .controles-mais-vendidos button:hover {
-    transform: scale(1.06);
+  transform: scale(1.06);
 }
 
 .controles-mais-vendidos button:active {
-    transform: scale(0.94);
+  transform: scale(0.94);
 }
 
 .controles-mais-vendidos button:focus-visible {
-    outline: 3px solid var(--logo-azul);
-    outline-offset: 2px;
+  outline: 3px solid var(--logo-azul);
+  outline-offset: 2px;
 }
 
 .carrossel-mais-vendidos {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(175px, 220px);
-    gap: 14px;
-    padding: 4px 4px 14px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-    overscroll-behavior-inline: contain;
-    scrollbar-width: thin;
-    scrollbar-color: var(--logo-laranja) transparent;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(175px, 220px);
+  gap: 14px;
+  padding: 4px 4px 14px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--logo-laranja) transparent;
 }
 
 .carrossel-mais-vendidos > * {
-    scroll-snap-align: start;
+  scroll-snap-align: start;
 }
 
 .carrossel-mais-vendidos::-webkit-scrollbar {
-    height: 7px;
+  height: 7px;
 }
 
 .carrossel-mais-vendidos::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 .carrossel-mais-vendidos::-webkit-scrollbar-thumb {
-    background-color: var(--logo-laranja);
-    border-radius: 10px;
+  background-color: var(--logo-laranja);
+  border-radius: 10px;
 }
 
 .carrossel-mais-vendidos .card-produto {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }

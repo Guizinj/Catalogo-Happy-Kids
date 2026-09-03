@@ -1,152 +1,150 @@
-
 .dialog-favorite {
-    font-family: var(--fonte-titulos);
-    border: none;
-    outline: none;
-    padding: 0;
-    width: 80%;
-    height: 100%;
-    max-height: 100%;
-    top: 0;
-    margin: 0;
-    right: 0;
-    left: auto;
-    border-top-left-radius: 10px;
+  font-family: var(--fonte-titulos);
+  border: none;
+  outline: none;
+  padding: 0;
+  width: 80%;
+  height: 100%;
+  max-height: 100%;
+  top: 0;
+  margin: 0;
+  right: 0;
+  left: auto;
+  border-top-left-radius: 10px;
 
-    opacity: 0;
-    transform: translateX(100%);
-    
-    transition: opacity .5s ease, 
-    transform .5s ease,
-    display .5s allow-discrete,
-    overlay .5s allow-discrete;
-}
-.modal-favorite{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  opacity: 0;
+  transform: translateX(100%);
 
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease,
+    display 0.5s allow-discrete,
+    overlay 0.5s allow-discrete;
 }
-.header-favorite{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding: 40px 20px;
-    background-image: url(../imagens/fundo.jpg);
-    background-size: cover;
-    border-bottom-left-radius:10px;
-    border-bottom-right-radius:10px;
+.modal-favorite {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
-.btn-fechar-fav{
-    color: black;
+.header-favorite {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 40px 20px;
+  background-image: url(../imagens/fundo.jpg);
+  background-size: cover;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.btn-fechar-fav {
+  color: black;
 }
 /* =======================================================
    ESTILO DO ESTADO VAZIO (FAVORITOS)
    ======================================================= */
 
 .empty-state-favoritos {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 24px;
-    height: 80%; /* Faz ocupar a maior parte do modal verticalmente */
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  height: 80%; /* Faz ocupar a maior parte do modal verticalmente */
+  box-sizing: border-box;
 }
 
 /* O círculo onde o ursinho fica */
 .ilustracao-ursinho {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    background-color: #ffffff; /* Fundo cinza bem suave */
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 24px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background-color: #ffffff; /* Fundo cinza bem suave */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
 }
 
 /* O emoji de ursinho */
 .ilustracao-ursinho span {
-    font-size: 60px; /* Bem grande e visível */
-    filter: grayscale(20%); /* Deixa levemente mais opaco/triste */
+  font-size: 60px; /* Bem grande e visível */
+  filter: grayscale(20%); /* Deixa levemente mais opaco/triste */
 }
-
 
 /* Textos */
 .titulo-empty {
-    font-family: var(--fonte-titulos); /* Sua fonte gordinha de títulos */
-    font-size: 1.3rem;
-    color: #333333;
-    margin: 0 0 10px 0;
+  font-family: var(--fonte-titulos); /* Sua fonte gordinha de títulos */
+  font-size: 1.3rem;
+  color: #333333;
+  margin: 0 0 10px 0;
 }
 
 .texto-empty {
-    font-family: var(--fonte-textos);
-    font-size: 0.95rem;
-    color: #777777; /* Cinza suave para texto de apoio */
-    max-width: 260px; /* Evita que o texto fique largo demais */
-    line-height: 1.4;
-    margin: 0 0 30px 0;
+  font-family: var(--fonte-textos);
+  font-size: 0.95rem;
+  color: #777777; /* Cinza suave para texto de apoio */
+  max-width: 260px; /* Evita que o texto fique largo demais */
+  line-height: 1.4;
+  margin: 0 0 30px 0;
 }
 
 /* Botão de chamada para ação */
 .btn-explorar {
-    font-family: var(--fonte-textos);
-    font-size: 0.95rem;
-    font-weight: var(--font-weight-bold);
-    background-color: var(--logo-verde);
-    color: #ffffff;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 25px; /* Bem arredondado como seu design */
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(154, 205, 50, 0.3);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: var(--fonte-textos);
+  font-size: 0.95rem;
+  font-weight: var(--font-weight-bold);
+  background-color: var(--logo-verde);
+  color: #ffffff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px; /* Bem arredondado como seu design */
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(154, 205, 50, 0.3);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .btn-explorar:active {
-    transform: scale(0.96); /* Efeito de clique no celular */
+  transform: scale(0.96); /* Efeito de clique no celular */
 }
 .dialog-favorite[open] {
-    opacity: 1;
-    transform: translateX(0);
+  opacity: 1;
+  transform: translateX(0);
 }
 @starting-style {
-    .dialog-favorite[open] {
-        opacity: 0;
-        transform: translateX(100%);
-    }
+  .dialog-favorite[open] {
+    opacity: 0;
+    transform: translateX(100%);
+  }
 }
 .dialog-favorite::backdrop {
-    background-color: #00000048;
-    transition: opacity .5s ease;
-    opacity: 0;
+  background-color: #00000048;
+  transition: opacity 0.5s ease;
+  opacity: 0;
 }
 .dialog-favorite[open]::backdrop {
-    opacity: 1;
+  opacity: 1;
 }
 @starting-style {
-    .dialog-favorite[open]::backdrop {
-        opacity: 0;
-    }
+  .dialog-favorite[open]::backdrop {
+    opacity: 0;
+  }
 }
 
-.modal-favoritos-conteudo{
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 0 10px;
+.modal-favoritos-conteudo {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 0 10px;
 }
-.remove{
-   position: fixed;
-   right: 0;
-   margin-right: 15px;
-
-  
+.remove {
+  position: fixed;
+  right: 0;
+  margin-right: 15px;
 }
 
 /* =========================================
@@ -155,66 +153,65 @@
 
 /* O container do card */
 .card-favorito-mini {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px;
-    margin-bottom: 12px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 .btn-detalhe-favorito {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    min-width: 0;
-    background: transparent;
-    color: inherit;
-    text-align: left;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
 }
 
 /* Imagem do produto */
 .img-favorito-mini {
-    width: 60px;
-    height: 60px;
-    object-fit: cover; /* Evita que a foto estique e garante padronização */
-    border-radius: 8px;
-    flex-shrink: 0;   /* Impede que a imagem encolha se o título for longo */
+  width: 60px;
+  height: 60px;
+  object-fit: cover; /* Evita que a foto estique e garante padronização */
+  border-radius: 8px;
+  flex-shrink: 0; /* Impede que a imagem encolha se o título for longo */
 }
 .img-favorito-mini.imagem-indisponivel {
-    background: #f5f5f5;
+  background: #f5f5f5;
 }
 /* Área de texto (Nome e Preço) */
 .info-favorito-mini {
-    flex-grow: 1;
-    padding: 0 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
+  flex-grow: 1;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 /* Título do produto */
 .info-favorito-mini h4 {
-    margin: 0;
-    font-size: 12px;
-    font-weight: 600;
-    color: #333333;
-    line-height: 1.2;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333333;
+  line-height: 1.2;
 }
 
 /* Preço do produto usando o laranja da marca */
 .info-favorito-mini p {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--logo-laranja);
-    font-family: var(--fonte-titulos);
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--logo-laranja);
+  font-family: var(--fonte-titulos);
 }
 
 /* Ícone da lixeira */
 .btn-remover-favorito .material-symbols-outlined {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 /* =========================================
@@ -222,146 +219,145 @@
 ========================================= */
 
 .pilula-quantidade {
-    display: flex;
-    align-items: center;
-    background-color: #f5f5f5;
-    border-radius: 50px; /* Cria o formato de pílula */
-    padding: 4px;
-    gap: 8px;
-    border: 1px solid #eeeeee;
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 50px; /* Cria o formato de pílula */
+  padding: 4px;
+  gap: 8px;
+  border: 1px solid #eeeeee;
 }
 
 .btn-qtd {
-    background: #ffffff;
-    border: none;
-    border-radius: 50%;
-    width: 26px;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #555555;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    transition: all 0.2s ease;
+  background: #ffffff;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #555555;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
 }
 
 .btn-qtd .material-symbols-outlined {
-    font-size: 15px;
+  font-size: 15px;
 }
 
 /* Efeito Hover: O botão de menos/lixeira fica rosa, o de mais fica verde */
 .btn-menos:hover {
-    background-color: var(--logo-rosa);
-    color: white;
+  background-color: var(--logo-rosa);
+  color: white;
 }
 
 .btn-mais:hover {
-    background-color: var(--logo-verde);
-    color: white;
+  background-color: var(--logo-verde);
+  color: white;
 }
 
 .btn-qtd:active {
-    transform: scale(0.90);
+  transform: scale(0.9);
 }
 
 .qtd-numero {
-    font-size: 12px;
-    font-weight: 700;
-    color: #333;
-    min-width: 16px;
-    text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #333;
+  min-width: 16px;
+  text-align: center;
 }
-
 
 /* =========================================
    MODAL DE CONFIRMAÇÃO DE REMOÇÃO
 ========================================= */
 
 #modal-confirmacao {
-    margin: auto;
-    padding: 0;
-    border: none;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    max-width: 360px;
-    width: 90%;
-    animation: fadeInModal 0.25s ease;
+  margin: auto;
+  padding: 0;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  max-width: 360px;
+  width: 90%;
+  animation: fadeInModal 0.25s ease;
 }
 
 #modal-confirmacao::backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(3px);
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
 }
 
 .conteudo-confirmacao {
-    padding: 24px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  padding: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .conteudo-confirmacao h3 {
-    margin: 0;
-    font-size: 18px;
-    color: #333333;
+  margin: 0;
+  font-size: 18px;
+  color: #333333;
 }
 
 .conteudo-confirmacao p {
-    margin: 0;
-    font-size: 14px;
-    color: #666666;
-    line-height: 1.4;
+  margin: 0;
+  font-size: 14px;
+  color: #666666;
+  line-height: 1.4;
 }
 
 .botoes-confirmacao {
-    display: flex;
-    gap: 10px;
-    margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
 }
 
 .botoes-confirmacao button {
-    flex: 1;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
 }
 
 /* Botão Cancelar */
 #btn-cancelar-remocao {
-    background-color: var(--logo-verde);
-    color: #ffffff;
+  background-color: var(--logo-verde);
+  color: #ffffff;
 }
 
 #btn-cancelar-remocao:hover {
-    background-color: #e62b2b;
+  background-color: #e62b2b;
 }
 
 /* Botão Confirmar Remoção (Usa o rosa da sua paleta) */
 #btn-confirmar-remocao {
-    background-color: white;
-    color: #313131;
+  background-color: white;
+  color: #313131;
 }
 
 #btn-confirmar-remocao:hover {
-    opacity: 0.9;
-    transform: scale(1.02);
+  opacity: 0.9;
+  transform: scale(1.02);
 }
 
 @keyframes fadeInModal {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* =========================================
@@ -369,51 +365,51 @@
 ========================================= */
 
 .footer-modal-favoritos {
-    margin-top: auto;
-    flex-shrink: 0;
-    background-color: #ffffff;
-    border-top: 1px solid #eeeeee;
-    padding: 16px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 0 0 16px 16px; /* Acompanha o arredondamento do modal */
-    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.03);
-    z-index: 10;
+  margin-top: auto;
+  flex-shrink: 0;
+  background-color: #ffffff;
+  border-top: 1px solid #eeeeee;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 0 0 16px 16px; /* Acompanha o arredondamento do modal */
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.03);
+  z-index: 10;
 }
 
 .info-total {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .info-total span {
-    font-size: 12px;
-    color: #777777;
-    margin-bottom: 2px;
+  font-size: 12px;
+  color: #777777;
+  margin-bottom: 2px;
 }
 
 .info-total strong {
-    font-size: 18px;
-    color: var(--logo-laranja); /* Usa o azul da sua paleta para o preço */
+  font-size: 18px;
+  color: var(--logo-laranja); /* Usa o azul da sua paleta para o preço */
 }
 
 #btn-consultar-favoritos {
-    background-color: var(--logo-laranja); /* O verde passa ideia de "Avançar" */
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 20px;
-    font-size: 15px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  background-color: var(--logo-laranja); /* O verde passa ideia de "Avançar" */
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 #btn-consultar-favoritos:hover {
-    transform: scale(1.03);
-    opacity: 0.9;
+  transform: scale(1.03);
+  opacity: 0.9;
 }

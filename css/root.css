@@ -1,22 +1,22 @@
-:root{
-    --logo-rosa: #d73d6f;   
-    --logo-laranja: #f66a09;
-    --logo-azul: #24b1a1;
-    --logo-verde: #7CBc42; 
-    /* =========================================
+:root {
+  --logo-rosa: #d73d6f;
+  --logo-laranja: #f66a09;
+  --logo-azul: #24b1a1;
+  --logo-verde: #7cbc42;
+  /* =========================================
        FAMÍLIAS DE FONTES
        ========================================= */
-    /* Para H1, H2, banners, botões grandes e preços em destaque */
-    --fonte-titulos: 'Fredoka', sans-serif; 
-    
-    /* Para parágrafos, menus, inputs e descrições longas */
-    --fonte-textos: 'Nunito', sans-serif;
+  /* Para H1, H2, banners, botões grandes e preços em destaque */
+  --fonte-titulos: 'Fredoka', sans-serif;
 
-    /* =========================================
+  /* Para parágrafos, menus, inputs e descrições longas */
+  --fonte-textos: 'Nunito', sans-serif;
+
+  /* =========================================
        PESOS DAS FONTES (Gordura)
        ========================================= */
-    --font-weight-normal: 400;
-    --font-weight-medium: 600;
-    --font-weight-bold: 700;
-    --font-weight-black: 800; /* Ótimo para destacar promoções */
+  --font-weight-normal: 400;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 800; /* Ótimo para destacar promoções */
 }
