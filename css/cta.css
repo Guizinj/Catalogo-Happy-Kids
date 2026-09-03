@@ -53,8 +53,9 @@
   text-align: center;
 }
 .titulo-secao-catalogo {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   color: var(--logo-laranja);
+  font-size: 1.5rem;
 }
 @keyframes pulsar {
   0% {
