@@ -1,4 +1,5 @@
 import {
+    buscarProdutosMaisVendidos,
     buscarProdutosPorCategoria,
     buscarProdutosPorCodigos,
     buscarProdutosPorFiltros,
@@ -17,6 +18,7 @@ import {
     mostrarToast,
     ocultarLoader,
     renderizarListaFavoritos,
+    renderizarMaisVendidos,
     renderizarProdutos
 } from './ui.js';
 import {
@@ -40,6 +42,7 @@ import {
     verificarFavorito
 } from './storage.js';
 import { configurarLinksWhatsApp } from './whatsapp.js';
+import { configurarCarrosselMaisVendidos } from './carrossel.js';
 
 const catalogo = criarControladorCatalogo({
     fontesDeDados: {
@@ -50,6 +53,7 @@ const catalogo = criarControladorCatalogo({
     }
 });
 let produtosAtuais = [];
+let produtosMaisVendidos = [];
 
 function sincronizarInterfaceFavoritos() {
     const favoritos = obterFavoritos();
@@ -81,7 +85,7 @@ function atualizarCatalogoNaTela(resultado) {
     controlarVisibilidadeBotaoCatalogoCompleto(possuiConsultaAtiva(resultado.modo));
 }
 
-function favoritarComFeedback(produto, iconeCoracao) {
+function favoritarComFeedback(produto) {
     const resultado = alternarFavorito(produto);
 
     if (!resultado.sucesso) {
@@ -89,9 +93,21 @@ function favoritarComFeedback(produto, iconeCoracao) {
         return resultado;
     }
 
-    if (iconeCoracao) {
-        iconeCoracao.classList.toggle('favoritado', resultado.foiAdicionado);
-    }
+        const botoesDoProduto = document.querySelectorAll(
+        '.card-produto[data-id="' + produto.codigo + '"] [data-action="favoritar"]'
+        );
+
+    botoesDoProduto.forEach((botao) => {
+        botao.querySelector('.favorite')
+            ?.classList.toggle('favoritado', resultado.foiAdicionado);
+
+        botao.setAttribute(
+            'aria-label',
+            (resultado.foiAdicionado ? 'Remover ' : 'Adicionar ')
+                + produto.nome
+                + ' dos favoritos'
+        );
+    });
 
     mostrarToast(
         resultado.foiAdicionado ? 'Item adicionado aos favoritos' : 'Item removido dos favoritos',
@@ -107,14 +123,27 @@ async function iniciarLoja() {
         carregarFavoritos();
 
         const codigosFavoritados = obterFavoritos().map((favorito) => favorito.codigo);
-        const [resultadoCatalogo, favoritosAtualizados] = await Promise.all([
-            catalogo.carregarCatalogo(),
-            buscarProdutosPorCodigos(codigosFavoritados)
-        ]);
+        const [
+    resultadoCatalogo,
+    favoritosAtualizados,
+    maisVendidos
+] = await Promise.all([
+    catalogo.carregarCatalogo(),
+    buscarProdutosPorCodigos(codigosFavoritados),
+    buscarProdutosMaisVendidos().catch((erro) => {
+        console.error('Falha ao carregar mais vendidos', erro);
+        return [];
+    })
+]);
 
-        atualizarPrecosFavoritos(favoritosAtualizados);
-        atualizarCatalogoNaTela(resultadoCatalogo);
-        sincronizarInterfaceFavoritos();
+atualizarPrecosFavoritos(favoritosAtualizados);
+
+produtosMaisVendidos = maisVendidos;
+
+atualizarCatalogoNaTela(resultadoCatalogo);
+renderizarMaisVendidos(produtosMaisVendidos, obterFavoritos());
+configurarCarrosselMaisVendidos();
+sincronizarInterfaceFavoritos();
     } catch (erro) {
         console.error('Falha ao iniciar loja', erro);
         mostrarToast('Não foi possível carregar a loja. Tente recarregar a página.', 'removido');
@@ -260,7 +289,13 @@ function configurarFiltroMagico() {
 }
 
 function encontrarProdutoNoCatalogo(codigo) {
-    return produtosAtuais.find((produto) => produto.codigo === String(codigo)) || null;
+    const codigoProcurado = String(codigo);
+
+    return produtosAtuais.find(
+        (produto) => produto.codigo === codigoProcurado
+    ) || produtosMaisVendidos.find(
+        (produto) => produto.codigo === codigoProcurado
+    ) || null;
 }
 
 function configurarModalProduto() {
@@ -306,10 +341,7 @@ function configurarModalProduto() {
     botaoFavoritar?.addEventListener('click', () => {
         if (!produtoAtualNoModal) return;
 
-        const icone = document.querySelector(
-            '.card-produto[data-id="' + produtoAtualNoModal.codigo + '"] .favorite'
-        );
-        const resultado = favoritarComFeedback(produtoAtualNoModal, icone);
+        const resultado = favoritarComFeedback(produtoAtualNoModal);
 
         if (!resultado.sucesso) return;
 
@@ -327,11 +359,8 @@ function configurarModalProduto() {
     fecharAoClicarFora(modalProduto);
 }
 
-function configurarCliqueNoGrid() {
-    const grid = document.getElementById('grid');
-    if (!grid) return;
-
-    grid.addEventListener('click', (evento) => {
+function configurarCliqueNosCards() {
+    document.addEventListener('click', (evento) => {
         const botao = evento.target.closest('[data-action="favoritar"]');
         if (!botao) return;
 
@@ -339,9 +368,12 @@ function configurarCliqueNoGrid() {
         const produto = encontrarProdutoNoCatalogo(card?.dataset.id);
         if (!produto) return;
 
-        const resultado = favoritarComFeedback(produto, botao.querySelector('.favorite'));
+        const resultado = favoritarComFeedback(produto);
+
         if (resultado.sucesso && resultado.foiAdicionado) {
-            setTimeout(() => document.getElementById('dialog-favorite')?.showModal(), 250);
+            setTimeout(() => {
+                document.getElementById('dialog-favorite')?.showModal();
+            }, 250);
         }
     });
 }
@@ -361,14 +393,33 @@ function configurarEventosModalFavoritosConteudo() {
     });
 
     confirmar.addEventListener('click', () => {
-        if (idProdutoPendente !== null) {
-            removerFavorito(idProdutoPendente);
-            document.querySelector(
-                '.card-produto[data-id="' + idProdutoPendente + '"] .favorite'
-            )?.classList.remove('favoritado');
-            sincronizarInterfaceFavoritos();
-            mostrarToast('Item removido dos favoritos', 'removido');
+    if (idProdutoPendente !== null) {
+    const produtoRemovido = buscarFavorito(idProdutoPendente);
+
+    removerFavorito(idProdutoPendente);
+
+    const botoesDoProduto = document.querySelectorAll(
+        '.card-produto[data-id="' + idProdutoPendente + '"] '
+            + '[data-action="favoritar"]'
+    );
+
+    botoesDoProduto.forEach((botao) => {
+        botao.querySelector('.favorite')
+            ?.classList.remove('favoritado');
+
+        if (produtoRemovido) {
+            botao.setAttribute(
+                'aria-label',
+                'Adicionar '
+                    + produtoRemovido.nome
+                    + ' aos favoritos'
+            );
         }
+    });
+
+    sincronizarInterfaceFavoritos();
+    mostrarToast('Item removido dos favoritos', 'removido');
+}
 
         idProdutoPendente = null;
         modalConfirmacao.close();
@@ -409,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
     configurarLinksWhatsApp();
     configurarPesquisa();
     configurarFiltroCategoria();
-    configurarCliqueNoGrid();
+    configurarCliqueNosCards();
     configurarFaq();
     configurarModalProduto();
     configurarModalLoja();

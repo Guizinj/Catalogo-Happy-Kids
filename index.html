@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/root.css?v=1.1.0">
     <link rel="stylesheet" href="css/base.css?v=1.1.0">
     <link rel="stylesheet" href="css/produtos.css?v=1.1.0">
+    <link rel="stylesheet" href="css/mais-vendidos.css?v=1.1.0">
     <link rel="stylesheet" href="css/footer.css?v=1.1.0">
     <link rel="stylesheet" href="css/faqajuda.css?v=1.1.0">
     <link rel="stylesheet" href="css/lojas.css?v=1.1.0">
@@ -66,6 +67,47 @@
             <button class="btn-cta" id="btn-cta" type="button">Filtro de presentes</button>
         </section>
 
+                <section
+            id="secao-mais-vendidos"
+            class="secao-mais-vendidos"
+            aria-labelledby="titulo-mais-vendidos"
+            hidden
+        >
+            <div class="cabecalho-mais-vendidos">
+                <div>
+                    <h2 id="titulo-mais-vendidos">Mais vendidos</h2>
+                </div>
+
+                <div class="controles-mais-vendidos" aria-label="Controles do carrossel">
+                    <button
+                        id="btn-mais-vendidos-anterior"
+                        type="button"
+                        aria-label="Mostrar produto anterior"
+                    >
+                        <span class="material-symbols-outlined" aria-hidden="true">
+                            chevron_left
+                        </span>
+                    </button>
+
+                    <button
+                        id="btn-mais-vendidos-proximo"
+                        type="button"
+                        aria-label="Mostrar próximo produto"
+                    >
+                        <span class="material-symbols-outlined" aria-hidden="true">
+                            chevron_right
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <div
+                id="carrossel-mais-vendidos"
+                class="carrossel-mais-vendidos"
+                tabindex="0"
+                aria-label="Produtos mais vendidos"
+            ></div>
+        </section>
 
         <section class="conteudo">
             <h1 id="titulo-catalogo" class="titulo-secao-catalogo">Destaques</h1>

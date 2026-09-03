@@ -70,8 +70,13 @@ function criarBotao({ classes = [], texto, rotulo, acao, titulo } = {}) {
     return botao;
 }
 
-export function renderizarProdutos(listaDeProdutos, deveAcrescentar = false, listaFavoritos = []) {
-    const grid = document.getElementById('grid');
+export function renderizarProdutos(
+    listaDeProdutos,
+    deveAcrescentar = false,
+    listaFavoritos = [],
+    idDoContainer = 'grid'
+) {
+    const grid = document.getElementById(idDoContainer);
     if (!grid) return;
 
     const produtos = normalizarListaProdutos(listaDeProdutos);
@@ -142,6 +147,30 @@ export function renderizarProdutos(listaDeProdutos, deveAcrescentar = false, lis
 
     grid.appendChild(fragmento);
 }
+
+export function renderizarMaisVendidos(listaDeProdutos, listaFavoritos = []) {
+    const secao = document.getElementById('secao-mais-vendidos');
+    const carrossel = document.getElementById('carrossel-mais-vendidos');
+    const produtos = normalizarListaProdutos(listaDeProdutos);
+
+    if (!secao || !carrossel) return;
+
+    if (produtos.length === 0) {
+        carrossel.replaceChildren();
+        secao.hidden = true;
+        return;
+    }
+
+    renderizarProdutos(
+        produtos,
+        false,
+        listaFavoritos,
+        'carrossel-mais-vendidos'
+    );
+
+    secao.hidden = false;
+}
+
 
 export function renderizarListaFavoritos(favoritos = []) {
     const container = document.querySelector('.modal-favoritos-conteudo');
