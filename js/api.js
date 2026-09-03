@@ -45,6 +45,31 @@ export async function buscarTodosOsProdutos(pagina = 0, limite = 14) {
     return executarConsultaPaginada(consulta, pagina, limite);
 }
 
+export async function buscarProdutosMaisVendidos(limite = 10) {
+    const limiteNormalizado = Math.max(
+        1,
+        Number.parseInt(limite, 10) || 10
+    );
+
+    const consulta = aplicarOrdenacao(
+        supabase
+            .from('produtos')
+            .select(CAMPOS_PRODUTO_PUBLICOS)
+            .eq('estoque', true)
+            .eq('mais_vendido', true)
+    );
+
+    const { data, error } = await consulta.limit(limiteNormalizado);
+
+    if (error) {
+        console.error('Erro ao buscar produtos mais vendidos', error.message);
+        throw new Error('Não foi possível buscar os produtos mais vendidos.');
+    }
+
+    return normalizarListaProdutos(data);
+}
+
+
 export async function buscarProdutosPorNome(filtro, pagina = 0, limite = 14) {
     const termo = String(filtro ?? '').trim();
 
@@ -57,7 +82,7 @@ export async function buscarProdutosPorNome(filtro, pagina = 0, limite = 14) {
             .from('produtos')
             .select(CAMPOS_PRODUTO_PUBLICOS)
             .eq('estoque', true)
-            .ilike('nome', '%' + escaparPadraoIlike(termo) + '%')
+            .ilike('termos_busca', '%' + escaparPadraoIlike(termo) + '%')
     );
 
     return executarConsultaPaginada(consulta, pagina, limite);
