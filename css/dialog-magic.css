@@ -1,207 +1,241 @@
-/* Configurações principais do modal centralizado (90% de largura e 80% de altura) */
 .dialog-magic {
-  border: none;
-  outline: none;
-  padding: 0px;
-  border-radius: 20px;
-
-  width: 90%;
-  height: 80%;
-  max-height: 80vh; /* Garante que ele respeite a trava de altura da tela */
-  max-width: 550px; /* Um limite elegante para não ficar excessivamente largo no desktop */
-
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  width: min(92%, 500px);
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  overflow: hidden;
+  inset: 0;
   margin: auto;
-  overflow: hidden; /* Impede o dialog de criar rolagem externa */
-
+  background: #ffffff;
+  border: none;
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(41, 41, 41, 0.22);
   opacity: 0;
-  transform: translateY(+100%);
-
+  transform: translateY(24px) scale(0.98);
   transition:
-    opacity 0.5s ease,
-    transform 0.5s ease,
-    display 0.5s allow-discrete,
-    overlay 0.5s allow-discrete;
+    opacity 0.28s ease,
+    transform 0.28s ease,
+    display 0.28s allow-discrete,
+    overlay 0.28s allow-discrete;
 }
 
 .dialog-magic[open] {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 @starting-style {
   .dialog-magic[open] {
     opacity: 0;
-    transform: translateY(+100%);
+    transform: translateY(24px) scale(0.98);
   }
 }
 
 .dialog-magic::backdrop {
-  background-color: #0000004b;
-  transition: opacity 0.5s ease;
+  background: rgba(41, 41, 41, 0.38);
+  backdrop-filter: blur(2px);
   opacity: 0;
+  transition: opacity 0.28s ease;
 }
+
 .dialog-magic[open]::backdrop {
   opacity: 1;
 }
+
 @starting-style {
   .dialog-magic[open]::backdrop {
     opacity: 0;
   }
 }
 
-/* Container Interno (O esqueleto que controla as alturas) */
-.modal {
+.dialog-magic .modal {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: white;
   width: 100%;
-  height: 100%; /* Ocupa exatamente os 80% de altura do dialog */
-  box-sizing: border-box;
-  overflow: hidden; /* Trava qualquer rolagem indesejada aqui fora */
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
+  background: #ffffff;
 }
 
-/* Topo Fixo */
-.modal-topo {
+.dialog-magic .modal-topo {
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 82px;
+  padding: 10px 56px;
+  background-color: var(--logo-laranja);
   background-image: url('../imagens/fundo.jpg');
+  background-position: center;
   background-size: cover;
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 15px;
 }
 
-.modal-topo a {
+.dialog-magic .modal-topo a {
+  display: block;
   border: none;
   outline: none;
 }
 
-.img-modal {
-  width: 70%;
+.dialog-magic .img-modal {
   display: block;
+  width: min(100%, 245px);
+  height: 62px;
   margin: 0 auto;
   object-fit: contain;
 }
 
-/* O PULO DO GATO: O Card Azul se adapta e rola internamente */
-.modal-filtro-magico {
-  width: 85%;
-  background-color: var(--logo-azul);
-  border-radius: 20px;
-  padding: 10px 0px;
+.dialog-magic > .modal > .btn-icon-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  color: #292929;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 3px 10px rgba(41, 41, 41, 0.14);
+}
 
-  min-height: 0; /* Correção essencial para o flexbox permitir rolagem interna */
-  overflow-y: auto; /* Ativa a rolagem vertical EXCLUSIVAMENTE aqui dentro */
+.dialog-magic > .modal > .btn-icon-close:hover {
+  background: #ffffff;
+}
 
+.dialog-magic > .modal > .btn-icon-close:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--logo-azul) 40%, transparent);
+  outline-offset: 2px;
+}
+
+.dialog-magic .modal-filtro-magico {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  padding: 28px clamp(24px, 7vw, 48px) 32px;
+  background: #ffffff;
 }
 
-/* Customização da barra de rolagem interna do card azul */
-.modal-filtro-magico::-webkit-scrollbar {
-  width: 6px;
-}
-.modal-filtro-magico::-webkit-scrollbar-thumb {
-  background: var(--logo-laranja);
-  border-radius: 10px;
-}
-
-.info {
+.dialog-magic .info {
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-shrink: 0; /* Garante que os textos informativos não sumam */
 }
 
-.modal-filtro-magico h1 {
-  color: rgb(24, 24, 24);
-  text-align: center;
-  padding: 15px 10px 5px 10px;
-  font-size: 1.3rem;
+.dialog-magic .modal-filtro-magico h2 {
   margin: 0;
-}
-
-.modal-filtro-magico p {
+  padding: 0;
+  color: var(--logo-verde);
+  font-size: clamp(1.45rem, 5vw, 1.75rem);
+  line-height: 1.15;
   text-align: center;
-  width: 80%;
-  color: rgb(32, 32, 32);
-  margin: 0 0 10px 0;
+}
+
+.dialog-magic .modal-filtro-magico .info p {
+  max-width: 360px;
+  margin: 8px 0 0;
+  color: #5f5f5f;
   font-size: 0.95rem;
-  line-height: 1.4;
+  line-height: 1.45;
+  text-align: center;
 }
 
-#form-filtro-magico {
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.select-grupo {
-  margin-bottom: 16px;
-  position: relative;
-}
-
-.select-campo {
+.dialog-magic #form-filtro-magico {
   width: 100%;
-  padding: 14px 20px;
-  font-size: 15px;
-  font-family: var(--fonte-textos);
+  padding: 24px 0 0;
+}
+
+.dialog-magic .select-grupo {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.dialog-magic .select-campo {
+  width: 100%;
+  min-height: 52px;
+  padding: 13px 44px 13px 16px;
   color: #333333;
-  background-color: #ffffff;
-  border: 1px solid var(--logo-laranja);
-  border-radius: 15px;
-  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid rgba(41, 41, 41, 0.16);
+  border-radius: 12px;
+  font-family: var(--fonte-textos);
+  font-size: 0.95rem;
   cursor: pointer;
   appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.select-campo:focus {
-  outline: 1px solid var(--logo-laranja);
+.dialog-magic .select-campo:hover {
+  border-color: color-mix(in srgb, var(--logo-laranja) 48%, white);
 }
 
-.select-grupo.seta::after {
+.dialog-magic .select-campo:focus {
+  border-color: var(--logo-laranja);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--logo-laranja) 18%, transparent);
+}
+
+.dialog-magic .select-grupo.seta::after {
   content: '';
   position: absolute;
-  right: 20px;
   top: 50%;
-  transform: translateY(-50%);
-  width: 12px;
-  height: 7px;
-  background-color: #333333;
-  clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+  right: 18px;
+  width: 9px;
+  height: 6px;
+  background: #4d4d4d;
+  clip-path: polygon(100% 0, 0 0, 50% 100%);
   pointer-events: none;
+  transform: translateY(-50%);
 }
 
-.botao-buscar {
+.dialog-magic .botao-buscar {
   width: 100%;
-  background-color: var(--logo-laranja);
-  color: #ffffff;
-  font-size: 16px;
-  font-weight: 700;
-  font-family: var(--fonte-titulos);
-  border: none;
-  border-radius: 30px;
-  padding: 14px;
+  min-height: 50px;
   margin-top: 8px;
-  cursor: pointer;
-  flex-shrink: 0; /* Bloqueia o botão de ser esmagado */
-}
-
-.botao-buscar:hover {
-  background-color: #f38e00f3;
-}
-
-/* Rodapé totalmente fixo abaixo do card azul */
-#footer-magic {
+  padding: 13px 18px;
+  color: #ffffff;
+  background: var(--logo-laranja);
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 5px 12px color-mix(in srgb, var(--logo-laranja) 24%, transparent);
   font-family: var(--fonte-titulos);
-  margin-top: 15px;
-  margin-bottom: 15px;
-  color: var(--logo-verde);
-  font-weight: 800;
-  flex-shrink: 0; /* Mantém o rodapé intacto na base */
-  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.dialog-magic .botao-buscar:hover {
+  background: color-mix(in srgb, var(--logo-laranja) 88%, #292929);
+  box-shadow: 0 7px 16px color-mix(in srgb, var(--logo-laranja) 30%, transparent);
+  transform: translateY(-1px);
+}
+
+.dialog-magic .botao-buscar:active {
+  transform: translateY(0);
+}
+
+.dialog-magic .botao-buscar:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--logo-azul) 38%, transparent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .dialog-magic {
+    width: calc(100% - 24px);
+    border-radius: 18px;
+  }
+
+  .dialog-magic .modal-topo {
+    min-height: 74px;
+    padding-block: 7px;
+  }
+
+  .dialog-magic .img-modal {
+    height: 60px;
+  }
+
+  .dialog-magic .modal-filtro-magico {
+    padding: 24px 22px 26px;
+  }
 }

@@ -63,11 +63,6 @@
   transform: scale(0.94);
 }
 
-.controles-mais-vendidos button:focus-visible {
-  outline: 3px solid var(--logo-azul);
-  outline-offset: 2px;
-}
-
 .carrossel-mais-vendidos {
   display: grid;
   grid-auto-flow: column;
