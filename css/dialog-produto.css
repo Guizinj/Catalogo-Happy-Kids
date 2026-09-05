@@ -15,6 +15,7 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   overflow: hidden; /* Garante que nada vaze do dialog principal */
+  overscroll-behavior: contain;
 
   /* Animação surgindo de baixo para cima */
   opacity: 0;
@@ -131,6 +132,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  touch-action: pan-y;
+  overscroll-behavior: contain;
 }
 @media (min-width: 768px) {
   .imagem-principal {
@@ -282,6 +285,7 @@
   margin: 0;
   padding-right: 5px;
   -webkit-overflow-scrolling: touch; /* Suaviza a rolagem no ecossistema iOS (iPhone) */
+  overscroll-behavior: contain;
   white-space: pre-wrap;
 }
 @media (min-width: 768px) {

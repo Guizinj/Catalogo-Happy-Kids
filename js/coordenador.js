@@ -23,6 +23,7 @@ import {
   renderizarProdutos
 } from './ui.js';
 import {
+  configurarBloqueioRolagemModais,
   configurarFaq,
   configurarModalFavoritos,
   configurarModalLoja,
@@ -439,6 +440,7 @@ function configurarBotaoConsultar() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  configurarBloqueioRolagemModais();
   configurarLinksWhatsApp();
   configurarPesquisa();
   configurarFiltroCategoria();

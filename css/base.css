@@ -21,6 +21,12 @@ body:has(dialog[open]) {
   overflow: hidden;
 }
 
+html.modal-aberto,
+body.modal-aberto {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 button,
 input,
 select {

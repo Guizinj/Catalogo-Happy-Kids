@@ -1,3 +1,76 @@
+let posicaoRolagemAntesDoModal = 0;
+let estilosBodyAntesDoModal = null;
+
+function bloquearRolagemDaPagina() {
+  if (estilosBodyAntesDoModal) return;
+
+  const body = document.body;
+  posicaoRolagemAntesDoModal = window.scrollY;
+  estilosBodyAntesDoModal = {
+    position: body.style.position,
+    top: body.style.top,
+    right: body.style.right,
+    left: body.style.left,
+    width: body.style.width,
+    overflow: body.style.overflow
+  };
+
+  document.documentElement.classList.add('modal-aberto');
+  body.classList.add('modal-aberto');
+  body.style.position = 'fixed';
+  body.style.top = `-${posicaoRolagemAntesDoModal}px`;
+  body.style.right = '0';
+  body.style.left = '0';
+  body.style.width = '100%';
+  body.style.overflow = 'hidden';
+}
+
+function liberarRolagemDaPagina() {
+  if (!estilosBodyAntesDoModal) return;
+
+  const body = document.body;
+  const estilosAnteriores = estilosBodyAntesDoModal;
+  estilosBodyAntesDoModal = null;
+
+  document.documentElement.classList.remove('modal-aberto');
+  body.classList.remove('modal-aberto');
+  Object.assign(body.style, estilosAnteriores);
+
+  const comportamentoAnterior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = 'auto';
+  window.scrollTo(0, posicaoRolagemAntesDoModal);
+
+  requestAnimationFrame(() => {
+    document.documentElement.style.scrollBehavior = comportamentoAnterior;
+  });
+}
+
+function sincronizarBloqueioDeRolagem() {
+  if (document.querySelector('dialog[open]')) {
+    bloquearRolagemDaPagina();
+  } else {
+    liberarRolagemDaPagina();
+  }
+}
+
+/**
+ * Mantém o documento imóvel enquanto qualquer dialog estiver aberto.
+ * O position: fixed é necessário porque apenas overflow: hidden não bloqueia
+ * de forma confiável a rolagem de fundo durante gestos no iOS.
+ */
+export function configurarBloqueioRolagemModais() {
+  const dialogs = document.querySelectorAll('dialog');
+  if (dialogs.length === 0) return;
+
+  const observador = new MutationObserver(sincronizarBloqueioDeRolagem);
+
+  dialogs.forEach((dialog) => {
+    observador.observe(dialog, { attributes: true, attributeFilter: ['open'] });
+  });
+
+  sincronizarBloqueioDeRolagem();
+}
+
 export function configurarModalMenu() {
   const modalMenu = document.getElementById('modal-menu');
   const botoesAbrirMenu = document.querySelectorAll('.abrir-menu');
