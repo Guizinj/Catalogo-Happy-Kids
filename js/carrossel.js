@@ -1,4 +1,4 @@
-const INTERVALO_AUTOMATICO = 2000;
+const INTERVALO_AUTOMATICO = 3000;
 
 function obterDistanciaDeRolagem(carrossel) {
   const primeiroCard = carrossel.querySelector('.card-produto');
