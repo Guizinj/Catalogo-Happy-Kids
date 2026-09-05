@@ -1,80 +1,65 @@
-let posicaoRolagemAntesDoModal = 0;
-let estilosBodyAntesDoModal = null;
+let posicaoAnteriorDoToqueY = 0;
 
-function bloquearRolagemDaPagina() {
-  if (estilosBodyAntesDoModal) return;
+/**
+ * Retorna a área em que o gesto começou quando ela realmente possui
+ * rolagem interna, como a descrição do produto ou o corpo de um menu.
+ */
+function obterAreaRolavel(alvo, dialog) {
+  let elemento = alvo instanceof Element ? alvo : alvo?.parentElement;
 
-  const body = document.body;
-  posicaoRolagemAntesDoModal = window.scrollY;
-  estilosBodyAntesDoModal = {
-    position: body.style.position,
-    top: body.style.top,
-    right: body.style.right,
-    left: body.style.left,
-    width: body.style.width,
-    overflow: body.style.overflow
-  };
+  while (elemento && elemento !== dialog) {
+    const estilos = getComputedStyle(elemento);
+    const permiteRolagemVertical = /auto|scroll/.test(estilos.overflowY);
 
-  document.documentElement.classList.add('modal-aberto');
-  body.classList.add('modal-aberto');
-  body.style.position = 'fixed';
-  body.style.top = `-${posicaoRolagemAntesDoModal}px`;
-  body.style.right = '0';
-  body.style.left = '0';
-  body.style.width = '100%';
-  body.style.overflow = 'hidden';
+    if (permiteRolagemVertical && elemento.scrollHeight > elemento.clientHeight + 1) {
+      return elemento;
+    }
+
+    elemento = elemento.parentElement;
+  }
+
+  return null;
 }
 
-function liberarRolagemDaPagina() {
-  if (!estilosBodyAntesDoModal) return;
-
-  const body = document.body;
-  const estilosAnteriores = estilosBodyAntesDoModal;
-  estilosBodyAntesDoModal = null;
-
-  document.documentElement.classList.remove('modal-aberto');
-  body.classList.remove('modal-aberto');
-  Object.assign(body.style, estilosAnteriores);
-
-  const comportamentoAnterior = document.documentElement.style.scrollBehavior;
-  document.documentElement.style.scrollBehavior = 'auto';
-  window.scrollTo(0, posicaoRolagemAntesDoModal);
-
-  requestAnimationFrame(() => {
-    document.documentElement.style.scrollBehavior = comportamentoAnterior;
-  });
+function registrarInicioDoToque(evento) {
+  if (!document.querySelector('dialog[open]') || evento.touches.length !== 1) return;
+  posicaoAnteriorDoToqueY = evento.touches[0].clientY;
 }
 
-function sincronizarBloqueioDeRolagem() {
-  if (document.querySelector('dialog[open]')) {
-    bloquearRolagemDaPagina();
-  } else {
-    liberarRolagemDaPagina();
+function impedirRolagemDoFundoNoToque(evento) {
+  const dialogAberto = document.querySelector('dialog[open]');
+  if (!dialogAberto || evento.touches.length !== 1) return;
+
+  const areaRolavel = dialogAberto.contains(evento.target)
+    ? obterAreaRolavel(evento.target, dialogAberto)
+    : null;
+
+  if (!areaRolavel) {
+    evento.preventDefault();
+    return;
+  }
+
+  const toqueAtualY = evento.touches[0].clientY;
+  const arrastandoParaBaixo = toqueAtualY > posicaoAnteriorDoToqueY;
+  const chegouAoInicio = areaRolavel.scrollTop <= 0;
+  const chegouAoFim =
+    areaRolavel.scrollTop + areaRolavel.clientHeight >= areaRolavel.scrollHeight - 1;
+
+  posicaoAnteriorDoToqueY = toqueAtualY;
+
+  if ((chegouAoInicio && arrastandoParaBaixo) || (chegouAoFim && !arrastandoParaBaixo)) {
+    evento.preventDefault();
   }
 }
 
-/**
- * Mantém o documento imóvel enquanto qualquer dialog estiver aberto.
- * O position: fixed é necessário porque apenas overflow: hidden não bloqueia
- * de forma confiável a rolagem de fundo durante gestos no iOS.
- */
+/** Mantém o documento imóvel enquanto qualquer dialog estiver aberto. */
 export function configurarBloqueioRolagemModais() {
-  const dialogs = document.querySelectorAll('dialog');
-  if (dialogs.length === 0) return;
-
-  const observador = new MutationObserver(sincronizarBloqueioDeRolagem);
-
-  dialogs.forEach((dialog) => {
-    observador.observe(dialog, { attributes: true, attributeFilter: ['open'] });
-  });
-
-  sincronizarBloqueioDeRolagem();
+  document.addEventListener('touchstart', registrarInicioDoToque, { passive: true });
+  document.addEventListener('touchmove', impedirRolagemDoFundoNoToque, { passive: false });
 }
 
 /**
- * Fecha o dialog e espera o body recuperar sua posição antes de navegar.
- * São necessários dois frames: um para liberar o scroll lock e outro para
- * executar a rolagem suave solicitada pela ação do usuário.
+ * Fecha o dialog e espera o bloqueio ser removido antes de navegar.
  */
 export function fecharModalERolar(dialog, elemento, opcoes = {}) {
   if (dialog?.open) {
@@ -82,9 +67,7 @@ export function fecharModalERolar(dialog, elemento, opcoes = {}) {
   }
 
   requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      elemento?.scrollIntoView(opcoes);
-    });
+    elemento?.scrollIntoView(opcoes);
   });
 }
 

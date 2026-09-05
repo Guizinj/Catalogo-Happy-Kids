@@ -184,10 +184,10 @@ function configurarProximaPagina() {
 }
 
 async function voltarParaCatalogoCompleto() {
+  mostrarToast(`Redirecionado para o Catálogo Completo...`)
   try {
     const resultado = await catalogo.carregarCatalogo();
     atualizarCatalogoNaTela(resultado);
-    mostrarToast('Voltando para Catálogo Completo')
     document.querySelector('.conteudo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (erro) {
     console.error('Falha ao voltar para catálogo completo', erro);
@@ -279,6 +279,7 @@ function configurarFiltroMagico() {
       marca: dados.get('marca')
     };
 
+
     try {
       const resultado = await catalogo.aplicarFiltros(filtros);
       atualizarCatalogoNaTela(resultado);
@@ -290,6 +291,7 @@ function configurarFiltroMagico() {
       console.error('Falha no filtro mágico', erro);
       mostrarToast('Não foi possível buscar. Tente novamente.', 'removido');
     }
+      mostrarToast(`Busca feita por Filtro Mágico...`);
   });
 }
 

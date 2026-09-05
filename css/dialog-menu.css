@@ -7,7 +7,7 @@
   border: none;
   outline: none;
   padding: 0;
-  width: 85%;
+  width: 75%;
   max-width: 360px; /* Evita que em tablets fique largo demais */
   height: 100dvh;
   max-height: 100dvh;
