@@ -7,6 +7,7 @@ import {
   normalizarProduto
 } from './domain.js';
 import { configurarGestosGaleria } from './gestos.js';
+import { fecharModalERolar } from './modais.js';
 import { criarUrlWhatsApp, montarMensagemOrcamento } from './whatsapp.js';
 
 let temporizadorToast;
@@ -203,8 +204,11 @@ export function renderizarListaFavoritos(favoritos = []) {
     });
 
     explorar.addEventListener('click', () => {
-      document.getElementById('dialog-favorite')?.close();
-      document.querySelector('.conteudo')?.scrollIntoView({ behavior: 'smooth' });
+      fecharModalERolar(
+        document.getElementById('dialog-favorite'),
+        document.querySelector('.conteudo'),
+        { behavior: 'smooth', block: 'start' }
+      );
     });
 
     estadoVazio.append(ilustracao, titulo, texto, explorar);

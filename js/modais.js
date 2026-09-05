@@ -71,6 +71,23 @@ export function configurarBloqueioRolagemModais() {
   sincronizarBloqueioDeRolagem();
 }
 
+/**
+ * Fecha o dialog e espera o body recuperar sua posição antes de navegar.
+ * São necessários dois frames: um para liberar o scroll lock e outro para
+ * executar a rolagem suave solicitada pela ação do usuário.
+ */
+export function fecharModalERolar(dialog, elemento, opcoes = {}) {
+  if (dialog?.open) {
+    dialog.close();
+  }
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      elemento?.scrollIntoView(opcoes);
+    });
+  });
+}
+
 export function configurarModalMenu() {
   const modalMenu = document.getElementById('modal-menu');
   const botoesAbrirMenu = document.querySelectorAll('.abrir-menu');

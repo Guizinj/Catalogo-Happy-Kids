@@ -29,7 +29,8 @@ import {
   configurarModalLoja,
   configurarModalMagic,
   configurarModalMenu,
-  fecharAoClicarFora
+  fecharAoClicarFora,
+  fecharModalERolar
 } from './modais.js';
 import { mensagensNoTopo } from './banner.js';
 import {
@@ -186,6 +187,7 @@ async function voltarParaCatalogoCompleto() {
   try {
     const resultado = await catalogo.carregarCatalogo();
     atualizarCatalogoNaTela(resultado);
+    mostrarToast('Voltando para Catálogo Completo')
     document.querySelector('.conteudo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (erro) {
     console.error('Falha ao voltar para catálogo completo', erro);
@@ -200,11 +202,10 @@ function configurarBotaoVerCatalogoCompleto() {
 }
 
 function fecharMenuERolar(modalMenu) {
-  if (modalMenu?.open) {
-    modalMenu.close();
-  }
-
-  document.querySelector('.conteudo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  fecharModalERolar(modalMenu, document.querySelector('.conteudo'), {
+    behavior: 'smooth',
+    block: 'start'
+  });
 }
 
 function configurarFiltroCategoria() {
@@ -281,8 +282,10 @@ function configurarFiltroMagico() {
     try {
       const resultado = await catalogo.aplicarFiltros(filtros);
       atualizarCatalogoNaTela(resultado);
-      if (modalMagic?.open) modalMagic.close();
-      document.querySelector('.conteudo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      fecharModalERolar(modalMagic, document.querySelector('.conteudo'), {
+        behavior: 'smooth',
+        block: 'start'
+      });
     } catch (erro) {
       console.error('Falha no filtro mágico', erro);
       mostrarToast('Não foi possível buscar. Tente novamente.', 'removido');
