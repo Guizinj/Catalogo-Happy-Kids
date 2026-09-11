@@ -5,7 +5,7 @@
  * registrados apenas na primeira chamada; as demais atualizam somente as imagens
  * e o índice do produto atual. Isso evita o acúmulo de listeners.
  */
-export function configurarGestosGaleria(imagemPrincipal, imagensProduto) {
+export function configurarGestosGaleria(imagemPrincipal, imagensProduto, aoTrocarImagem) {
   if (!imagemPrincipal.dataset.gestosAtivos) {
     imagemPrincipal.dataset.gestosAtivos = 'true';
 
@@ -34,9 +34,12 @@ export function configurarGestosGaleria(imagemPrincipal, imagensProduto) {
 
       imagemPrincipal._indiceGaleria = indice;
       imagemPrincipal.src = imagens[indice];
+      imagemPrincipal._aoTrocarImagemGaleria?.(imagens[indice]);
     });
   }
 
+  const urlAtual = imagemPrincipal.src || imagemPrincipal.currentSrc;
   imagemPrincipal._imagensGaleria = imagensProduto;
-  imagemPrincipal._indiceGaleria = 0;
+  imagemPrincipal._indiceGaleria = Math.max(0, imagensProduto.indexOf(urlAtual));
+  imagemPrincipal._aoTrocarImagemGaleria = aoTrocarImagem;
 }

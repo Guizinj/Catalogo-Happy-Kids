@@ -246,7 +246,6 @@ Revise `NUMEROS_WHATSAPP` e o atributo `data-whatsapp` do link. A chave do HTML 
 
 ## 11. Melhorias futuras já identificadas
 
-- Fazer a galeria navegar somente pelas imagens que realmente carregaram.
 - Versionar schema, índices e policies do Supabase por migrations.
 - Trocar o texto livre de categoria por um identificador estável.
 - Ampliar os testes automatizados para os componentes do DOM e para o controlador do catálogo.

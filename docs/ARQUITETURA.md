@@ -85,7 +85,7 @@ O Storage público pode conter até três imagens conhecidas pela interface:
 {codigo}_3.webp
 ```
 
-A primeira é a principal. A segunda e a terceira são opcionais. Uma miniatura cujo carregamento falha é removida do modal. Atualmente, a lista usada pelo gesto de deslizar ainda é criada antes dessa confirmação e pode tentar uma imagem opcional ausente.
+A primeira é a principal. A segunda e a terceira são opcionais. Uma miniatura cujo carregamento falha é removida do modal, e o gesto de deslizar recebe somente a lista de imagens cujo carregamento foi confirmado.
 
 O código do produto nunca aceita barra, espaço ou caracteres de caminho. Assets institucionais como logo, fundo e favicon ficam em `imagens/` e não usam essa convenção.
 

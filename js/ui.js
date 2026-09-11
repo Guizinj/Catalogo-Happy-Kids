@@ -37,6 +37,10 @@ function configurarImagemDeProduto(imagem, codigo, nome, indice = 1) {
   imagem.parentElement?.removeAttribute('data-imagem-indisponivel');
   imagem.alt = nome;
   imagem.decoding = 'async';
+  imagem.onload = () => {
+    imagem.classList.remove('imagem-indisponivel');
+    imagem.parentElement?.removeAttribute('data-imagem-indisponivel');
+  };
   imagem.onerror = () => {
     imagem.classList.add('imagem-indisponivel');
     imagem.removeAttribute('src');
@@ -406,7 +410,29 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
   const imagens = [1, 2, 3].map((indice) =>
     criarUrlImagem(URL_BUCKET_PRODUTOS, produto.codigo, indice)
   );
+  const imagensCarregadas = new Set();
+  const miniaturasPorUrl = new Map();
+  const sessaoGaleria = Symbol(produto.codigo);
   const fragmento = document.createDocumentFragment();
+
+  imagemPrincipal._sessaoGaleria = sessaoGaleria;
+
+  const marcarMiniaturaAtiva = (urlImagem) => {
+    containerMiniaturas
+      .querySelectorAll('img')
+      .forEach((imagem) =>
+        imagem.classList.toggle('ativa', imagem === miniaturasPorUrl.get(urlImagem))
+      );
+  };
+
+  const atualizarImagensDaGaleria = () => {
+    if (imagemPrincipal._sessaoGaleria !== sessaoGaleria) return;
+
+    const imagensDisponiveis = imagens.filter((urlImagem) => imagensCarregadas.has(urlImagem));
+    configurarGestosGaleria(imagemPrincipal, imagensDisponiveis, marcarMiniaturaAtiva);
+  };
+
+  configurarGestosGaleria(imagemPrincipal, [], marcarMiniaturaAtiva);
 
   imagens.forEach((urlImagem, indice) => {
     const wrapper = criarElemento('div', {
@@ -426,22 +452,37 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
     }
 
     miniatura.decoding = 'async';
-    miniatura.addEventListener('load', () => wrapper.classList.remove('skeleton'), { once: true });
+    miniaturasPorUrl.set(urlImagem, miniatura);
+    miniatura.addEventListener(
+      'load',
+      () => {
+        if (imagemPrincipal._sessaoGaleria !== sessaoGaleria) return;
+
+        wrapper.classList.remove('skeleton');
+        imagensCarregadas.add(urlImagem);
+        atualizarImagensDaGaleria();
+      },
+      { once: true }
+    );
     miniatura.addEventListener(
       'error',
       () => {
+        imagensCarregadas.delete(urlImagem);
         wrapper.remove();
+        atualizarImagensDaGaleria();
       },
       { once: true }
     );
     miniatura.src = urlImagem;
 
     miniatura.addEventListener('click', () => {
+      if (!imagensCarregadas.has(urlImagem)) return;
+
       imagemPrincipal.src = urlImagem;
-      containerMiniaturas
-        .querySelectorAll('img')
-        .forEach((imagem) => imagem.classList.remove('ativa'));
-      miniatura.classList.add('ativa');
+      imagemPrincipal._indiceGaleria = imagens
+        .filter((imagem) => imagensCarregadas.has(imagem))
+        .indexOf(urlImagem);
+      marcarMiniaturaAtiva(urlImagem);
     });
 
     wrapper.appendChild(miniatura);
@@ -449,7 +490,6 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
   });
 
   containerMiniaturas.appendChild(fragmento);
-  configurarGestosGaleria(imagemPrincipal, imagens);
 
   document.getElementById('modal-nome').textContent = produto.nome;
   document.getElementById('modal-preco').textContent = formatarMoeda(produto.preco);
