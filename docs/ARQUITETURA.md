@@ -10,7 +10,7 @@ Navegador
     ├── catalogo.js ── api.js ── Supabase Database: produtos
     ├── carrossel.js ─────────── seção Mais vendidos
     ├── storage.js ───────────── localStorage: happyKidsFavoritos
-    ├── ui.js / modais.js / gestos.js / banner.js ── DOM
+    ├── ui.js / modais.js / gestos.js / visualizador-imagens.js / banner.js ── DOM
     └── whatsapp.js ──────────── wa.me
 ```
 
@@ -20,20 +20,21 @@ Na inicialização, o catálogo principal, os favoritos atualizados e os mais ve
 
 ## 2. Responsabilidade dos módulos
 
-| Módulo           | Responsabilidade                                             | Não deve fazer                        |
-| ---------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `config.js`      | Criar o cliente Supabase e expor bucket e telefones públicos | Guardar segredo administrativo        |
-| `domain.js`      | Validar, normalizar e formatar produtos e favoritos          | Acessar DOM ou rede                   |
-| `api.js`         | Construir consultas públicas e paginação                     | Renderizar ou salvar favoritos        |
-| `catalogo.js`    | Manter modo, página, concorrência e retry                    | Conhecer elementos do HTML            |
-| `carrossel.js`   | Controlar setas, autoplay e pausa por hover                  | Buscar produtos ou criar cards        |
-| `storage.js`     | Validar e persistir favoritos no navegador                   | Consultar Supabase                    |
-| `ui.js`          | Criar elementos, preencher dialogs, toast e totais           | Inserir HTML externo sem validação    |
-| `modais.js`      | Abrir, fechar e restaurar foco dos dialogs                   | Aplicar regra de negócio              |
-| `gestos.js`      | Trocar imagens por gesto e clique                            | Consultar banco                       |
-| `banner.js`      | Alternar as mensagens do topo                                | Controlar outras áreas da página      |
-| `whatsapp.js`    | Montar URLs e mensagem de consulta                           | Repetir telefones fora de `config.js` |
-| `coordenador.js` | Inicializar a loja e conectar eventos aos módulos            | Concentrar funções puras de domínio   |
+| Módulo                     | Responsabilidade                                             | Não deve fazer                        |
+| -------------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `config.js`                | Criar o cliente Supabase e expor bucket e telefones públicos | Guardar segredo administrativo        |
+| `domain.js`                | Validar, normalizar e formatar produtos e favoritos          | Acessar DOM ou rede                   |
+| `api.js`                   | Construir consultas públicas e paginação                     | Renderizar ou salvar favoritos        |
+| `catalogo.js`              | Manter modo, página, concorrência e retry                    | Conhecer elementos do HTML            |
+| `carrossel.js`             | Controlar setas, autoplay e pausa por hover                  | Buscar produtos ou criar cards        |
+| `storage.js`               | Validar e persistir favoritos no navegador                   | Consultar Supabase                    |
+| `ui.js`                    | Criar elementos, preencher dialogs, toast e totais           | Inserir HTML externo sem validação    |
+| `modais.js`                | Abrir, fechar e restaurar foco dos dialogs                   | Aplicar regra de negócio              |
+| `gestos.js`                | Trocar imagens por gesto e clique                            | Consultar banco                       |
+| `visualizador-imagens.js`  | Controlar a galeria ampliada e seus atalhos                  | Descobrir URLs ou consultar o bucket  |
+| `banner.js`                | Alternar as mensagens do topo                                | Controlar outras áreas da página      |
+| `whatsapp.js`              | Montar URLs e mensagem de consulta                           | Repetir telefones fora de `config.js` |
+| `coordenador.js`           | Inicializar a loja e conectar eventos aos módulos            | Concentrar funções puras de domínio   |
 
 ## 3. Contratos de dados
 
@@ -85,7 +86,9 @@ O Storage público pode conter até três imagens conhecidas pela interface:
 {codigo}_3.webp
 ```
 
-A primeira é a principal. A segunda e a terceira são opcionais. Uma miniatura cujo carregamento falha é removida do modal, e o gesto de deslizar recebe somente a lista de imagens cujo carregamento foi confirmado.
+A primeira é a principal. A segunda e a terceira são opcionais. Uma miniatura cujo carregamento falha é removida do modal, e tanto o gesto de deslizar quanto o visualizador ampliado recebem somente a lista de imagens cujo carregamento foi confirmado.
+
+Ao clicar na imagem principal, `visualizador-imagens.js` abre um segundo `dialog` sobre os detalhes do produto. A interface ampliada mantém o foco na foto, exibindo apenas o fechamento e as orientações inferiores. A imagem que já estava selecionada é preservada. A navegação aceita botões laterais, setas do teclado e gesto horizontal; quando muda de imagem, também sincroniza a galeria do modal que permanece aberto por baixo. Produtos com uma única imagem não exibem controles de navegação.
 
 O código do produto nunca aceita barra, espaço ou caracteres de caminho. Assets institucionais como logo, fundo e favicon ficam em `imagens/` e não usam essa convenção.
 
@@ -205,6 +208,10 @@ Os dialogs usam `showModal()` e `close()`, permitindo que o navegador controle o
 
 - [ ] Produto com uma, duas e três imagens.
 - [ ] Imagem inexistente não deixa miniatura quebrada.
+- [ ] Clique na imagem principal abre o visualizador na imagem selecionada.
+- [ ] Setas visuais, teclado e swipe navegam e atualizam o contador.
+- [ ] Visualizador fecha por `X`, `Esc` e clique na área escura, retornando ao produto.
+- [ ] Produto com uma imagem não exibe setas no visualizador.
 - [ ] Adicionar e remover pelo catálogo, carrossel e modal.
 - [ ] Corações duplicados do mesmo produto ficam sincronizados.
 - [ ] Quantidade respeita os limites de 1 a 99.

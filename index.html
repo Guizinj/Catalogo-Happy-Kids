@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="css/dialog-magic.css?v=1.1.0" />
     <link rel="stylesheet" href="css/dialog-favorite.css?v=1.1.0" />
     <link rel="stylesheet" href="css/dialog-menu.css?v=1.1.0" />
-    <link rel="stylesheet" href="css/dialog-produto.css?v=1.1.0" />
+    <link rel="stylesheet" href="css/dialog-produto.css?v=1.2.0" />
     <link rel="stylesheet" href="css/root.css?v=1.1.0" />
     <link rel="stylesheet" href="css/base.css?v=1.1.0" />
     <link rel="stylesheet" href="css/produtos.css?v=1.1.0" />
@@ -590,9 +590,18 @@
 
         <div class="modal-produto-conteudo">
           <div class="modal-produto-esquerda">
-            <div class="imagem-principal">
+            <button
+              id="btn-ampliar-imagem"
+              class="imagem-principal"
+              type="button"
+              aria-label="Ampliar imagem do produto"
+            >
               <img id="modal-img" src="" alt="" />
-            </div>
+              <span class="dica-ampliar-imagem" aria-hidden="true">
+                <span class="dica-ampliar-mobile">Toque para ampliar</span>
+                <span class="dica-ampliar-desktop">Clique para ampliar</span>
+              </span>
+            </button>
 
             <div id="miniaturas" class="miniaturas">
               <!-- As miniaturas serão criadas pelo JavaScript -->
@@ -621,6 +630,54 @@
             </div>
           </div>
         </div>
+      </div>
+    </dialog>
+
+    <dialog
+      id="visualizador-imagens"
+      class="visualizador-imagens"
+      aria-label="Visualizador de imagens do produto"
+    >
+      <div class="visualizador-imagens-conteudo">
+        <button
+          id="btn-fechar-visualizador"
+          class="btn-fechar-visualizador"
+          type="button"
+          aria-label="Fechar imagem ampliada"
+        >
+          <span class="material-symbols-outlined" aria-hidden="true">close</span>
+        </button>
+
+        <div id="visualizador-imagens-palco" class="visualizador-imagens-palco">
+          <button
+            id="btn-imagem-anterior"
+            class="btn-navegar-imagem btn-imagem-anterior"
+            type="button"
+            aria-label="Mostrar imagem anterior"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+          </button>
+
+          <div class="visualizador-imagens-moldura">
+            <img id="visualizador-imagem" src="" alt="" />
+          </div>
+
+          <button
+            id="btn-proxima-imagem"
+            class="btn-navegar-imagem btn-proxima-imagem"
+            type="button"
+            aria-label="Mostrar próxima imagem"
+          >
+            <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+          </button>
+        </div>
+
+        <footer class="visualizador-imagens-rodape">
+          <p id="visualizador-imagens-contador" aria-live="polite">1 de 1</p>
+          <p id="visualizador-imagens-dica" class="visualizador-imagens-dica">
+            Arraste para o lado ou use as setas para navegar
+          </p>
+        </footer>
       </div>
     </dialog>
 

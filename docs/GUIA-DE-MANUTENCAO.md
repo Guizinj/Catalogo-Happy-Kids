@@ -4,24 +4,24 @@ Este documento é o manual do dia a dia do Catálogo Happy Kids. Para entender o
 
 ## 1. Mapa rápido: onde alterar cada coisa
 
-| Quero alterar...                                        | Arquivo ou local principal      |
-| ------------------------------------------------------- | ------------------------------- |
-| Estrutura, textos fixos, categorias ou opções do filtro | `index.html`                    |
-| Cores e medidas reutilizadas                            | `css/root.css`                  |
-| Cards e grade do catálogo                               | `css/produtos.css` e `js/ui.js` |
-| Aparência do carrossel                                  | `css/mais-vendidos.css`         |
-| Tempo e movimento do carrossel                          | `js/carrossel.js`               |
-| Consultas e filtros do Supabase                         | `js/api.js`                     |
-| Validação dos dados recebidos                           | `js/domain.js`                  |
-| Estado e paginação do catálogo                          | `js/catalogo.js`                |
-| Eventos e ligação entre os módulos                      | `js/coordenador.js`             |
-| Favoritos salvos no navegador                           | `js/storage.js`                 |
-| Abertura e fechamento de dialogs                        | `js/modais.js`                  |
-| Galeria e gestos das imagens                            | `js/ui.js` e `js/gestos.js`     |
-| Telefones, Supabase ou bucket                           | `js/config.js`                  |
-| Mensagem enviada ao WhatsApp                            | `js/whatsapp.js`                |
-| Mensagens rotativas do topo                             | `js/banner.js`                  |
-| Logo, fundo ou favicon                                  | pasta `imagens/`                |
+| Quero alterar...                                        | Arquivo ou local principal                                  |
+| ------------------------------------------------------- | ----------------------------------------------------------- |
+| Estrutura, textos fixos, categorias ou opções do filtro | `index.html`                                                |
+| Cores e medidas reutilizadas                            | `css/root.css`                                              |
+| Cards e grade do catálogo                               | `css/produtos.css` e `js/ui.js`                             |
+| Aparência do carrossel                                  | `css/mais-vendidos.css`                                     |
+| Tempo e movimento do carrossel                          | `js/carrossel.js`                                           |
+| Consultas e filtros do Supabase                         | `js/api.js`                                                 |
+| Validação dos dados recebidos                           | `js/domain.js`                                              |
+| Estado e paginação do catálogo                          | `js/catalogo.js`                                            |
+| Eventos e ligação entre os módulos                      | `js/coordenador.js`                                         |
+| Favoritos salvos no navegador                           | `js/storage.js`                                             |
+| Abertura e fechamento de dialogs                        | `js/modais.js`                                              |
+| Galeria e gestos das imagens                            | `js/ui.js`, `js/gestos.js` e `js/visualizador-imagens.js`   |
+| Telefones, Supabase ou bucket                           | `js/config.js`                                              |
+| Mensagem enviada ao WhatsApp                            | `js/whatsapp.js`                                            |
+| Mensagens rotativas do topo                             | `js/banner.js`                                              |
+| Logo, fundo ou favicon                                  | pasta `imagens/`                                            |
 
 ## 2. Rodar e conferir o projeto
 
@@ -105,7 +105,18 @@ ABC_123_3.webp
 - Não use espaços antes ou depois do nome.
 - Substituir um arquivo mantendo o mesmo nome pode exigir limpar o cache do navegador ou do CDN para enxergar a versão nova.
 
-Teste o card e abra o modal após o upload. Uma miniatura opcional que não carrega é removida da tela. Existe uma melhoria pendente: o gesto de deslizar ainda pode tentar a terceira URL mesmo quando esse arquivo não existe.
+Teste o card e abra o modal após o upload. Uma miniatura opcional que não carrega é removida da tela e também fica fora dos gestos e do visualizador ampliado.
+
+No modal do produto, uma orientação textual discreta indica que clicar ou tocar na imagem principal abre a galeria em tela cheia. Ela oferece:
+
+- interface limpa, sem cabeçalho sobre a fotografia;
+- botões laterais e teclas `←`/`→` no computador;
+- gesto horizontal no celular;
+- fechamento pelo botão `X`, pela tecla `Esc` ou por um clique na área escura ao redor da imagem;
+- contador da imagem atual;
+- sincronização com a imagem selecionada no modal do produto.
+
+Quando existir apenas a imagem `_1`, as setas e a instrução de navegação ficam ocultas. Depois de alterar esta área, teste produtos com uma, duas e três imagens, além de um produto sem `_2` ou sem `_3`.
 
 ## 5. Controlar o carrossel Mais vendidos
 

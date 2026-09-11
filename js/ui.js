@@ -8,6 +8,7 @@ import {
 } from './domain.js';
 import { configurarGestosGaleria } from './gestos.js';
 import { fecharModalERolar } from './modais.js';
+import { configurarVisualizadorImagens } from './visualizador-imagens.js';
 import { criarUrlWhatsApp, montarMensagemOrcamento } from './whatsapp.js';
 
 let temporizadorToast;
@@ -396,11 +397,19 @@ export function enviarOrcamentoWhatsApp(listaFavoritos) {
 export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
   const produto = normalizarProduto(produtoSelecionado);
   const imagemPrincipal = document.getElementById('modal-img');
+  const botaoAmpliarImagem = document.getElementById('btn-ampliar-imagem');
   const containerMiniaturas = document.getElementById('miniaturas');
   const botaoFavoritar = document.getElementById('btn-favoritar-modal');
   const parcela = document.getElementById('modal-parcela');
 
-  if (!produto || !imagemPrincipal || !containerMiniaturas || !botaoFavoritar || !parcela) {
+  if (
+    !produto ||
+    !imagemPrincipal ||
+    !botaoAmpliarImagem ||
+    !containerMiniaturas ||
+    !botaoFavoritar ||
+    !parcela
+  ) {
     return;
   }
 
@@ -430,9 +439,27 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
 
     const imagensDisponiveis = imagens.filter((urlImagem) => imagensCarregadas.has(urlImagem));
     configurarGestosGaleria(imagemPrincipal, imagensDisponiveis, marcarMiniaturaAtiva);
+    configurarVisualizadorImagens({
+      botaoAbrir: botaoAmpliarImagem,
+      imagensProduto: imagensDisponiveis,
+      nomeProduto: produto.nome,
+      urlAtual: imagemPrincipal.src,
+      aoTrocarImagem: (urlImagem) => {
+        imagemPrincipal.src = urlImagem;
+        imagemPrincipal._indiceGaleria = imagensDisponiveis.indexOf(urlImagem);
+        marcarMiniaturaAtiva(urlImagem);
+      }
+    });
   };
 
   configurarGestosGaleria(imagemPrincipal, [], marcarMiniaturaAtiva);
+  configurarVisualizadorImagens({
+    botaoAbrir: botaoAmpliarImagem,
+    imagensProduto: [],
+    nomeProduto: produto.nome,
+    urlAtual: imagemPrincipal.src,
+    aoTrocarImagem: marcarMiniaturaAtiva
+  });
 
   imagens.forEach((urlImagem, indice) => {
     const wrapper = criarElemento('div', {

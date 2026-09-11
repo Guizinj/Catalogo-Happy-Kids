@@ -32,6 +32,7 @@ export function configurarGestosGaleria(imagemPrincipal, imagensProduto, aoTroca
         return;
       }
 
+      imagemPrincipal._ignorarCliqueAte = Date.now() + 400;
       imagemPrincipal._indiceGaleria = indice;
       imagemPrincipal.src = imagens[indice];
       imagemPrincipal._aoTrocarImagemGaleria?.(imagens[indice]);

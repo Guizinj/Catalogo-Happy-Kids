@@ -10,7 +10,7 @@ Catálogo público de brinquedos da Happy Kids. O cliente pode navegar pelos pro
 - Filtro de presentes por idade, gênero e marca.
 - Navegação por categorias comerciais.
 - Carrossel horizontal de **Mais vendidos**, alimentado pela coluna booleana `mais_vendido`.
-- Modal do produto com galeria de até três imagens.
+- Modal do produto com galeria de até três imagens e visualização ampliada em tela cheia.
 - Favoritos persistidos no `localStorage`, com quantidade de 1 a 99.
 - Total estimado e mensagem pronta para consultar a loja pelo WhatsApp.
 - FAQ, localização das lojas e atalhos de atendimento.
@@ -51,6 +51,7 @@ Catalogo Happy Kids/
 │   ├── ui.js                    Renderização e feedback visual
 │   ├── modais.js                Abertura e fechamento dos dialogs
 │   ├── gestos.js                Gestos da galeria do produto
+│   ├── visualizador-imagens.js  Galeria ampliada, setas e atalhos
 │   ├── banner.js                Mensagens rotativas do topo
 │   ├── whatsapp.js              Links e mensagem de consulta
 │   └── coordenador.js           Inicialização e ligação dos fluxos
@@ -131,6 +132,8 @@ Exemplo para o produto `ABC_123`: `ABC_123_1.webp`, `ABC_123_2.webp` e `ABC_123_
 
 Os assets institucionais permanecem em `imagens/`; eles não seguem a convenção do bucket.
 
+No modal do produto, a imagem principal pode ser aberta em tela cheia. O visualizador permite navegar pelas imagens válidas usando botões laterais, teclas de direção ou gesto horizontal no celular.
+
 ## Configuração pública e segurança
 
 `js/config.js` contém somente dados que precisam chegar ao navegador:
@@ -155,7 +158,7 @@ Nunca coloque `service_role`, senha de banco, token administrativo, chave secret
 - Os favoritos pertencem somente ao navegador e dispositivo atuais.
 - O total é uma estimativa; o site não cria pedido nem reserva estoque.
 - As categorias dependem do texto comercial salvo no banco.
-- A interface testa até três endereços de imagem. Miniaturas inexistentes são removidas, mas o gesto da galeria ainda pode tentar um endereço ausente.
+- A interface testa até três endereços de imagem e inclui na galeria somente os arquivos que carregarem corretamente.
 - Policies, migrations do Supabase e configuração da hospedagem não ficam versionadas neste repositório.
 
 ## Documentação
