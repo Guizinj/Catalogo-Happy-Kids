@@ -113,7 +113,7 @@ Não adicione à tabela pública dados de clientes, pedidos, custo, margem, forn
 
 `catalogo.js` trabalha com quatro modos: `catalogo`, `busca`, `filtro` e `categoria`.
 
-- A API solicita 15 registros para exibir 14. O item extra informa se existe próxima página sem executar `count`.
+- A API solicita 21 registros para exibir 20. O item extra informa se existe próxima página sem executar `count`.
 - Uma troca de modo sempre começa na página zero.
 - Respostas antigas são ignoradas por um identificador de requisição.
 - A página só avança depois de uma resposta bem-sucedida.

@@ -1,4 +1,5 @@
 import { supabase } from './config.js';
+import { LIMITE_POR_PAGINA } from './catalogo.js';
 import { CAMPOS_PRODUTO_PUBLICOS, escaparPadraoIlike, normalizarListaProdutos } from './domain.js';
 
 function aplicarOrdenacao(consulta) {
@@ -7,9 +8,12 @@ function aplicarOrdenacao(consulta) {
     .order('codigo', { ascending: true });
 }
 
-async function executarConsultaPaginada(consulta, pagina = 0, limite = 14) {
+async function executarConsultaPaginada(consulta, pagina = 0, limite = LIMITE_POR_PAGINA) {
   const paginaNormalizada = Math.max(0, Number.parseInt(pagina, 10) || 0);
-  const limiteNormalizado = Math.max(1, Number.parseInt(limite, 10) || 14);
+  const limiteNormalizado = Math.max(
+    1,
+    Number.parseInt(limite, 10) || LIMITE_POR_PAGINA
+  );
   const inicio = paginaNormalizada * limiteNormalizado;
 
   // Busca um registro extra para saber se existe uma próxima página sem
@@ -30,7 +34,7 @@ async function executarConsultaPaginada(consulta, pagina = 0, limite = 14) {
   };
 }
 
-export async function buscarTodosOsProdutos(pagina = 0, limite = 14) {
+export async function buscarTodosOsProdutos(pagina = 0, limite = LIMITE_POR_PAGINA) {
   const consulta = aplicarOrdenacao(
     supabase.from('produtos').select(CAMPOS_PRODUTO_PUBLICOS).eq('estoque', true)
   );
@@ -59,7 +63,7 @@ export async function buscarProdutosMaisVendidos(limite = 10) {
   return normalizarListaProdutos(data);
 }
 
-export async function buscarProdutosPorNome(filtro, pagina = 0, limite = 14) {
+export async function buscarProdutosPorNome(filtro, pagina = 0, limite = LIMITE_POR_PAGINA) {
   const termo = String(filtro ?? '').trim();
 
   if (!termo) {
@@ -77,7 +81,11 @@ export async function buscarProdutosPorNome(filtro, pagina = 0, limite = 14) {
   return executarConsultaPaginada(consulta, pagina, limite);
 }
 
-export async function buscarProdutosPorFiltros(filtros = {}, pagina = 0, limite = 14) {
+export async function buscarProdutosPorFiltros(
+  filtros = {},
+  pagina = 0,
+  limite = LIMITE_POR_PAGINA
+) {
   let consulta = supabase.from('produtos').select(CAMPOS_PRODUTO_PUBLICOS).eq('estoque', true);
 
   const idade = Number(filtros.idade);
@@ -127,7 +135,11 @@ export async function buscarProdutosPorCodigos(codigos) {
   }
 }
 
-export async function buscarProdutosPorCategoria(categoria, pagina = 0, limite = 14) {
+export async function buscarProdutosPorCategoria(
+  categoria,
+  pagina = 0,
+  limite = LIMITE_POR_PAGINA
+) {
   const categoriaNormalizada = String(categoria ?? '').trim();
 
   if (!categoriaNormalizada) {

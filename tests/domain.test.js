@@ -2,7 +2,27 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { escaparPadraoIlike, normalizarListaFavoritos, normalizarProduto } from '../js/domain.js';
-import { criarControladorCatalogo, possuiConsultaAtiva } from '../js/catalogo.js';
+import {
+  criarControladorCatalogo,
+  LIMITE_POR_PAGINA,
+  possuiConsultaAtiva
+} from '../js/catalogo.js';
+
+test('usa 20 produtos como limite padrão por página', async () => {
+  let limiteRecebido;
+  const fontesDeDados = {
+    buscarTodosOsProdutos: async (_pagina, limite) => {
+      limiteRecebido = limite;
+      return { produtos: [], temMais: false };
+    }
+  };
+  const catalogo = criarControladorCatalogo({ fontesDeDados });
+
+  await catalogo.carregarCatalogo();
+
+  assert.equal(LIMITE_POR_PAGINA, 20);
+  assert.equal(limiteRecebido, 20);
+});
 
 test('normaliza um produto público válido', () => {
   const produto = normalizarProduto({
