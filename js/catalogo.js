@@ -1,4 +1,4 @@
-export const LIMITE_POR_PAGINA = 14;
+export const LIMITE_POR_PAGINA = 20;
 
 const MODOS_COM_CONSULTA_ATIVA = new Set(['busca', 'filtro', 'categoria']);
 
