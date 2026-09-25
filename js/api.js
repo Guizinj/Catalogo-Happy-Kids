@@ -70,12 +70,24 @@ export async function buscarProdutosPorNome(filtro, pagina = 0, limite = LIMITE_
     return { produtos: [], temMais: false };
   }
 
+  const termoEscapado = escaparPadraoIlike(termo);
+
+  const filtros = [
+    `nome.ilike.%${termoEscapado}%`,
+    `termos_busca.ilike.%${termoEscapado}%`
+  ];
+
+  // Se digitou somente números, também busca o código exato.
+  if (/^\d+$/.test(termo)) {
+    filtros.push(`codigo.eq.${termo}`);
+  }
+
   const consulta = aplicarOrdenacao(
     supabase
       .from('produtos')
       .select(CAMPOS_PRODUTO_PUBLICOS)
       .eq('estoque', true)
-      .ilike('termos_busca', '%' + escaparPadraoIlike(termo) + '%')
+      .or(filtros.join(','))
   );
 
   return executarConsultaPaginada(consulta, pagina, limite);
