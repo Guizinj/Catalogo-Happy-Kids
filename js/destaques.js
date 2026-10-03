@@ -11,6 +11,17 @@ function aguardarImagem(imagem) {
 }
 
 export async function configurarDestaques() {
+  const telaMobile = window.matchMedia('(max-width: 760px)');
+  if (!telaMobile.matches) {
+    function iniciarAoEntrarNoMobile(evento) {
+      if (!evento.matches) return;
+      telaMobile.removeEventListener('change', iniciarAoEntrarNoMobile);
+      configurarDestaques();
+    }
+    telaMobile.addEventListener('change', iniciarAoEntrarNoMobile);
+    return;
+  }
+
   const secao = document.querySelector('.destaques');
   const faixa = document.getElementById('destaques-faixa');
   if (!secao || !faixa) return;
@@ -20,6 +31,9 @@ export async function configurarDestaques() {
   const pontos = [...secao.querySelectorAll('.destaques-pontos button')];
   const loader = document.getElementById('loader-overlay');
   const imagensIniciais = imagens.slice(0, INDICE_INICIAL + 1);
+  imagensIniciais.forEach((imagem) => {
+    imagem.loading = 'eager';
+  });
   if (!imagens.length || (await Promise.all(imagensIniciais.map(aguardarImagem))).includes(false)) return;
 
   secao.hidden = false;

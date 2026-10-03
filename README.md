@@ -9,7 +9,7 @@ Catálogo público de brinquedos da Happy Kids. O cliente pode navegar pelos pro
 - Busca pelo conteúdo da coluna `termos_busca`.
 - Filtro de presentes por idade, gênero e marca.
 - Navegação por categorias comerciais e subcategorias em menu expansível.
-- Carrossel de artes na entrada, com versões otimizadas para celular, navegação por toque e rotação automática.
+- Banner horizontal de Dia das Crianças no desktop e carrossel de artes no celular, com navegação por toque e rotação automática.
 - Carrossel horizontal de **Mais vendidos**, alimentado pela coluna booleana `mais_vendido`.
 - Modal do produto com galeria de até três imagens e visualização ampliada em tela cheia.
 - Favoritos persistidos no `localStorage`, com quantidade de 1 a 99.
@@ -19,6 +19,8 @@ Catálogo público de brinquedos da Happy Kids. O cliente pode navegar pelos pro
 O botão **Ver catálogo completo** começa oculto. Ele aparece somente depois de uma busca, filtro ou seleção de categoria, permitindo desfazer a consulta ativa.
 
 As três artes originais estão em `imagens/arte 1.png` até `imagens/arte 3.png`. O carrossel usa os arquivos `imagens/destaque-1.jpg` até `imagens/destaque-3.jpg` e suas versões `-mobile.jpg`. Ao trocar uma arte, atualize as duas versões otimizadas e o texto alternativo no `index.html`.
+
+O banner do desktop usa `imagens/banner-desktop-1200.jpg` e `imagens/banner-desktop.jpg`, derivados de `imagens/banner.png`. Clique nele para ir ao catálogo. Ao trocar o banner, atualize as versões otimizadas e seu texto alternativo no `index.html`.
 
 ## Tecnologias
 
@@ -43,7 +45,7 @@ Catalogo Happy Kids/
 │   ├── base.css                 Regras globais e utilitários
 │   ├── produtos.css             Cards e catálogo
 │   ├── mais-vendidos.css        Carrossel horizontal
-│   ├── destaques.css            Carrossel de artes da entrada
+│   ├── destaques.css            Banner desktop e carrossel do celular
 │   └── ...                      Estilos dos demais componentes
 ├── js/
 │   ├── config.js                Supabase, bucket e telefones públicos

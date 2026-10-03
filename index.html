@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="css/base.css?v=1.1.0" />
     <link rel="stylesheet" href="css/produtos.css?v=1.1.0" />
     <link rel="stylesheet" href="css/mais-vendidos.css?v=1.1.0" />
-    <link rel="stylesheet" href="css/destaques.css?v=1.0.5" />
+    <link rel="stylesheet" href="css/destaques.css?v=1.1.0" />
     <link rel="stylesheet" href="css/footer.css?v=1.1.0" />
     <link rel="stylesheet" href="css/faqajuda.css?v=1.1.0" />
     <link rel="stylesheet" href="css/lojas.css?v=1.1.0" />
@@ -78,6 +78,20 @@
     </header>
 
     <main class="principal">
+      <section class="banner-desktop" aria-label="Campanha Dia das Crianças">
+        <a href="#catalogo" aria-label="Ver o catálogo de brinquedos da Happy Kids">
+          <img
+            src="imagens/banner-desktop-1200.jpg"
+            srcset="imagens/banner-desktop-1200.jpg 1200w, imagens/banner-desktop.jpg 2172w"
+            sizes="(max-width: 1200px) calc(100vw - 32px), 1168px"
+            width="2172"
+            height="724"
+            alt="Dia das Crianças na Happy Kids, com crianças brincando na loja"
+            loading="lazy"
+          />
+        </a>
+      </section>
+
       <section class="destaques" aria-label="Destaques da Happy Kids" hidden>
         <div
           class="destaques-janela"
@@ -94,6 +108,7 @@
                 width="1122"
                 height="1402"
                 alt="Vem brincar na Happy Kids: duas crianças com um carrinho de brinquedos"
+                loading="lazy"
               />
             </div>
             <div class="destaques-slide" role="group" aria-label="2 de 3">
@@ -105,6 +120,7 @@
                 height="1402"
                 alt="Dia das Crianças: uma mulher e duas crianças sorrindo na Happy Kids"
                 fetchpriority="high"
+                loading="lazy"
               />
             </div>
             <div class="destaques-slide" role="group" aria-label="3 de 3">
@@ -188,7 +204,7 @@
         ></div>
       </section>
 
-      <section class="conteudo">
+      <section class="conteudo" id="catalogo">
         <h1 id="titulo-catalogo" class="titulo-secao-catalogo">Destaques</h1>
         <button id="btn-ver-catalogo-completo" class="btn-cta-voltar" type="button" hidden>
           ← Ver catálogo completo
@@ -1444,6 +1460,6 @@
       </div>
     </dialog>
 
-    <script type="module" src="js/coordenador.js?v=1.2.1"></script>
+    <script type="module" src="js/coordenador.js?v=1.2.2"></script>
   </body>
 </html>
