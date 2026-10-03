@@ -1,0 +1,153 @@
+.destaques[hidden] {
+  display: none;
+}
+
+.destaques {
+  width: min(1240px, 100%);
+  margin: 14px auto 36px;
+  --largura-card: min(60vw, 480px);
+}
+
+.destaques-janela {
+  position: relative;
+}
+
+.destaques-faixa {
+  position: relative;
+  display: flex;
+  gap: 18px;
+  padding: 8px calc((100% - var(--largura-card)) / 2) 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
+}
+
+.destaques-faixa::-webkit-scrollbar {
+  display: none;
+}
+
+.destaques-slide {
+  flex: 0 0 var(--largura-card);
+  min-width: 0;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(68, 38, 14, 0.16);
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  background: #fff6ed;
+}
+
+.destaques-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.destaques-seta {
+  position: absolute;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: #343434;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.16);
+  transform: translateY(-50%);
+}
+
+.destaques-seta:hover {
+  background: #fff;
+}
+
+.destaques-seta:focus-visible,
+.destaques-pontos button:focus-visible {
+  outline: 3px solid var(--logo-azul);
+  outline-offset: 3px;
+}
+
+.destaques-anterior {
+  left: 16px;
+}
+
+.destaques-proximo {
+  right: 16px;
+}
+
+.destaques-pontos {
+  display: flex;
+  justify-content: center;
+  gap: 9px;
+  padding-top: 8px;
+}
+
+.destaques-pontos button {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #d6d6d6;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.destaques-pontos button[aria-current='true'] {
+  background: var(--logo-laranja);
+  transform: scale(1.2);
+}
+
+@media (max-width: 760px) {
+  .destaques {
+    --largura-card: min(calc(100vw - 32px), 480px);
+    margin: 6px auto 24px;
+  }
+
+  .destaques-faixa {
+    gap: 6px;
+    padding-top: 6px;
+    padding-bottom: 12px;
+  }
+
+  .destaques-slide {
+    aspect-ratio: 20 / 21;
+    border-radius: 0px;
+  }
+
+  .destaques-slide img {
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .destaques-slide:first-child img {
+    object-position: center 30%;
+  }
+
+  .destaques-slide:last-child img {
+    object-position: center 50%;
+  }
+
+  .destaques-seta {
+    width: 30px;
+    height: 30px;
+  }
+
+  .destaques-anterior {
+    left: 2px;
+  }
+
+  .destaques-proximo {
+    right: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .destaques-faixa {
+    scroll-behavior: auto;
+  }
+
+  .destaques-pontos button {
+    transition: none;
+  }
+}

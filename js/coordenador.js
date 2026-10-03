@@ -7,6 +7,7 @@ import {
   buscarTodosOsProdutos
 } from './api.js';
 import { configurarCarrosselMaisVendidos } from './carrossel.js';
+import { configurarDestaques } from './destaques.js?v=1.0.1';
 import { criarControladorCatalogo, possuiConsultaAtiva } from './catalogo.js';
 import {
   atualizarModalProdutoUI,
@@ -455,6 +456,7 @@ function configurarBotaoConsultar() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  configurarDestaques();
   configurarBloqueioRolagemModais();
   configurarLinksWhatsApp();
   configurarPesquisa();
