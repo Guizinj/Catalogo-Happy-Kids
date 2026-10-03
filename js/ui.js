@@ -321,7 +321,9 @@ export function atualizarTituloCatalogo(modo = 'catalogo', parametros = {}) {
       break;
 
     case 'categoria':
-      titulo.textContent = parametros.categoria || 'Produtos da categoria';
+      titulo.textContent = parametros.subcategoria
+        ? `${parametros.categoria} › ${parametros.subcategoria}`
+        : parametros.categoria || 'Produtos da categoria';
       break;
 
     default:

@@ -8,6 +8,8 @@ import {
   possuiConsultaAtiva
 } from '../js/catalogo.js';
 
+const chamadasSupabase = [];
+
 test('usa 20 produtos como limite padrão por página', async () => {
   let limiteRecebido;
   const fontesDeDados = {
@@ -184,4 +186,223 @@ test('encerra a paginação quando a próxima página não retorna cards', async
   assert.equal(resultado.acrescentou, false);
   assert.equal(resultado.temMais, false);
   assert.equal(catalogo.obterEstado().carregando, false);
+});
+
+test('categoria e subcategoria permanecem na paginação e cada seleção reinicia a página', async () => {
+  const chamadas = [];
+  const catalogo = criarControladorCatalogo({
+    fontesDeDados: {
+      buscarProdutosPorCategoria: async (categoria, subcategoria, pagina) => {
+        chamadas.push({ categoria, subcategoria, pagina });
+        return { produtos: [{ codigo: String(chamadas.length) }], temMais: pagina === 0 };
+      }
+    }
+  });
+
+  await catalogo.aplicarCategoria('Bebês');
+  assert.deepEqual(catalogo.obterEstado().parametros, {
+    categoria: 'Bebês',
+    subcategoria: null
+  });
+  await catalogo.carregarMais();
+  await catalogo.aplicarCategoria('Bebês', 'Banho');
+  await catalogo.carregarMais();
+  await catalogo.aplicarCategoria('Bebês', 'Sono e Conforto');
+  await catalogo.aplicarCategoria('Jogos', 'Jogos de Mesa');
+  await catalogo.aplicarCategoria('Jogos');
+
+  assert.deepEqual(chamadas, [
+    { categoria: 'Bebês', subcategoria: null, pagina: 0 },
+    { categoria: 'Bebês', subcategoria: null, pagina: 1 },
+    { categoria: 'Bebês', subcategoria: 'Banho', pagina: 0 },
+    { categoria: 'Bebês', subcategoria: 'Banho', pagina: 1 },
+    { categoria: 'Bebês', subcategoria: 'Sono e Conforto', pagina: 0 },
+    { categoria: 'Jogos', subcategoria: 'Jogos de Mesa', pagina: 0 },
+    { categoria: 'Jogos', subcategoria: null, pagina: 0 }
+  ]);
+  assert.equal(catalogo.obterEstado().modo, 'categoria');
+  assert.equal(catalogo.obterEstado().pagina, 0);
+});
+
+test('resposta antiga de categoria não substitui a seleção mais recente', async () => {
+  let resolverPrimeira;
+  const catalogo = criarControladorCatalogo({
+    fontesDeDados: {
+      buscarProdutosPorCategoria: (categoria) =>
+        categoria === 'Jogos'
+          ? new Promise((resolve) => {
+              resolverPrimeira = resolve;
+            })
+          : Promise.resolve({ produtos: [{ codigo: 'recente' }], temMais: false })
+    }
+  });
+
+  const primeira = catalogo.aplicarCategoria('Jogos', 'Jogos de Mesa');
+  await catalogo.aplicarCategoria('Bebês', 'Banho');
+  resolverPrimeira({ produtos: [{ codigo: 'antigo' }], temMais: false });
+  const respostaAntiga = await primeira;
+
+  assert.equal(respostaAntiga.desatualizada, true);
+  assert.deepEqual(catalogo.obterEstado().parametros, {
+    categoria: 'Bebês',
+    subcategoria: 'Banho'
+  });
+  assert.deepEqual(catalogo.obterEstado().produtos, [{ codigo: 'recente' }]);
+});
+
+test('resposta antiga de carregar mais não acrescenta produtos após troca de categoria', async () => {
+  let resolverPaginaAntiga;
+  const catalogo = criarControladorCatalogo({
+    fontesDeDados: {
+      buscarProdutosPorCategoria: (categoria, _subcategoria, pagina) => {
+        if (categoria === 'Bebês' && pagina === 1) {
+          return new Promise((resolve) => {
+            resolverPaginaAntiga = resolve;
+          });
+        }
+        return Promise.resolve({
+          produtos: [{ codigo: categoria }],
+          temMais: categoria === 'Bebês'
+        });
+      }
+    }
+  });
+
+  await catalogo.aplicarCategoria('Bebês', 'Banho');
+  const paginaAntiga = catalogo.carregarMais();
+  await catalogo.aplicarCategoria('Jogos');
+  resolverPaginaAntiga({ produtos: [{ codigo: 'atrasado' }], temMais: false });
+
+  assert.equal((await paginaAntiga).desatualizada, true);
+  assert.equal(catalogo.obterEstado().pagina, 0);
+  assert.deepEqual(catalogo.obterEstado().parametros, {
+    categoria: 'Jogos',
+    subcategoria: null
+  });
+  assert.deepEqual(catalogo.obterEstado().produtos, [{ codigo: 'Jogos' }]);
+});
+
+test('consulta por categoria usa igualdade e só filtra subcategoria quando selecionada', async (t) => {
+  const chamadas = [];
+  globalThis.window = {
+    supabase: {
+      createClient: () => ({
+        from(tabela) {
+          const operacoes = [['from', tabela]];
+          chamadas.push(operacoes);
+          chamadasSupabase.push(operacoes);
+          return {
+            select(campo) {
+              operacoes.push(['select', campo]);
+              return this;
+            },
+            eq(campo, valor) {
+              operacoes.push(['eq', campo, valor]);
+              return this;
+            },
+            filter(campo, operador, valor) {
+              operacoes.push(['filter', campo, operador, valor]);
+              return this;
+            },
+            order(campo) {
+              operacoes.push(['order', campo]);
+              return this;
+            },
+            range(inicio, fim) {
+              operacoes.push(['range', inicio, fim]);
+              return Promise.resolve({ data: [], error: null });
+            }
+          };
+        }
+      })
+    }
+  };
+  const { buscarProdutosPorCategoria } = await import('../js/api.js');
+
+  await buscarProdutosPorCategoria('Bebês', null, 0, 20);
+  await buscarProdutosPorCategoria('Bebês', 'Banho', 1, 20);
+
+  assert.deepEqual(
+    chamadas[0].filter(([operacao]) => operacao === 'eq'),
+    [
+      ['eq', 'estoque', true],
+      ['eq', 'categoria', 'Bebês']
+    ]
+  );
+  assert.equal(
+    chamadas[0].some(([operacao]) => operacao === 'filter'),
+    false
+  );
+  assert.deepEqual(
+    chamadas[1].find(([operacao]) => operacao === 'filter'),
+    ['filter', 'subcategorias', 'cs', '{"Banho"}']
+  );
+  assert.deepEqual(chamadas[1].at(-1), ['range', 20, 40]);
+
+  await t.test('serializa subcategoria com vírgula como um único elemento do array', async () => {
+    await buscarProdutosPorCategoria('Educativos e Criativos', 'Artes, Música e Criação', 0, 20);
+
+    assert.deepEqual(
+      chamadas[2].find(([operacao]) => operacao === 'filter'),
+      ['filter', 'subcategorias', 'cs', '{"Artes, Música e Criação"}']
+    );
+  });
+});
+
+test('accordion abre e fecha sem consultar produtos ou fechar o menu', async () => {
+  const sublistas = {
+    'subcategorias-jogos': { hidden: true },
+    'subcategorias-bebes': { hidden: true }
+  };
+  const criarBotao = (id) => {
+    const atributos = new Map([
+      ['aria-expanded', 'false'],
+      ['aria-controls', id]
+    ]);
+    return {
+      getAttribute: (nome) => atributos.get(nome),
+      setAttribute: (nome, valor) => atributos.set(nome, valor)
+    };
+  };
+  const jogos = criarBotao('subcategorias-jogos');
+  const bebes = criarBotao('subcategorias-bebes');
+  let aoClicar;
+  const consultasAntes = chamadasSupabase.length;
+  let fechamentos = 0;
+  const lista = {
+    addEventListener: (_tipo, callback) => {
+      aoClicar = callback;
+    },
+    querySelectorAll: () => [jogos, bebes]
+  };
+  globalThis.document = {
+    addEventListener() {},
+    querySelector: () => lista,
+    getElementById: (id) =>
+      id === 'modal-menu'
+        ? {
+            close() {
+              fechamentos++;
+            }
+          }
+        : sublistas[id]
+  };
+  const { configurarFiltroCategoria } = await import('../js/coordenador.js');
+  configurarFiltroCategoria();
+  const clicar = (botao) =>
+    aoClicar({
+      target: { closest: (seletor) => (seletor === '.btn-alternar-categoria' ? botao : null) }
+    });
+
+  await clicar(jogos);
+  assert.equal(jogos.getAttribute('aria-expanded'), 'true');
+  assert.equal(sublistas['subcategorias-jogos'].hidden, false);
+  await clicar(bebes);
+  assert.equal(sublistas['subcategorias-jogos'].hidden, true);
+  assert.equal(sublistas['subcategorias-bebes'].hidden, false);
+  await clicar(bebes);
+  assert.equal(bebes.getAttribute('aria-expanded'), 'false');
+  assert.equal(sublistas['subcategorias-bebes'].hidden, true);
+  assert.equal(chamadasSupabase.length, consultasAntes);
+  assert.equal(fechamentos, 0);
 });

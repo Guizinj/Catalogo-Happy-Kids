@@ -35,7 +35,12 @@ export function criarControladorCatalogo({ limite = LIMITE_POR_PAGINA, fontesDeD
       case 'filtro':
         return fontesDeDados.buscarProdutosPorFiltros(parametros.filtros, pagina, limite);
       case 'categoria':
-        return fontesDeDados.buscarProdutosPorCategoria(parametros.categoria, pagina, limite);
+        return fontesDeDados.buscarProdutosPorCategoria(
+          parametros.categoria,
+          parametros.subcategoria,
+          pagina,
+          limite
+        );
       default:
         return fontesDeDados.buscarTodosOsProdutos(pagina, limite);
     }
@@ -139,7 +144,8 @@ export function criarControladorCatalogo({ limite = LIMITE_POR_PAGINA, fontesDeD
     carregarCatalogo: () => trocarModo('catalogo'),
     aplicarBusca: (termo) => trocarModo('busca', { termo }),
     aplicarFiltros: (filtros) => trocarModo('filtro', { filtros }),
-    aplicarCategoria: (categoria) => trocarModo('categoria', { categoria }),
+    aplicarCategoria: (categoria, subcategoria = null) =>
+      trocarModo('categoria', { categoria, subcategoria }),
     carregarMais,
     obterEstado
   };

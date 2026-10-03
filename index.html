@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="css/cta.css?v=1.1.0" />
     <link rel="stylesheet" href="css/dialog-magic.css?v=1.1.0" />
     <link rel="stylesheet" href="css/dialog-favorite.css?v=1.1.0" />
-    <link rel="stylesheet" href="css/dialog-menu.css?v=1.1.0" />
+    <link rel="stylesheet" href="css/dialog-menu.css?v=1.1.5" />
     <link rel="stylesheet" href="css/dialog-produto.css?v=1.2.2" />
     <link rel="stylesheet" href="css/root.css?v=1.1.0" />
     <link rel="stylesheet" href="css/base.css?v=1.1.0" />
@@ -296,24 +296,23 @@
             <p>Descubra opções sob medida para cada criança.</p>
           </div>
           <form id="form-filtro-magico">
-
             <div class="select-grupo seta">
               <label class="sr-only" for="filtro-idade">Idade da criança</label>
 
               <select id="filtro-idade" name="idade" class="select-campo" required>
-                  <option value="" disabled selected hidden>Idade</option>
-                  <option value="6">Até 6 meses</option>
-                  <option value="12">1 ano</option>
-                  <option value="24">2 anos</option>
-                  <option value="36">3 anos</option>
-                  <option value="48">4 anos</option>
-                  <option value="60">5 anos</option>
-                  <option value="72">6 anos</option>
-                  <option value="84">7 anos</option>
-                  <option value="96">8 anos</option>
-                  <option value="120">10 anos</option>
-                  <option value="144">12 anos</option>
-                  <option value="168">14 anos</option>
+                <option value="" disabled selected hidden>Idade</option>
+                <option value="6">Até 6 meses</option>
+                <option value="12">1 ano</option>
+                <option value="24">2 anos</option>
+                <option value="36">3 anos</option>
+                <option value="48">4 anos</option>
+                <option value="60">5 anos</option>
+                <option value="72">6 anos</option>
+                <option value="84">7 anos</option>
+                <option value="96">8 anos</option>
+                <option value="120">10 anos</option>
+                <option value="144">12 anos</option>
+                <option value="168">14 anos</option>
               </select>
             </div>
 
@@ -411,119 +410,586 @@
           <section class="modal-categorias">
             <h2 id="h2-categoria">Busque por Categorias</h2>
             <ul class="lista-modal-categoria">
-
               <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">🍼</span>
-                  <span class="texto-categoria">Alimentação Infantil</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+                <button
+                  class="btn-alternar-categoria"
+                  type="button"
+                  data-categoria="Alimentação e Cuidados"
+                  aria-expanded="false"
+                  aria-controls="subcategorias-alimentacao"
+                >
+                  <span class="categoria-info">
+                    <span class="emoji-cat" aria-hidden="true">&#x1F37C;</span>
+                    <span class="texto-categoria">Alimentação e Cuidados</span>
+                  </span>
+                  <span class="material-symbols-outlined seta-cat" aria-hidden="true"
+                    >expand_more</span
+                  >
+                </button>
+                <ul class="sublista-categoria" id="subcategorias-alimentacao" hidden>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Alimentação e Cuidados"
+                      data-subcategoria=""
+                      aria-label="Ver todos em Alimentação e Cuidados"
+                    >
+                      Ver todos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Alimentação e Cuidados"
+                      data-subcategoria="Copos e Garrafas"
+                    >
+                      Copos e Garrafas
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Alimentação e Cuidados"
+                      data-subcategoria="Higiene, Banho e Desfralde"
+                    >
+                      Higiene, Banho e Desfralde
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Alimentação e Cuidados"
+                      data-subcategoria="Potes e Lancheiras"
+                    >
+                      Potes e Lancheiras
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Alimentação e Cuidados"
+                      data-subcategoria="Refeição e Introdução Alimentar"
+                    >
+                      Refeição e Introdução Alimentar
+                    </button>
+                  </li>
+                </ul>
               </li>
-
               <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">🎨</span>
-                  <span class="texto-categoria">Artes e Criatividade</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+                <button
+                  class="btn-alternar-categoria"
+                  type="button"
+                  data-categoria="Bebês"
+                  aria-expanded="false"
+                  aria-controls="subcategorias-bebes"
+                >
+                  <span class="categoria-info">
+                    <span class="emoji-cat" aria-hidden="true">&#x1F476;</span>
+                    <span class="texto-categoria">Bebês</span>
+                  </span>
+                  <span class="material-symbols-outlined seta-cat" aria-hidden="true"
+                    >expand_more</span
+                  >
+                </button>
+                <ul class="sublista-categoria" id="subcategorias-bebes" hidden>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Bebês"
+                      data-subcategoria=""
+                      aria-label="Ver todos em Bebês"
+                    >
+                      Ver todos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Bebês"
+                      data-subcategoria="Atividades e Interativos"
+                    >
+                      Atividades e Interativos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Bebês"
+                      data-subcategoria="Banho"
+                    >
+                      Banho
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Bebês"
+                      data-subcategoria="Mordedores e Chocalhos"
+                    >
+                      Mordedores e Chocalhos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Bebês"
+                      data-subcategoria="Sono e Conforto"
+                    >
+                      Sono e Conforto
+                    </button>
+                  </li>
+                </ul>
               </li>
-
               <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">🧩</span>
-                  <span class="texto-categoria">Blocos de Montar e Encaixar</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+                <button
+                  class="btn-alternar-categoria"
+                  type="button"
+                  data-categoria="Bonecas, Bonecos e Pelúcias"
+                  aria-expanded="false"
+                  aria-controls="subcategorias-bonecas"
+                >
+                  <span class="categoria-info">
+                    <span class="emoji-cat" aria-hidden="true">&#x1F9F8;</span>
+                    <span class="texto-categoria">Bonecas, Bonecos e Pelúcias</span>
+                  </span>
+                  <span class="material-symbols-outlined seta-cat" aria-hidden="true"
+                    >expand_more</span
+                  >
+                </button>
+                <ul class="sublista-categoria" id="subcategorias-bonecas" hidden>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Bonecas, Bonecos e Pelúcias"
+                      data-subcategoria=""
+                      aria-label="Ver todos em Bonecas, Bonecos e Pelúcias"
+                    >
+                      Ver todos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Bonecas, Bonecos e Pelúcias"
+                      data-subcategoria="Bonecas"
+                    >
+                      Bonecas
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Bonecas, Bonecos e Pelúcias"
+                      data-subcategoria="Bonecos e Personagens"
+                    >
+                      Bonecos e Personagens
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Bonecas, Bonecos e Pelúcias"
+                      data-subcategoria="Pelúcias"
+                    >
+                      Pelúcias
+                    </button>
+                  </li>
+                </ul>
               </li>
-
-               <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">🧸</span>
-                  <span class="texto-categoria">Bonecos e Acessórios</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
-              </li>
-
               <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">🧠</span>
-                  <span class="texto-categoria">Brinquedos Educativos</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+                <button
+                  class="btn-alternar-categoria"
+                  type="button"
+                  data-categoria="Carrinhos e Veículos"
+                  aria-expanded="false"
+                  aria-controls="subcategorias-carrinhos"
+                >
+                  <span class="categoria-info">
+                    <span class="emoji-cat" aria-hidden="true">&#x1F697;</span>
+                    <span class="texto-categoria">Carrinhos e Veículos</span>
+                  </span>
+                  <span class="material-symbols-outlined seta-cat" aria-hidden="true"
+                    >expand_more</span
+                  >
+                </button>
+                <ul class="sublista-categoria" id="subcategorias-carrinhos" hidden>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Carrinhos e Veículos"
+                      data-subcategoria=""
+                      aria-label="Ver todos em Carrinhos e Veículos"
+                    >
+                      Ver todos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Carrinhos e Veículos"
+                      data-subcategoria="Caminhões e Máquinas"
+                    >
+                      Caminhões e Máquinas
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Carrinhos e Veículos"
+                      data-subcategoria="Carrinhos e Outros Veículos"
+                    >
+                      Carrinhos e Outros Veículos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Carrinhos e Veículos"
+                      data-subcategoria="Controle Remoto"
+                    >
+                      Controle Remoto
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Carrinhos e Veículos"
+                      data-subcategoria="Pistas e Garagens"
+                    >
+                      Pistas e Garagens
+                    </button>
+                  </li>
+                </ul>
               </li>
-
-               <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">🚗</span>
-                  <span class="texto-categoria">Carrinhos e Veículos</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
-              </li>
-
               <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">⚽</span>
-                  <span class="texto-categoria">Esportes e Ar Livre</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+                <button
+                  class="btn-alternar-categoria"
+                  type="button"
+                  data-categoria="Educativos e Criativos"
+                  aria-expanded="false"
+                  aria-controls="subcategorias-educativos"
+                >
+                  <span class="categoria-info">
+                    <span class="emoji-cat" aria-hidden="true">&#x1F3A8;</span>
+                    <span class="texto-categoria">Educativos e Criativos</span>
+                  </span>
+                  <span class="material-symbols-outlined seta-cat" aria-hidden="true"
+                    >expand_more</span
+                  >
+                </button>
+                <ul class="sublista-categoria" id="subcategorias-educativos" hidden>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Educativos e Criativos"
+                      data-subcategoria=""
+                      aria-label="Ver todos em Educativos e Criativos"
+                    >
+                      Ver todos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Educativos e Criativos"
+                      data-subcategoria="Aprendizado e Raciocínio"
+                    >
+                      Aprendizado e Raciocínio
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Educativos e Criativos"
+                      data-subcategoria="Artes, Música e Criação"
+                    >
+                      Artes, Música e Criação
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Educativos e Criativos"
+                      data-subcategoria="Blocos e Construção"
+                    >
+                      Blocos e Construção
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Educativos e Criativos"
+                      data-subcategoria="Encaixe e Coordenação"
+                    >
+                      Encaixe e Coordenação
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Educativos e Criativos"
+                      data-subcategoria="Massinhas e Slimes"
+                    >
+                      Massinhas e Slimes
+                    </button>
+                  </li>
+                </ul>
               </li>
-
               <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">👑</span>
-                  <span class="texto-categoria">Faz de Conta</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+                <button
+                  class="btn-alternar-categoria"
+                  type="button"
+                  data-categoria="Faz de Conta"
+                  aria-expanded="false"
+                  aria-controls="subcategorias-faz-de-conta"
+                >
+                  <span class="categoria-info">
+                    <span class="emoji-cat" aria-hidden="true">&#x1F451;</span>
+                    <span class="texto-categoria">Faz de Conta</span>
+                  </span>
+                  <span class="material-symbols-outlined seta-cat" aria-hidden="true"
+                    >expand_more</span
+                  >
+                </button>
+                <ul class="sublista-categoria" id="subcategorias-faz-de-conta" hidden>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Faz de Conta"
+                      data-subcategoria=""
+                      aria-label="Ver todos em Faz de Conta"
+                    >
+                      Ver todos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Faz de Conta"
+                      data-subcategoria="Beleza, Moda e Cuidados"
+                    >
+                      Beleza, Moda e Cuidados
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Faz de Conta"
+                      data-subcategoria="Cozinha e Mercado"
+                    >
+                      Cozinha e Mercado
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Faz de Conta"
+                      data-subcategoria="Fantasia e Histórias"
+                    >
+                      Fantasia e Histórias
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Faz de Conta"
+                      data-subcategoria="Profissões e Ferramentas"
+                    >
+                      Profissões e Ferramentas
+                    </button>
+                  </li>
+                </ul>
               </li>
-
               <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">🧼</span>
-                  <span class="texto-categoria">Higiene e Cuidados do Bebê</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+                <button
+                  class="btn-alternar-categoria"
+                  type="button"
+                  data-categoria="Jogos"
+                  aria-expanded="false"
+                  aria-controls="subcategorias-jogos"
+                >
+                  <span class="categoria-info">
+                    <span class="emoji-cat" aria-hidden="true">&#x1F3B2;</span>
+                    <span class="texto-categoria">Jogos</span>
+                  </span>
+                  <span class="material-symbols-outlined seta-cat" aria-hidden="true"
+                    >expand_more</span
+                  >
+                </button>
+                <ul class="sublista-categoria" id="subcategorias-jogos" hidden>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Jogos"
+                      data-subcategoria=""
+                      aria-label="Ver todos em Jogos"
+                    >
+                      Ver todos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Jogos"
+                      data-subcategoria="Ação e Habilidade"
+                    >
+                      Ação e Habilidade
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Jogos"
+                      data-subcategoria="Jogos de Mesa"
+                    >
+                      Jogos de Mesa
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Jogos"
+                      data-subcategoria="Memória e Observação"
+                    >
+                      Memória e Observação
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Jogos"
+                      data-subcategoria="Quebra-Cabeças"
+                    >
+                      Quebra-Cabeças
+                    </button>
+                  </li>
+                </ul>
               </li>
-
               <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">🎮</span>
-                  <span class="texto-categoria">Jogos e Quebra-Cabeças</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
+                <button
+                  class="btn-alternar-categoria"
+                  type="button"
+                  data-categoria="Passeio e Ar Livre"
+                  aria-expanded="false"
+                  aria-controls="subcategorias-passeio"
+                >
+                  <span class="categoria-info">
+                    <span class="emoji-cat" aria-hidden="true">&#x1F6B2;</span>
+                    <span class="texto-categoria">Passeio e Ar Livre</span>
+                  </span>
+                  <span class="material-symbols-outlined seta-cat" aria-hidden="true"
+                    >expand_more</span
+                  >
+                </button>
+                <ul class="sublista-categoria" id="subcategorias-passeio" hidden>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Passeio e Ar Livre"
+                      data-subcategoria=""
+                      aria-label="Ver todos em Passeio e Ar Livre"
+                    >
+                      Ver todos
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Passeio e Ar Livre"
+                      data-subcategoria="Bicicletas e Equilíbrio"
+                    >
+                      Bicicletas e Equilíbrio
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Passeio e Ar Livre"
+                      data-subcategoria="Patinetes"
+                    >
+                      Patinetes
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Passeio e Ar Livre"
+                      data-subcategoria="Praia e Esportes"
+                    >
+                      Praia e Esportes
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Passeio e Ar Livre"
+                      data-subcategoria="Segurança e Acessórios"
+                    >
+                      Segurança e Acessórios
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Passeio e Ar Livre"
+                      data-subcategoria="Triciclos, Motocas e Passeio"
+                    >
+                      Triciclos, Motocas e Passeio
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      class="btn-filtrar-categoria"
+                      type="button"
+                      data-categoria="Passeio e Ar Livre"
+                      data-subcategoria="Veículos Elétricos"
+                    >
+                      Veículos Elétricos
+                    </button>
+                  </li>
+                </ul>
               </li>
-
-              <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">🚗</span>
-                  <span class="texto-categoria">Passeio e Segurança</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
-              </li>
-
-              <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">👶</span>
-                  <span class="texto-categoria">Primeira Infância e Bebês</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
-              </li>
-
-              <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">😴</span>
-                  <span class="texto-categoria">Sono e Conforto</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
-              </li>
-
-              <li class="item-categoria-modal">
-                <div class="categoria-info">
-                  <span class="emoji-cat">🚙</span>
-                  <span class="texto-categoria">Veículos de Passeio e Pedal</span>
-                </div>
-                <span class="material-symbols-outlined seta-cat">chevron_right</span>
-              </li>
-
             </ul>
           </section>
         </div>
@@ -665,7 +1131,13 @@
               alt=""
               width="320"
               height="320"
-              style="width: 320px; height: 320px; max-width: 60vw; max-height: 55vh; object-fit: contain"
+              style="
+                width: 320px;
+                height: 320px;
+                max-width: 60vw;
+                max-height: 55vh;
+                object-fit: contain;
+              "
             />
           </div>
 

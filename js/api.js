@@ -10,10 +10,7 @@ function aplicarOrdenacao(consulta) {
 
 async function executarConsultaPaginada(consulta, pagina = 0, limite = LIMITE_POR_PAGINA) {
   const paginaNormalizada = Math.max(0, Number.parseInt(pagina, 10) || 0);
-  const limiteNormalizado = Math.max(
-    1,
-    Number.parseInt(limite, 10) || LIMITE_POR_PAGINA
-  );
+  const limiteNormalizado = Math.max(1, Number.parseInt(limite, 10) || LIMITE_POR_PAGINA);
   const inicio = paginaNormalizada * limiteNormalizado;
 
   // Busca um registro extra para saber se existe uma próxima página sem
@@ -72,10 +69,7 @@ export async function buscarProdutosPorNome(filtro, pagina = 0, limite = LIMITE_
 
   const termoEscapado = escaparPadraoIlike(termo);
 
-  const filtros = [
-    `nome.ilike.%${termoEscapado}%`,
-    `termos_busca.ilike.%${termoEscapado}%`
-  ];
+  const filtros = [`nome.ilike.%${termoEscapado}%`, `termos_busca.ilike.%${termoEscapado}%`];
 
   // Se digitou somente números, também busca o código exato.
   if (/^\d+$/.test(termo)) {
@@ -149,26 +143,27 @@ export async function buscarProdutosPorCodigos(codigos) {
 
 export async function buscarProdutosPorCategoria(
   categoria,
+  subcategoria = null,
   pagina = 0,
   limite = LIMITE_POR_PAGINA
 ) {
   const categoriaNormalizada = String(categoria ?? '').trim();
+  const subcategoriaNormalizada = String(subcategoria ?? '').trim();
 
   if (!categoriaNormalizada) {
     return { produtos: [], temMais: false };
   }
 
-  // A categoria atual é um rótulo comercial completo. A comparação parcial
-  // preserva compatibilidade com o catálogo existente; caracteres curingas
-  // são escapados. Quando o banco ganhar um identificador normalizado, esta
-  // consulta deve migrar para ele.
-  const consulta = aplicarOrdenacao(
-    supabase
-      .from('produtos')
-      .select(CAMPOS_PRODUTO_PUBLICOS)
-      .eq('estoque', true)
-      .ilike('categoria', '%' + escaparPadraoIlike(categoriaNormalizada) + '%')
-  );
+  let consulta = supabase
+    .from('produtos')
+    .select(CAMPOS_PRODUTO_PUBLICOS)
+    .eq('estoque', true)
+    .eq('categoria', categoriaNormalizada);
 
-  return executarConsultaPaginada(consulta, pagina, limite);
+  if (subcategoriaNormalizada) {
+    const valorArray = subcategoriaNormalizada.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    consulta = consulta.filter('subcategorias', 'cs', `{"${valorArray}"}`);
+  }
+
+  return executarConsultaPaginada(aplicarOrdenacao(consulta), pagina, limite);
 }

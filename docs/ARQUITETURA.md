@@ -20,21 +20,21 @@ Na inicialização, o catálogo principal, os favoritos atualizados e os mais ve
 
 ## 2. Responsabilidade dos módulos
 
-| Módulo                     | Responsabilidade                                             | Não deve fazer                        |
-| -------------------------- | ------------------------------------------------------------ | ------------------------------------- |
-| `config.js`                | Criar o cliente Supabase e expor bucket e telefones públicos | Guardar segredo administrativo        |
-| `domain.js`                | Validar, normalizar e formatar produtos e favoritos          | Acessar DOM ou rede                   |
-| `api.js`                   | Construir consultas públicas e paginação                     | Renderizar ou salvar favoritos        |
-| `catalogo.js`              | Manter modo, página, concorrência e retry                    | Conhecer elementos do HTML            |
-| `carrossel.js`             | Controlar setas, autoplay e pausa por hover                  | Buscar produtos ou criar cards        |
-| `storage.js`               | Validar e persistir favoritos no navegador                   | Consultar Supabase                    |
-| `ui.js`                    | Criar elementos, preencher dialogs, toast e totais           | Inserir HTML externo sem validação    |
-| `modais.js`                | Abrir, fechar e restaurar foco dos dialogs                   | Aplicar regra de negócio              |
-| `gestos.js`                | Trocar imagens por gesto e clique                            | Consultar banco                       |
-| `visualizador-imagens.js`  | Controlar a galeria ampliada e seus atalhos                  | Descobrir URLs ou consultar o bucket  |
-| `banner.js`                | Alternar as mensagens do topo                                | Controlar outras áreas da página      |
-| `whatsapp.js`              | Montar URLs e mensagem de consulta                           | Repetir telefones fora de `config.js` |
-| `coordenador.js`           | Inicializar a loja e conectar eventos aos módulos            | Concentrar funções puras de domínio   |
+| Módulo                    | Responsabilidade                                             | Não deve fazer                        |
+| ------------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| `config.js`               | Criar o cliente Supabase e expor bucket e telefones públicos | Guardar segredo administrativo        |
+| `domain.js`               | Validar, normalizar e formatar produtos e favoritos          | Acessar DOM ou rede                   |
+| `api.js`                  | Construir consultas públicas e paginação                     | Renderizar ou salvar favoritos        |
+| `catalogo.js`             | Manter modo, página, concorrência e retry                    | Conhecer elementos do HTML            |
+| `carrossel.js`            | Controlar setas, autoplay e pausa por hover                  | Buscar produtos ou criar cards        |
+| `storage.js`              | Validar e persistir favoritos no navegador                   | Consultar Supabase                    |
+| `ui.js`                   | Criar elementos, preencher dialogs, toast e totais           | Inserir HTML externo sem validação    |
+| `modais.js`               | Abrir, fechar e restaurar foco dos dialogs                   | Aplicar regra de negócio              |
+| `gestos.js`               | Trocar imagens por gesto e clique                            | Consultar banco                       |
+| `visualizador-imagens.js` | Controlar a galeria ampliada e seus atalhos                  | Descobrir URLs ou consultar o bucket  |
+| `banner.js`               | Alternar as mensagens do topo                                | Controlar outras áreas da página      |
+| `whatsapp.js`             | Montar URLs e mensagem de consulta                           | Repetir telefones fora de `config.js` |
+| `coordenador.js`          | Inicializar a loja e conectar eventos aos módulos            | Concentrar funções puras de domínio   |
 
 ## 3. Contratos de dados
 
@@ -51,11 +51,12 @@ Na inicialização, o catálogo principal, os favoritos atualizados e os mais ve
 | `idade_recomendada` | número ou `null` | Filtro usa `idade_recomendada <= idade selecionada`            |
 | `genero`            | texto            | Comparação exata no filtro mágico                              |
 | `marca`             | texto            | Comparação exata no filtro mágico                              |
-| `categoria`         | texto            | Comparação parcial, com curingas escapados                     |
+| `categoria`         | texto            | Comparação exata na navegação por categoria                    |
+| `subcategorias`     | lista de textos  | Contém a subcategoria selecionada, quando houver               |
 | `termos_busca`      | texto            | Comparação parcial da busca, com curingas escapados            |
 | `mais_vendido`      | booleano         | `true` inclui o produto no carrossel se também houver estoque  |
 
-`CAMPOS_PRODUTO_PUBLICOS`, em `domain.js`, define as colunas devolvidas ao navegador. `termos_busca` e `mais_vendido` participam dos filtros da consulta, mas não são selecionados porque não são necessários para renderizar os cards.
+`CAMPOS_PRODUTO_PUBLICOS`, em `domain.js`, define as colunas devolvidas ao navegador. `termos_busca`, `mais_vendido` e `subcategorias` participam dos filtros da consulta, mas não são selecionados porque não são necessários para renderizar os cards.
 
 Um registro com `codigo` inválido ou `preco` inválido é descartado pela normalização. Dados vindos do Supabase ou `localStorage` entram na interface por APIs DOM seguras, principalmente `textContent`.
 
@@ -121,7 +122,7 @@ Não adicione à tabela pública dados de clientes, pedidos, custo, margem, forn
 - O título muda conforme o modo ativo.
 - **Ver catálogo completo** aparece apenas em busca, filtro e categoria.
 
-A busca usa `termos_busca`, não apenas `nome`. Categoria usa o texto visível no menu como filtro parcial da coluna `categoria`.
+A busca usa `termos_busca`, não apenas `nome`. O menu abre uma categoria sem consultar o banco; `Ver todos` filtra por `categoria` exata e inclui produtos sem subcategoria. Uma subcategoria selecionada adiciona a condição `subcategorias` contém o valor escolhido. Os filtros usam os atributos `data-categoria` e `data-subcategoria`, e ambos permanecem nos parâmetros do modo `categoria` durante a paginação.
 
 ### Mais vendidos
 
@@ -155,7 +156,7 @@ Os dialogs usam `showModal()` e `close()`, permitindo que o navegador controle o
 - O valor salvo em `idade_recomendada` é comparado numericamente com a idade selecionada, usando `<=`.
 - `genero` precisa corresponder exatamente a `ambos`, `menino` ou `menina` conforme as opções atuais.
 - `marca` precisa corresponder exatamente ao valor do `<option>` no HTML.
-- Categoria depende do rótulo comercial. Uma evolução futura é usar um `categoria_id` estável.
+- Categoria e subcategoria dependem dos valores comerciais exatos. Uma evolução futura é usar identificadores estáveis.
 - Um favorito que deixou de ter estoque não é removido automaticamente do navegador; a loja confirma a disponibilidade.
 - Alterar o nome de campo no Supabase exige alterar a consulta e esta documentação em conjunto.
 
@@ -193,6 +194,8 @@ Os dialogs usam `showModal()` e `close()`, permitindo que o navegador controle o
 - [ ] Busca com acentos, `%`, `_`, barra invertida e nenhum resultado.
 - [ ] Filtro mágico com e sem marca.
 - [ ] Todas as categorias retornam ao catálogo corretamente.
+- [ ] Accordion abre e fecha sem consulta; `Ver todos` e subcategorias filtram, fecham o menu e reiniciam a página.
+- [ ] `Carregar mais` preserva categoria e subcategoria; uma seleção nova ignora respostas antigas.
 
 ### Mais vendidos
 

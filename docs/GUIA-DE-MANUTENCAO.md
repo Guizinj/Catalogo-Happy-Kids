@@ -4,24 +4,24 @@ Este documento é o manual do dia a dia do Catálogo Happy Kids. Para entender o
 
 ## 1. Mapa rápido: onde alterar cada coisa
 
-| Quero alterar...                                        | Arquivo ou local principal                                  |
-| ------------------------------------------------------- | ----------------------------------------------------------- |
-| Estrutura, textos fixos, categorias ou opções do filtro | `index.html`                                                |
-| Cores e medidas reutilizadas                            | `css/root.css`                                              |
-| Cards e grade do catálogo                               | `css/produtos.css` e `js/ui.js`                             |
-| Aparência do carrossel                                  | `css/mais-vendidos.css`                                     |
-| Tempo e movimento do carrossel                          | `js/carrossel.js`                                           |
-| Consultas e filtros do Supabase                         | `js/api.js`                                                 |
-| Validação dos dados recebidos                           | `js/domain.js`                                              |
-| Estado e paginação do catálogo                          | `js/catalogo.js`                                            |
-| Eventos e ligação entre os módulos                      | `js/coordenador.js`                                         |
-| Favoritos salvos no navegador                           | `js/storage.js`                                             |
-| Abertura e fechamento de dialogs                        | `js/modais.js`                                              |
-| Galeria e gestos das imagens                            | `js/ui.js`, `js/gestos.js` e `js/visualizador-imagens.js`   |
-| Telefones, Supabase ou bucket                           | `js/config.js`                                              |
-| Mensagem enviada ao WhatsApp                            | `js/whatsapp.js`                                            |
-| Mensagens rotativas do topo                             | `js/banner.js`                                              |
-| Logo, fundo ou favicon                                  | pasta `imagens/`                                            |
+| Quero alterar...                                        | Arquivo ou local principal                                |
+| ------------------------------------------------------- | --------------------------------------------------------- |
+| Estrutura, textos fixos, categorias ou opções do filtro | `index.html`                                              |
+| Cores e medidas reutilizadas                            | `css/root.css`                                            |
+| Cards e grade do catálogo                               | `css/produtos.css` e `js/ui.js`                           |
+| Aparência do carrossel                                  | `css/mais-vendidos.css`                                   |
+| Tempo e movimento do carrossel                          | `js/carrossel.js`                                         |
+| Consultas e filtros do Supabase                         | `js/api.js`                                               |
+| Validação dos dados recebidos                           | `js/domain.js`                                            |
+| Estado e paginação do catálogo                          | `js/catalogo.js`                                          |
+| Eventos e ligação entre os módulos                      | `js/coordenador.js`                                       |
+| Favoritos salvos no navegador                           | `js/storage.js`                                           |
+| Abertura e fechamento de dialogs                        | `js/modais.js`                                            |
+| Galeria e gestos das imagens                            | `js/ui.js`, `js/gestos.js` e `js/visualizador-imagens.js` |
+| Telefones, Supabase ou bucket                           | `js/config.js`                                            |
+| Mensagem enviada ao WhatsApp                            | `js/whatsapp.js`                                          |
+| Mensagens rotativas do topo                             | `js/banner.js`                                            |
+| Logo, fundo ou favicon                                  | pasta `imagens/`                                          |
 
 ## 2. Rodar e conferir o projeto
 
@@ -66,7 +66,7 @@ Faça a alteração na tabela `produtos` do Supabase. Confira estes pontos:
 2. `nome` está preenchido.
 3. `preco` é um número maior ou igual a zero.
 4. `estoque` está como `true` para o produto aparecer.
-5. `descricao`, `marca`, `genero` e `categoria` usam o padrão já adotado nos outros registros.
+5. `descricao`, `marca`, `genero`, `categoria` e `subcategorias` usam os valores comerciais adotados. A lista de subcategorias pode ficar vazia.
 6. `termos_busca` contém palavras úteis que o cliente pode digitar.
 7. `destaque` possui a prioridade desejada ou está vazio.
 8. `mais_vendido` está marcado somente quando o produto deve aparecer no carrossel.
@@ -159,9 +159,9 @@ Se adicionar uma marca ao HTML, use em `value` exatamente o conteúdo existente 
 
 ### Categorias
 
-As categorias ficam na lista `.lista-modal-categoria` em `index.html`. O texto visível é enviado como filtro parcial para a coluna `categoria`.
+As categorias e subcategorias ficam na lista `.lista-modal-categoria` em `index.html`. Os valores de `data-categoria` e `data-subcategoria` devem corresponder exatamente aos valores salvos no banco. Abrir uma categoria não consulta produtos. `Ver todos` consulta apenas a categoria e inclui produtos com `subcategorias` vazia; escolher uma subcategoria filtra também pela presença dela no array.
 
-Ao renomear uma categoria, atualize também os produtos no Supabase. Caso contrário, a opção poderá ficar sem resultados.
+Ao renomear uma categoria ou subcategoria, atualize também os produtos no Supabase. Caso contrário, a opção poderá ficar sem resultados.
 
 ## 7. Alterar telefones e mensagens do WhatsApp
 

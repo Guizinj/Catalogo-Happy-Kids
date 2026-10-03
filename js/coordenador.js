@@ -184,7 +184,7 @@ function configurarProximaPagina() {
 }
 
 async function voltarParaCatalogoCompleto() {
-  mostrarToast(`Redirecionado para o Catálogo Completo...`)
+  mostrarToast(`Redirecionado para o Catálogo Completo...`);
   try {
     const resultado = await catalogo.carregarCatalogo();
     atualizarCatalogoNaTela(resultado);
@@ -208,22 +208,33 @@ function fecharMenuERolar(modalMenu) {
   });
 }
 
-function configurarFiltroCategoria() {
+export function configurarFiltroCategoria() {
   const listaCategorias = document.querySelector('.lista-modal-categoria');
   const modalMenu = document.getElementById('modal-menu');
   if (!listaCategorias) return;
 
   listaCategorias.addEventListener('click', async (evento) => {
-    const item = evento.target.closest('.item-categoria-modal');
-    if (!item) return;
+    const botaoAccordion = evento.target.closest('.btn-alternar-categoria');
+    if (botaoAccordion) {
+      const abrir = botaoAccordion.getAttribute('aria-expanded') !== 'true';
+      listaCategorias.querySelectorAll('.btn-alternar-categoria').forEach((botao) => {
+        const expandido = botao === botaoAccordion && abrir;
+        botao.setAttribute('aria-expanded', String(expandido));
+        document.getElementById(botao.getAttribute('aria-controls')).hidden = !expandido;
+      });
+      return;
+    }
 
-    const categoria = item.querySelector('.texto-categoria')?.textContent.trim();
+    const botaoFiltro = evento.target.closest('.btn-filtrar-categoria');
+    if (!botaoFiltro) return;
+
+    const { categoria, subcategoria } = botaoFiltro.dataset;
     if (!categoria) return;
 
     try {
       fecharMenuERolar(modalMenu);
       mostrarToast(`Carregando Categoria "${categoria}"...`, 'sucesso');
-      const resultado = await catalogo.aplicarCategoria(categoria);
+      const resultado = await catalogo.aplicarCategoria(categoria, subcategoria || null);
       atualizarCatalogoNaTela(resultado);
     } catch (erro) {
       console.error('Falha ao filtrar por categoria', erro);
@@ -279,7 +290,6 @@ function configurarFiltroMagico() {
       marca: dados.get('marca')
     };
 
-
     try {
       const resultado = await catalogo.aplicarFiltros(filtros);
       atualizarCatalogoNaTela(resultado);
@@ -291,7 +301,7 @@ function configurarFiltroMagico() {
       console.error('Falha no filtro mágico', erro);
       mostrarToast('Não foi possível buscar. Tente novamente.', 'removido');
     }
-      mostrarToast(`Busca feita por Filtro Mágico...`);
+    mostrarToast(`Busca feita por Filtro Mágico...`);
   });
 }
 

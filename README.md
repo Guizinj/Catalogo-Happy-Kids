@@ -8,7 +8,7 @@ Catálogo público de brinquedos da Happy Kids. O cliente pode navegar pelos pro
 - Título contextual: **Destaques**, resultado da busca, resultado do filtro ou categoria escolhida.
 - Busca pelo conteúdo da coluna `termos_busca`.
 - Filtro de presentes por idade, gênero e marca.
-- Navegação por categorias comerciais.
+- Navegação por categorias comerciais e subcategorias em menu expansível.
 - Carrossel horizontal de **Mais vendidos**, alimentado pela coluna booleana `mais_vendido`.
 - Modal do produto com galeria de até três imagens e visualização ampliada em tela cheia.
 - Favoritos persistidos no `localStorage`, com quantidade de 1 a 99.
@@ -113,6 +113,7 @@ A tabela pública `produtos` precisa manter estes campos:
 | `genero`            | texto            | Filtro de público                           |
 | `marca`             | texto            | Filtro de marca                             |
 | `categoria`         | texto            | Navegação por categoria                     |
+| `subcategorias`     | lista de textos  | Filtro opcional dentro da categoria         |
 | `termos_busca`      | texto            | Conteúdo pesquisável pelo cliente           |
 | `mais_vendido`      | booleano         | Inclui o item no carrossel quando `true`    |
 
@@ -157,7 +158,7 @@ Nunca coloque `service_role`, senha de banco, token administrativo, chave secret
 
 - Os favoritos pertencem somente ao navegador e dispositivo atuais.
 - O total é uma estimativa; o site não cria pedido nem reserva estoque.
-- As categorias dependem do texto comercial salvo no banco.
+- As categorias e subcategorias dependem dos valores comerciais exatos salvos no banco.
 - A interface testa até três endereços de imagem e inclui na galeria somente os arquivos que carregarem corretamente.
 - Policies, migrations do Supabase e configuração da hospedagem não ficam versionadas neste repositório.
 
