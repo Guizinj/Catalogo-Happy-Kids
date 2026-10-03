@@ -209,6 +209,17 @@ function fecharMenuERolar(modalMenu) {
   });
 }
 
+async function carregarCategoria(categoria, subcategoria = null) {
+  try {
+    mostrarToast(`Carregando Categoria "${categoria}"...`, 'sucesso');
+    const resultado = await catalogo.aplicarCategoria(categoria, subcategoria);
+    atualizarCatalogoNaTela(resultado);
+  } catch (erro) {
+    console.error('Falha ao filtrar por categoria', erro);
+    mostrarToast('Não foi possível carregar esta categoria. Tente novamente.', 'removido');
+  }
+}
+
 export function configurarFiltroCategoria() {
   const listaCategorias = document.querySelector('.lista-modal-categoria');
   const modalMenu = document.getElementById('modal-menu');
@@ -232,15 +243,117 @@ export function configurarFiltroCategoria() {
     const { categoria, subcategoria } = botaoFiltro.dataset;
     if (!categoria) return;
 
-    try {
-      fecharMenuERolar(modalMenu);
-      mostrarToast(`Carregando Categoria "${categoria}"...`, 'sucesso');
-      const resultado = await catalogo.aplicarCategoria(categoria, subcategoria || null);
-      atualizarCatalogoNaTela(resultado);
-    } catch (erro) {
-      console.error('Falha ao filtrar por categoria', erro);
-      mostrarToast('Não foi possível carregar esta categoria. Tente novamente.', 'removido');
+    fecharMenuERolar(modalMenu);
+    await carregarCategoria(categoria, subcategoria || null);
+  });
+}
+
+function configurarCarrosselCategorias() {
+  const carrossel = document.getElementById('carrossel-categorias');
+  const anterior = document.getElementById('btn-categorias-anterior');
+  const proximo = document.getElementById('btn-categorias-proximo');
+  const painel = document.getElementById('categorias-subcategorias');
+  const secao = carrossel?.closest('.secao-categorias');
+  if (!carrossel || !anterior || !proximo || !painel || !secao) return;
+
+  const cards = carrossel.querySelectorAll('.categoria-card');
+  let cardAberto = null;
+  cards.forEach((card) => {
+    card.setAttribute('aria-controls', painel.id);
+    card.setAttribute('aria-expanded', 'false');
+  });
+
+  const fecharPainel = () => {
+    painel.hidden = true;
+    cardAberto?.setAttribute('aria-expanded', 'false');
+    cardAberto = null;
+  };
+
+  const atualizarControles = () => {
+    const fim = carrossel.scrollWidth - carrossel.clientWidth;
+    anterior.disabled = carrossel.scrollLeft <= 1;
+    proximo.disabled = carrossel.scrollLeft >= fim - 1;
+  };
+
+  const rolar = (direcao) => {
+    const card = carrossel.querySelector('li');
+    if (!card) return;
+    const distancia = card.getBoundingClientRect().width + parseFloat(getComputedStyle(carrossel).gap);
+    carrossel.scrollBy({
+      left: distancia * 3 * direcao,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+    });
+  };
+
+  anterior.addEventListener('click', () => rolar(-1));
+  proximo.addEventListener('click', () => rolar(1));
+  carrossel.addEventListener('scroll', atualizarControles, { passive: true });
+  window.addEventListener('resize', atualizarControles);
+  atualizarControles();
+
+  carrossel.addEventListener('click', (evento) => {
+    const botao = evento.target.closest('.categoria-card');
+    if (!botao || !carrossel.contains(botao)) return;
+
+    if (cardAberto === botao && !painel.hidden) {
+      fecharPainel();
+      return;
     }
+
+    const categoria = botao.dataset.categoria;
+    const origem = Array.from(
+      document.querySelectorAll('.lista-modal-categoria .btn-alternar-categoria')
+    ).find((item) => item.dataset.categoria === categoria);
+    const sublista = origem && document.getElementById(origem.getAttribute('aria-controls'));
+    const opcoes = sublista?.querySelectorAll('.btn-filtrar-categoria');
+    if (!opcoes?.length) {
+      fecharPainel();
+      document.querySelector('.conteudo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      void carregarCategoria(categoria);
+      return;
+    }
+
+    const itens = Array.from(opcoes, (opcaoOriginal) => {
+      const item = document.createElement('li');
+      const opcao = document.createElement('button');
+      opcao.type = 'button';
+      opcao.className = 'btn-filtrar-categoria categoria-subcategoria';
+      opcao.dataset.categoria = opcaoOriginal.dataset.categoria;
+      opcao.dataset.subcategoria = opcaoOriginal.dataset.subcategoria || '';
+      opcao.textContent = opcaoOriginal.textContent.trim();
+      if (opcaoOriginal.hasAttribute('aria-label')) {
+        opcao.setAttribute('aria-label', opcaoOriginal.getAttribute('aria-label'));
+      }
+      item.append(opcao);
+      return item;
+    });
+
+    fecharPainel();
+    painel.replaceChildren(...itens);
+    painel.setAttribute('aria-label', `Opções de ${categoria}`);
+    painel.hidden = false;
+    botao.setAttribute('aria-expanded', 'true');
+    cardAberto = botao;
+    itens[0].querySelector('button').focus({ preventScroll: true });
+    secao.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      block: 'start'
+    });
+  });
+
+  painel.addEventListener('click', async (evento) => {
+    const botao = evento.target.closest('.categoria-subcategoria');
+    if (!botao || !painel.contains(botao)) return;
+
+    document.querySelector('.conteudo')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    await carregarCategoria(botao.dataset.categoria, botao.dataset.subcategoria || null);
+  });
+
+  painel.addEventListener('keydown', (evento) => {
+    if (evento.key !== 'Escape') return;
+    const card = cardAberto;
+    fecharPainel();
+    card?.focus();
   });
 }
 
@@ -461,6 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
   configurarLinksWhatsApp();
   configurarPesquisa();
   configurarFiltroCategoria();
+  configurarCarrosselCategorias();
   configurarCliqueNosCards();
   configurarFaq();
   configurarModalProduto();

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="css/produtos.css?v=1.1.0" />
     <link rel="stylesheet" href="css/mais-vendidos.css?v=1.1.0" />
     <link rel="stylesheet" href="css/destaques.css?v=1.1.0" />
+    <link rel="stylesheet" href="css/categorias.css?v=1.0.2" />
     <link rel="stylesheet" href="css/footer.css?v=1.1.0" />
     <link rel="stylesheet" href="css/faqajuda.css?v=1.1.0" />
     <link rel="stylesheet" href="css/lojas.css?v=1.1.0" />
@@ -140,6 +141,85 @@
           <button type="button" aria-label="Mostrar arte 2" aria-current="true"></button>
           <button type="button" aria-label="Mostrar arte 3"></button>
         </div>
+      </section>
+
+      <section class="secao-categorias" aria-labelledby="titulo-categorias">
+        <div class="categorias-cabecalho">
+          <h2 id="titulo-categorias">Explore por categoria</h2>
+          <div class="categorias-controles" role="group" aria-label="Controles das categorias">
+            <button
+              id="btn-categorias-anterior"
+              type="button"
+              aria-label="Mostrar categorias anteriores"
+              disabled
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+            </button>
+            <button
+              id="btn-categorias-proximo"
+              type="button"
+              aria-label="Mostrar próximas categorias"
+            >
+              <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+            </button>
+          </div>
+        </div>
+        <ul class="categorias-carrossel" id="carrossel-categorias" aria-label="Categorias de produtos">
+          <li>
+            <button class="categoria-card" type="button" data-categoria="Alimentação e Cuidados">
+              <span class="categoria-icone" aria-hidden="true">&#x1F37C;</span>
+              <span class="categoria-nome">Alimentação e Cuidados</span>
+            </button>
+          </li>
+          <li>
+            <button class="categoria-card" type="button" data-categoria="Bebês">
+              <span class="categoria-icone" aria-hidden="true">&#x1F476;</span>
+              <span class="categoria-nome">Bebês</span>
+            </button>
+          </li>
+          <li>
+            <button class="categoria-card" type="button" data-categoria="Bonecas, Bonecos e Pelúcias">
+              <span class="categoria-icone" aria-hidden="true">&#x1F9F8;</span>
+              <span class="categoria-nome">Bonecas, Bonecos e Pelúcias</span>
+            </button>
+          </li>
+          <li>
+            <button class="categoria-card" type="button" data-categoria="Carrinhos e Veículos">
+              <span class="categoria-icone" aria-hidden="true">&#x1F697;</span>
+              <span class="categoria-nome">Carrinhos e Veículos</span>
+            </button>
+          </li>
+          <li>
+            <button class="categoria-card" type="button" data-categoria="Educativos e Criativos">
+              <span class="categoria-icone" aria-hidden="true">&#x1F3A8;</span>
+              <span class="categoria-nome">Educativos e Criativos</span>
+            </button>
+          </li>
+          <li>
+            <button class="categoria-card" type="button" data-categoria="Faz de Conta">
+              <span class="categoria-icone" aria-hidden="true">&#x1F451;</span>
+              <span class="categoria-nome">Faz de Conta</span>
+            </button>
+          </li>
+          <li>
+            <button class="categoria-card" type="button" data-categoria="Jogos">
+              <span class="categoria-icone" aria-hidden="true">&#x1F3B2;</span>
+              <span class="categoria-nome">Jogos</span>
+            </button>
+          </li>
+          <li>
+            <button class="categoria-card" type="button" data-categoria="Passeio e Ar Livre">
+              <span class="categoria-icone" aria-hidden="true">&#x1F6B2;</span>
+              <span class="categoria-nome">Passeio e Ar Livre</span>
+            </button>
+          </li>
+        </ul>
+        <ul
+          class="categorias-subcategorias sublista-categoria"
+          id="categorias-subcategorias"
+          aria-label="Opções da categoria selecionada"
+          hidden
+        ></ul>
       </section>
 
       <section class="cta">
@@ -1453,6 +1533,6 @@
       </div>
     </dialog>
 
-    <script type="module" src="js/coordenador.js?v=1.2.3"></script>
+    <script type="module" src="js/coordenador.js?v=1.2.6"></script>
   </body>
 </html>

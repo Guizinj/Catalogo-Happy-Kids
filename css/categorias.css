@@ -1,0 +1,208 @@
+.secao-categorias {
+  width: calc(100% - 32px);
+  max-width: 1168px;
+  margin: 0 auto 30px;
+  padding: 20px 18px 22px;
+  overflow: hidden;
+  border: 1px solid #f7dfcd;
+  border-radius: 22px;
+  background: linear-gradient(120deg, #fff9f3 0%, #ffffff 55%, #f5fcfa 100%);
+  box-shadow: 0 8px 24px rgba(68, 38, 14, 0.07);
+  scroll-margin-top: 120px;
+}
+
+.categorias-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+#titulo-categorias {
+  color: var(--logo-laranja);
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  line-height: 1.15;
+  text-align: left;
+}
+
+.categorias-controles {
+  display: flex;
+  flex: none;
+  gap: 8px;
+}
+
+.categorias-controles button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--logo-laranja);
+  color: #ffffff;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.categorias-controles button:hover:not(:disabled) {
+  transform: scale(1.06);
+}
+
+.categorias-controles button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.categorias-carrossel {
+  display: grid;
+  grid-auto-columns: 185px;
+  grid-auto-flow: column;
+  gap: 14px;
+  margin: 0 -18px -8px;
+  padding: 2px 18px 8px;
+  overflow-x: auto;
+  scroll-padding-inline: 18px;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
+}
+
+.categorias-carrossel::-webkit-scrollbar {
+  display: none;
+}
+
+.categorias-carrossel li {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.categoria-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 126px;
+  padding: 2px 3px 4px;
+  background: transparent;
+  color: #303030;
+  font-family: var(--fonte-textos);
+  text-align: center;
+}
+
+.categoria-icone {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border: 2px solid #ffe0c7;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 5px 14px rgba(68, 38, 14, 0.09);
+  font-size: 36px;
+  line-height: 1;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.categorias-carrossel li:nth-child(4n + 2) .categoria-icone {
+  border-color: #f8d5e1;
+}
+
+.categorias-carrossel li:nth-child(4n + 3) .categoria-icone {
+  border-color: #cbebe6;
+}
+
+.categorias-carrossel li:nth-child(4n + 4) .categoria-icone {
+  border-color: #e0efcc;
+}
+
+.categoria-nome {
+  display: block;
+  max-width: 100%;
+  font-size: 0.85rem;
+  font-weight: var(--font-weight-black);
+  line-height: 1.18;
+  text-wrap: balance;
+}
+
+.categoria-card:hover .categoria-icone {
+  transform: translateY(-3px);
+}
+
+.categoria-card:hover .categoria-nome {
+  color: var(--logo-laranja);
+}
+
+.categoria-card[aria-expanded='true'] .categoria-icone {
+  border-color: var(--logo-laranja);
+  box-shadow: 0 5px 16px rgba(246, 106, 9, 0.18);
+}
+
+.categoria-card[aria-expanded='true'] .categoria-nome {
+  color: #ae4700;
+}
+
+.categorias-subcategorias[hidden] {
+  display: none;
+}
+
+.categorias-subcategorias {
+  max-width: 540px;
+  margin: 7px 0 0 12px;
+  padding: 0;
+}
+
+.categoria-card:focus-visible,
+.categorias-controles button:focus-visible {
+  outline: 3px solid var(--logo-azul);
+  outline-offset: 2px;
+}
+
+@media (max-width: 760px) {
+  .secao-categorias {
+    margin-bottom: 26px;
+    padding: 18px 15px 18px;
+  }
+
+  .categorias-cabecalho {
+    margin-bottom: 14px;
+  }
+
+  .categorias-controles {
+    display: none;
+  }
+
+  .categorias-carrossel {
+    grid-auto-columns: clamp(84px, 23vw, 100px);
+    gap: 10px;
+    margin-inline: -15px;
+    padding-inline: 15px;
+    scroll-padding-inline: 15px;
+  }
+
+  .categoria-card {
+    gap: 9px;
+    min-height: 116px;
+  }
+
+  .categoria-icone {
+    width: 68px;
+    height: 68px;
+    font-size: 32px;
+  }
+
+  .categoria-nome {
+    font-size: 0.78rem;
+  }
+
+  .categorias-subcategorias {
+    margin-left: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .categorias-controles button,
+  .categoria-icone {
+    transition: none;
+  }
+}
