@@ -18,9 +18,9 @@ Catálogo público de brinquedos da Happy Kids. O cliente pode navegar pelos pro
 
 O botão **Ver catálogo completo** começa oculto. Ele aparece somente depois de uma busca, filtro ou seleção de categoria, permitindo desfazer a consulta ativa.
 
-As três artes originais estão em `imagens/arte 1.png` até `imagens/arte 3.png`. O carrossel usa os arquivos `imagens/destaque-1.jpg` até `imagens/destaque-3.jpg` e suas versões `-mobile.jpg`. Ao trocar uma arte, atualize as duas versões otimizadas e o texto alternativo no `index.html`.
+As três artes originais estão em `imagens/arte 1.png` até `imagens/arte 3.png`. O carrossel usa versões em resolução integral, de `imagens/destaque-1-hq.jpg` até `imagens/destaque-3-hq.jpg`. Ao trocar uma arte, atualize sua versão exibida e o texto alternativo no `index.html`.
 
-O banner do desktop usa `imagens/banner-desktop-1200.jpg` e `imagens/banner-desktop.jpg`, derivados de `imagens/banner.png`. Clique nele para ir ao catálogo. Ao trocar o banner, atualize as versões otimizadas e seu texto alternativo no `index.html`.
+O banner do desktop usa `imagens/banner-desktop-hq.jpg`, derivado de `imagens/banner.png` na resolução integral. Clique nele para ir ao catálogo. Ao trocar o banner, atualize a versão exibida e seu texto alternativo no `index.html`.
 
 ## Tecnologias
 

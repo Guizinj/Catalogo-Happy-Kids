@@ -30,11 +30,10 @@ export async function configurarDestaques() {
   const slides = [...faixa.querySelectorAll('.destaques-slide')];
   const pontos = [...secao.querySelectorAll('.destaques-pontos button')];
   const loader = document.getElementById('loader-overlay');
-  const imagensIniciais = imagens.slice(0, INDICE_INICIAL + 1);
-  imagensIniciais.forEach((imagem) => {
-    imagem.loading = 'eager';
-  });
-  if (!imagens.length || (await Promise.all(imagensIniciais.map(aguardarImagem))).includes(false)) return;
+  const imagemInicial = imagens[INDICE_INICIAL];
+  if (!imagemInicial) return;
+  imagemInicial.loading = 'eager';
+  if (!(await aguardarImagem(imagemInicial))) return;
 
   secao.hidden = false;
   let indiceAtual = INDICE_INICIAL;
