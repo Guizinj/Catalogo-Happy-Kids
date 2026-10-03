@@ -100,19 +100,20 @@
 
 @media (max-width: 760px) {
   .destaques {
-    --largura-card: min(calc(100vw - 20px), 480px);
+    width: min(100%, 480px);
+    --largura-card: 100%;
     margin: 6px auto 24px;
   }
 
   .destaques-faixa {
-    gap: 6px;
-    padding-top: 6px;
-    padding-bottom: 12px;
+    gap: 0;
+    padding: 0;
   }
 
   .destaques-slide {
-    aspect-ratio: 20 / 21;
+    aspect-ratio: 1;
     border-radius: 0px;
+    box-shadow: none;
   }
 
   .destaques-slide img {
