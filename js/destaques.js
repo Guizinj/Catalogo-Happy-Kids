@@ -1,4 +1,4 @@
-const INTERVALO_AUTOMATICO = 5000;
+const INTERVALO_AUTOMATICO = 3000;
 const INDICE_INICIAL = 1;
 
 function aguardarImagem(imagem) {

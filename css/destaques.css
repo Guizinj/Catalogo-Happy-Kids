@@ -100,7 +100,7 @@
 
 @media (max-width: 760px) {
   .destaques {
-    --largura-card: min(calc(100vw - 32px), 480px);
+    --largura-card: min(calc(100vw - 20px), 480px);
     margin: 6px auto 24px;
   }
 
