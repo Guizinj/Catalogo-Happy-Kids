@@ -1,6 +1,6 @@
 import { supabase } from './config.js';
 import { LIMITE_POR_PAGINA } from './catalogo.js';
-import { CAMPOS_PRODUTO_PUBLICOS, escaparPadraoIlike, normalizarListaProdutos } from './domain.js';
+import { CAMPOS_PRODUTO_PUBLICOS, normalizarListaProdutos } from './domain.js';
 
 function aplicarOrdenacao(consulta) {
   return consulta
@@ -61,30 +61,27 @@ export async function buscarProdutosMaisVendidos(limite = 10) {
 }
 
 export async function buscarProdutosPorNome(filtro, pagina = 0, limite = LIMITE_POR_PAGINA) {
-  const termo = String(filtro ?? '').trim();
+  const termo = String(filtro ?? '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
 
   if (!termo) {
     return { produtos: [], temMais: false };
   }
 
-  const termoEscapado = escaparPadraoIlike(termo);
+  let consulta = supabase
+    .from('produtos')
+    .select(CAMPOS_PRODUTO_PUBLICOS)
+    .eq('estoque', true);
 
-  const filtros = [`nome.ilike.%${termoEscapado}%`, `termos_busca.ilike.%${termoEscapado}%`];
-
-  // Se digitou somente números, também busca o código exato.
-  if (/^\d+$/.test(termo)) {
-    filtros.push(`codigo.eq.${termo}`);
+  for (const palavra of termo.split(' ')) {
+    consulta = consulta.ilike('busca_normalizada', `% ${palavra} %`);
   }
 
-  const consulta = aplicarOrdenacao(
-    supabase
-      .from('produtos')
-      .select(CAMPOS_PRODUTO_PUBLICOS)
-      .eq('estoque', true)
-      .or(filtros.join(','))
-  );
-
-  return executarConsultaPaginada(consulta, pagina, limite);
+  return executarConsultaPaginada(aplicarOrdenacao(consulta), pagina, limite);
 }
 
 export async function buscarProdutosPorFiltros(
