@@ -64,7 +64,7 @@ export async function buscarProdutosPorNome(filtro, pagina = 0, limite = LIMITE_
   const termo = String(filtro ?? '')
     .toLowerCase()
     .normalize('NFD')
-    .replace(/\p{M}/gu, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 
