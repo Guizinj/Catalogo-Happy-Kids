@@ -22,7 +22,7 @@ import {
   renderizarListaFavoritos,
   renderizarMaisVendidos,
   renderizarProdutos
-} from './ui.js?v=1.0.1';
+} from './ui.js?v=1.0.3';
 import {
   configurarBloqueioRolagemModais,
   configurarFaq,
@@ -94,7 +94,9 @@ function atualizarCatalogoNaTela(resultado) {
   renderizarProdutos(
     resultado.acrescentou ? resultado.ultimaPagina : resultado.produtos,
     Boolean(resultado.acrescentou),
-    obterFavoritos()
+    obterFavoritos(),
+    'grid',
+    resultado.modo
   );
   controlarVisibilidadeBotaoPaginacao(resultado.temMais, resultado.carregando);
   controlarVisibilidadeBotaoCatalogoCompleto(possuiConsultaAtiva(resultado.modo));
@@ -390,6 +392,25 @@ function configurarPesquisa() {
   });
 }
 
+function configurarEstadoVazioCatalogo() {
+  const grid = document.getElementById('grid');
+  if (!grid) return;
+
+  grid.addEventListener('click', (evento) => {
+    if (evento.target.closest('[data-action="abrir-busca"]')) {
+      document.getElementById('btn-abrir-busca')?.click();
+      return;
+    }
+
+    if (!evento.target.closest('[data-action="explorar-categorias"]')) return;
+
+    document.querySelector('.abrir-menu')?.click();
+    const corpoMenu = document.querySelector('#modal-menu .corpo-menu-scroll');
+    if (corpoMenu) corpoMenu.scrollTop = 0;
+    document.querySelector('#modal-menu .btn-alternar-categoria')?.focus({ preventScroll: true });
+  });
+}
+
 function configurarFiltroMagico() {
   const formulario = document.getElementById('form-filtro-magico');
   const modalMagic = document.getElementById('modal-filtro-magico');
@@ -573,6 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
   configurarBloqueioRolagemModais();
   configurarLinksWhatsApp();
   configurarPesquisa();
+  configurarEstadoVazioCatalogo();
   configurarFiltroCategoria();
   configurarCarrosselCategorias();
   configurarCliqueNosCards();

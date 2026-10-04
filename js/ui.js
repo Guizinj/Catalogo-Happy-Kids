@@ -120,11 +120,90 @@ function criarCardProduto(produto, estaFavoritado) {
   return card;
 }
 
+function criarEstadoVazioCatalogo(modo = 'catalogo') {
+  const mensagens = {
+    busca: {
+      titulo: 'Ainda não encontramos esse brinquedo',
+      descricao: 'Tente uma palavra mais simples, outra grafia ou o código do produto.'
+    },
+    filtro: {
+      titulo: 'Essa combinação não trouxe presentes',
+      descricao: 'Busque pelo nome de um brinquedo ou explore outras categorias.'
+    },
+    categoria: {
+      titulo: 'Ainda não há brinquedos nessa seleção',
+      descricao: 'Escolha outra categoria ou procure um brinquedo pelo nome ou código.'
+    },
+    catalogo: {
+      titulo: 'Nenhum brinquedo disponível agora',
+      descricao: 'Faça uma busca ou volte mais tarde para conferir as novidades.'
+    }
+  };
+  const mensagem = mensagens[modo] || mensagens.catalogo;
+
+  const estadoVazio = criarElemento('div', {
+    classes: ['estado-catalogo'],
+    atributos: { 'aria-labelledby': 'titulo-estado-catalogo' }
+  });
+  const ilustracao = criarElemento('div', {
+    classes: ['estado-catalogo-ilustracao'],
+    atributos: { 'aria-hidden': 'true' }
+  });
+  ilustracao.appendChild(criarElemento('span', { classes: ['estado-catalogo-xis'], texto: '×' }));
+
+  const conteudo = criarElemento('div', { classes: ['estado-catalogo-conteudo'] });
+  const mensagemAcessivel = criarElemento('div', { atributos: { role: 'status' } });
+  const etiqueta = criarElemento('span', {
+    classes: ['estado-catalogo-etiqueta'],
+    texto: 'Vamos tentar de outro jeito?'
+  });
+  const titulo = criarElemento('h2', {
+    classes: ['estado-catalogo-titulo'],
+    texto: mensagem.titulo,
+    atributos: { id: 'titulo-estado-catalogo' }
+  });
+  const descricao = criarElemento('p', {
+    classes: ['estado-catalogo-descricao'],
+    texto: mensagem.descricao
+  });
+  mensagemAcessivel.append(etiqueta, titulo, descricao);
+
+  const buscar = criarBotao({
+    classes: ['estado-catalogo-busca'],
+    rotulo: 'Abrir menu para buscar outro brinquedo',
+    acao: 'abrir-busca'
+  });
+  buscar.setAttribute('aria-haspopup', 'dialog');
+  buscar.setAttribute('aria-controls', 'modal-menu');
+  buscar.append(
+    criarIcone('search'),
+    criarElemento('span', {
+      classes: ['estado-catalogo-busca-texto'],
+      texto: 'Buscar outro brinquedo ou código'
+    }),
+    criarIcone('arrow_forward', ['estado-catalogo-busca-seta'])
+  );
+
+  const explorar = criarBotao({
+    classes: ['estado-catalogo-explorar'],
+    texto: 'Explorar categorias',
+    acao: 'explorar-categorias'
+  });
+  explorar.setAttribute('aria-haspopup', 'dialog');
+  explorar.setAttribute('aria-controls', 'modal-menu');
+  explorar.appendChild(criarIcone('arrow_forward'));
+
+  conteudo.append(mensagemAcessivel, buscar, explorar);
+  estadoVazio.append(ilustracao, conteudo);
+  return estadoVazio;
+}
+
 export function renderizarProdutos(
   listaDeProdutos,
   deveAcrescentar = false,
   listaFavoritos = [],
-  idDoContainer = 'grid'
+  idDoContainer = 'grid',
+  modo = 'catalogo'
 ) {
   const container = document.getElementById(idDoContainer);
   if (!container) return;
@@ -140,12 +219,7 @@ export function renderizarProdutos(
 
   if (produtos.length === 0) {
     if (!deveAcrescentar) {
-      const estadoVazio = criarElemento('p', {
-        classes: ['estado-catalogo'],
-        texto: 'Nenhum produto encontrado na loja.',
-        atributos: { role: 'status' }
-      });
-      container.appendChild(estadoVazio);
+      container.appendChild(criarEstadoVazioCatalogo(modo));
     }
     return;
   }
