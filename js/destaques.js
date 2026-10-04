@@ -26,14 +26,24 @@ export async function configurarDestaques() {
   const faixa = document.getElementById('destaques-faixa');
   if (!secao || !faixa) return;
 
-  const imagens = [...faixa.querySelectorAll('img')];
-  const slides = [...faixa.querySelectorAll('.destaques-slide')];
+  const slidesOriginais = [...faixa.querySelectorAll('.destaques-slide')];
+  const imagens = slidesOriginais.map((slide) => slide.querySelector('img'));
   const pontos = [...secao.querySelectorAll('.destaques-pontos button')];
   const loader = document.getElementById('loader-overlay');
   const imagemInicial = imagens[INDICE_INICIAL];
-  if (!imagemInicial) return;
+  if (!imagemInicial || slidesOriginais.length < 2) return;
   imagemInicial.loading = 'eager';
   if (!(await aguardarImagem(imagemInicial))) return;
+
+  const cloneUltimo = slidesOriginais.at(-1).cloneNode(true);
+  const clonePrimeiro = slidesOriginais[0].cloneNode(true);
+  cloneUltimo.setAttribute('aria-hidden', 'true');
+  clonePrimeiro.setAttribute('aria-hidden', 'true');
+  cloneUltimo.querySelector('img').loading = 'eager';
+  clonePrimeiro.querySelector('img').loading = 'eager';
+  faixa.prepend(cloneUltimo);
+  faixa.append(clonePrimeiro);
+  const slides = [...faixa.querySelectorAll('.destaques-slide')];
 
   secao.hidden = false;
   let indiceAtual = INDICE_INICIAL;
@@ -42,6 +52,8 @@ export async function configurarDestaques() {
   let focoDentro = false;
   let visivel = true;
   let quadroDeRolagem;
+  let ajustePendente;
+  let toqueAtivo = false;
 
   function atualizarPontos() {
     pontos.forEach((ponto, indice) => {
@@ -51,8 +63,12 @@ export async function configurarDestaques() {
   }
 
   function mostrar(indice) {
+    const origem = indiceAtual;
     indiceAtual = (indice + imagens.length) % imagens.length;
-    const slide = slides[indiceAtual];
+    let indiceFisico = indiceAtual + 1;
+    if (origem === imagens.length - 1 && indiceAtual === 0) indiceFisico = slides.length - 1;
+    if (origem === 0 && indiceAtual === imagens.length - 1) indiceFisico = 0;
+    const slide = slides[indiceFisico];
     faixa.scrollTo({
       left: posicaoDoSlide(slide),
       behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
@@ -62,6 +78,35 @@ export async function configurarDestaques() {
 
   function posicaoDoSlide(slide) {
     return slide.offsetLeft - (faixa.clientWidth - slide.offsetWidth) / 2;
+  }
+
+  function indiceFisicoMaisProximo() {
+    const centro = faixa.scrollLeft + faixa.clientWidth / 2;
+    return slides.reduce((maisProximo, slide, indice) => {
+      const distancia = Math.abs(slide.offsetLeft + slide.offsetWidth / 2 - centro);
+      const distanciaAnterior = Math.abs(
+        slides[maisProximo].offsetLeft + slides[maisProximo].offsetWidth / 2 - centro
+      );
+      return distancia < distanciaAnterior ? indice : maisProximo;
+    }, 0);
+  }
+
+  function irSemAnimacao(indiceFisico) {
+    faixa.style.scrollSnapType = 'none';
+    faixa.style.scrollBehavior = 'auto';
+    faixa.scrollLeft = posicaoDoSlide(slides[indiceFisico]);
+    requestAnimationFrame(() => {
+      faixa.style.scrollSnapType = '';
+      faixa.style.scrollBehavior = '';
+    });
+  }
+
+  function ajustarExtremidades() {
+    clearTimeout(ajustePendente);
+    if (toqueAtivo) return;
+    const indiceFisico = indiceFisicoMaisProximo();
+    if (indiceFisico === 0) irSemAnimacao(imagens.length);
+    if (indiceFisico === slides.length - 1) irSemAnimacao(1);
   }
 
   function parar() {
@@ -99,11 +144,7 @@ export async function configurarDestaques() {
     });
   });
 
-  faixa.style.scrollBehavior = 'auto';
-  faixa.scrollLeft = posicaoDoSlide(slides[indiceAtual]);
-  requestAnimationFrame(() => {
-    faixa.style.scrollBehavior = '';
-  });
+  irSemAnimacao(indiceAtual + 1);
   atualizarPontos();
 
   faixa.addEventListener(
@@ -111,19 +152,16 @@ export async function configurarDestaques() {
     () => {
       cancelAnimationFrame(quadroDeRolagem);
       quadroDeRolagem = requestAnimationFrame(() => {
-        const centro = faixa.scrollLeft + faixa.clientWidth / 2;
-        indiceAtual = slides.reduce((maisProximo, slide, indice) => {
-          const distancia = Math.abs(slide.offsetLeft + slide.offsetWidth / 2 - centro);
-          const distanciaAnterior = Math.abs(
-            slides[maisProximo].offsetLeft + slides[maisProximo].offsetWidth / 2 - centro
-          );
-          return distancia < distanciaAnterior ? indice : maisProximo;
-        }, 0);
+        const indiceFisico = indiceFisicoMaisProximo();
+        indiceAtual = (indiceFisico - 1 + imagens.length) % imagens.length;
         atualizarPontos();
       });
+      clearTimeout(ajustePendente);
+      ajustePendente = setTimeout(ajustarExtremidades, 140);
     },
     { passive: true }
   );
+  faixa.addEventListener('scrollend', ajustarExtremidades);
 
   if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     secao.addEventListener('mouseenter', () => {
@@ -135,9 +173,22 @@ export async function configurarDestaques() {
       iniciar();
     });
   }
-  faixa.addEventListener('touchstart', parar, { passive: true });
-  faixa.addEventListener('touchend', iniciar, { passive: true });
-  faixa.addEventListener('touchcancel', iniciar, { passive: true });
+  faixa.addEventListener(
+    'touchstart',
+    () => {
+      toqueAtivo = true;
+      parar();
+    },
+    { passive: true }
+  );
+  function finalizarToque() {
+    toqueAtivo = false;
+    clearTimeout(ajustePendente);
+    ajustePendente = setTimeout(ajustarExtremidades, 140);
+    iniciar();
+  }
+  faixa.addEventListener('touchend', finalizarToque, { passive: true });
+  faixa.addEventListener('touchcancel', finalizarToque, { passive: true });
   secao.addEventListener('focusin', () => {
     focoDentro = true;
     parar();
@@ -149,7 +200,7 @@ export async function configurarDestaques() {
   });
   document.addEventListener('visibilitychange', iniciar);
   window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', iniciar);
-  window.addEventListener('resize', () => mostrar(indiceAtual));
+  window.addEventListener('resize', () => irSemAnimacao(indiceAtual + 1));
   if (loader?.isConnected && !loader.classList.contains('oculto')) {
     const observadorDoLoader = new MutationObserver(() => {
       if (!loader.classList.contains('oculto')) return;

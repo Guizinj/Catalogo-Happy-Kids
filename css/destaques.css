@@ -157,11 +157,11 @@
     object-position: center top;
   }
 
-  .destaques-slide:first-child img {
+  .destaques-slide-primeiro img {
     object-position: center 30%;
   }
 
-  .destaques-slide:last-child img {
+  .destaques-slide-ultimo img {
     object-position: center 50%;
   }
 

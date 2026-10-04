@@ -7,7 +7,7 @@ import {
   buscarTodosOsProdutos
 } from './api.js';
 import { configurarCarrosselMaisVendidos } from './carrossel.js';
-import { configurarDestaques } from './destaques.js?v=1.0.3';
+import { configurarDestaques } from './destaques.js?v=1.0.4';
 import { criarControladorCatalogo, possuiConsultaAtiva } from './catalogo.js';
 import {
   atualizarModalProdutoUI,
