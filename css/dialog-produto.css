@@ -348,35 +348,34 @@
 /* Botões de ação robustos na base */
 .modal-acoes {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   margin-top: auto;
   flex-shrink: 0; /* Proíbe os botões de sumirem ou serem esmagados */
   padding-top: 5px;
 }
 
-.btn-comprar-modal {
+.btn-consultar-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 8px;
   background-color: var(--logo-laranja);
-  color: white;
-  border: none;
-  padding: 14px;
+  color: #ffffff;
   border-radius: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
+  font-family: var(--fonte-textos);
+  font-size: clamp(12px, 3.5vw, 16px);
+  font-weight: var(--font-weight-black);
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
   transition: background 0.2s;
 }
-@media (min-width: 768px) {
-  .btn-comprar-modal {
-    padding: 16px;
-  }
-}
-
-.btn-comprar-modal:hover {
+.btn-consultar-modal:hover {
   background-color: #f38e00f3;
-}
-.btn-comprar-modal.esta-favoritado {
-  background-color: var(--logo-rosa);
 }
 .modal-categoria {
   margin: 8px 0;
@@ -387,23 +386,48 @@
 }
 
 .btn-favoritar-modal {
-  background: #f0f0f5;
-  border: none;
-  padding: 0 14px;
+  display: grid;
+  flex: 0 0 48px;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #f4bed1;
   border-radius: 12px;
+  background: #fff2f6;
+  color: var(--logo-laranja);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  color: #444;
   transition: background 0.2s;
 }
-@media (min-width: 768px) {
-  .btn-favoritar-modal {
-    padding: 0 16px;
-  }
+
+.btn-favoritar-modal svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
+
+.btn-favoritar-modal.esta-favoritado svg {
+  fill: currentColor;
+}
+
 .btn-favoritar-modal:hover {
-  background: #e4e4eb;
+  background: #ffe4ed;
+}
+
+.btn-favoritar-modal:focus-visible,
+.btn-consultar-modal:focus-visible {
+  outline: 3px solid var(--logo-azul);
+  outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  .btn-consultar-modal,
+  .btn-favoritar-modal {
+    height: 50px;
+  }
 }
 
 /* Visualizador ampliado da galeria */

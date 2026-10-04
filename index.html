@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="css/dialog-magic.css?v=1.1.0" />
     <link rel="stylesheet" href="css/dialog-favorite.css?v=1.1.0" />
     <link rel="stylesheet" href="css/dialog-menu.css?v=1.1.5" />
-    <link rel="stylesheet" href="css/dialog-produto.css?v=1.2.2" />
+    <link rel="stylesheet" href="css/dialog-produto.css?v=1.2.3" />
     <link rel="stylesheet" href="css/root.css?v=1.1.0" />
     <link rel="stylesheet" href="css/base.css?v=1.1.0" />
     <link rel="stylesheet" href="css/produtos.css?v=1.1.0" />
@@ -1235,9 +1235,19 @@
             </div>
 
             <div class="modal-acoes">
-              <button class="btn-comprar-modal" id="btn-favoritar-modal" type="button">
-                Adicionar aos Favoritos
+              <button class="btn-favoritar-modal" id="btn-favoritar-modal" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path
+                    d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"
+                  />
+                </svg>
               </button>
+              <a
+                class="btn-consultar-modal"
+                id="btn-consultar-produto"
+                target="_blank"
+                rel="noopener noreferrer"
+              >Consultar no WhatsApp</a>
             </div>
           </div>
         </div>
@@ -1533,6 +1543,6 @@
       </div>
     </dialog>
 
-    <script type="module" src="js/coordenador.js?v=1.2.7"></script>
+    <script type="module" src="js/coordenador.js?v=1.2.8"></script>
   </body>
 </html>

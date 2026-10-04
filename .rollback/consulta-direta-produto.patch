@@ -1,0 +1,264 @@
+diff --git a/css/dialog-produto.css b/css/dialog-produto.css
+index 5e9cdea..5bd2e30 100644
+--- a/css/dialog-produto.css
++++ b/css/dialog-produto.css
+@@ -348,36 +348,35 @@
+ /* Botões de ação robustos na base */
+ .modal-acoes {
+   display: flex;
+-  gap: 12px;
++  gap: 8px;
+   margin-top: auto;
+   flex-shrink: 0; /* Proíbe os botões de sumirem ou serem esmagados */
+   padding-top: 5px;
+ }
+ 
+-.btn-comprar-modal {
++.btn-consultar-modal {
++  display: flex;
++  align-items: center;
++  justify-content: center;
+   flex: 1;
++  min-width: 0;
++  height: 48px;
++  padding: 0 8px;
+   background-color: var(--logo-laranja);
+-  color: white;
+-  border: none;
+-  padding: 14px;
++  color: #ffffff;
+   border-radius: 12px;
+-  font-size: 16px;
+-  font-weight: bold;
+-  cursor: pointer;
++  font-family: var(--fonte-textos);
++  font-size: clamp(12px, 3.5vw, 16px);
++  font-weight: var(--font-weight-black);
++  line-height: 1;
++  text-align: center;
++  text-decoration: none;
++  white-space: nowrap;
+   transition: background 0.2s;
+ }
+-@media (min-width: 768px) {
+-  .btn-comprar-modal {
+-    padding: 16px;
+-  }
+-}
+-
+-.btn-comprar-modal:hover {
++.btn-consultar-modal:hover {
+   background-color: #f38e00f3;
+ }
+-.btn-comprar-modal.esta-favoritado {
+-  background-color: var(--logo-rosa);
+-}
+ .modal-categoria {
+   margin: 8px 0;
+   color: var(--logo-azul);
+@@ -387,24 +386,49 @@
+ }
+ 
+ .btn-favoritar-modal {
+-  background: #f0f0f5;
+-  border: none;
+-  padding: 0 14px;
++  display: grid;
++  flex: 0 0 48px;
++  place-items: center;
++  width: 48px;
++  height: 48px;
++  border: 1px solid #f4bed1;
+   border-radius: 12px;
++  background: #fff2f6;
++  color: var(--logo-rosa);
+   cursor: pointer;
+-  display: flex;
+-  align-items: center;
+-  color: #444;
+   transition: background 0.2s;
+ }
++
++.btn-favoritar-modal svg {
++  width: 24px;
++  height: 24px;
++  fill: none;
++  stroke: currentColor;
++  stroke-width: 1.9;
++  stroke-linecap: round;
++  stroke-linejoin: round;
++}
++
++.btn-favoritar-modal.esta-favoritado svg {
++  fill: currentColor;
++}
++
++.btn-favoritar-modal:hover {
++  background: #ffe4ed;
++}
++
++.btn-favoritar-modal:focus-visible,
++.btn-consultar-modal:focus-visible {
++  outline: 3px solid var(--logo-azul);
++  outline-offset: 2px;
++}
++
+ @media (min-width: 768px) {
++  .btn-consultar-modal,
+   .btn-favoritar-modal {
+-    padding: 0 16px;
++    height: 50px;
+   }
+ }
+-.btn-favoritar-modal:hover {
+-  background: #e4e4eb;
+-}
+ 
+ /* Visualizador ampliado da galeria */
+ .visualizador-imagens {
+diff --git a/index.html b/index.html
+index c45d63b..4772198 100644
+--- a/index.html
++++ b/index.html
+@@ -15,7 +15,7 @@
+     <link rel="stylesheet" href="css/dialog-magic.css?v=1.1.0" />
+     <link rel="stylesheet" href="css/dialog-favorite.css?v=1.1.0" />
+     <link rel="stylesheet" href="css/dialog-menu.css?v=1.1.5" />
+-    <link rel="stylesheet" href="css/dialog-produto.css?v=1.2.2" />
++    <link rel="stylesheet" href="css/dialog-produto.css?v=1.2.3" />
+     <link rel="stylesheet" href="css/root.css?v=1.1.0" />
+     <link rel="stylesheet" href="css/base.css?v=1.1.0" />
+     <link rel="stylesheet" href="css/produtos.css?v=1.1.0" />
+@@ -1235,9 +1235,19 @@
+             </div>
+ 
+             <div class="modal-acoes">
+-              <button class="btn-comprar-modal" id="btn-favoritar-modal" type="button">
+-                Adicionar aos Favoritos
++              <button class="btn-favoritar-modal" id="btn-favoritar-modal" type="button">
++                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
++                  <path
++                    d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"
++                  />
++                </svg>
+               </button>
++              <a
++                class="btn-consultar-modal"
++                id="btn-consultar-produto"
++                target="_blank"
++                rel="noopener noreferrer"
++              >Consultar no WhatsApp</a>
+             </div>
+           </div>
+         </div>
+@@ -1533,6 +1543,6 @@
+       </div>
+     </dialog>
+ 
+-    <script type="module" src="js/coordenador.js?v=1.2.7"></script>
++    <script type="module" src="js/coordenador.js?v=1.2.8"></script>
+   </body>
+ </html>
+diff --git a/js/coordenador.js b/js/coordenador.js
+index 4ff1131..d72f85b 100644
+--- a/js/coordenador.js
++++ b/js/coordenador.js
+@@ -22,7 +22,7 @@ import {
+   renderizarListaFavoritos,
+   renderizarMaisVendidos,
+   renderizarProdutos
+-} from './ui.js';
++} from './ui.js?v=1.0.1';
+ import {
+   configurarBloqueioRolagemModais,
+   configurarFaq,
+@@ -45,7 +45,7 @@ import {
+   removerFavorito,
+   verificarFavorito
+ } from './storage.js';
+-import { configurarLinksWhatsApp } from './whatsapp.js';
++import { configurarLinksWhatsApp } from './whatsapp.js?v=1.0.1';
+ 
+ const catalogo = criarControladorCatalogo({
+   fontesDeDados: {
+diff --git a/js/ui.js b/js/ui.js
+index 9f1de7e..18903ae 100644
+--- a/js/ui.js
++++ b/js/ui.js
+@@ -9,7 +9,11 @@ import {
+ import { configurarGestosGaleria } from './gestos.js';
+ import { fecharModalERolar } from './modais.js';
+ import { configurarVisualizadorImagens } from './visualizador-imagens.js';
+-import { criarUrlWhatsApp, montarMensagemOrcamento } from './whatsapp.js';
++import {
++  criarUrlWhatsApp,
++  montarMensagemConsultaProduto,
++  montarMensagemOrcamento
++} from './whatsapp.js?v=1.0.1';
+ 
+ let temporizadorToast;
+ 
+@@ -402,6 +406,7 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
+   const botaoAmpliarImagem = document.getElementById('btn-ampliar-imagem');
+   const containerMiniaturas = document.getElementById('miniaturas');
+   const botaoFavoritar = document.getElementById('btn-favoritar-modal');
++  const linkConsultar = document.getElementById('btn-consultar-produto');
+   const parcela = document.getElementById('modal-parcela');
+ 
+   if (
+@@ -410,6 +415,7 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
+     !botaoAmpliarImagem ||
+     !containerMiniaturas ||
+     !botaoFavoritar ||
++    !linkConsultar ||
+     !parcela
+   ) {
+     return;
+@@ -543,7 +549,14 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
+     produto.descricao || 'Descrição não informada.';
+ 
+   const jaEhFavorito = verificarFavorito(produto.codigo);
+-  botaoFavoritar.textContent = jaEhFavorito ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos';
+   botaoFavoritar.classList.toggle('esta-favoritado', jaEhFavorito);
+-  botaoFavoritar.setAttribute('aria-label', botaoFavoritar.textContent + ': ' + produto.nome);
++  botaoFavoritar.setAttribute('aria-pressed', String(jaEhFavorito));
++  botaoFavoritar.setAttribute(
++    'aria-label',
++    (jaEhFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos') + ': ' + produto.nome
++  );
++  botaoFavoritar.title = jaEhFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos';
++
++  linkConsultar.href = criarUrlWhatsApp('principal', montarMensagemConsultaProduto(produto));
++  linkConsultar.setAttribute('aria-label', 'Consultar ' + produto.nome + ' no WhatsApp');
+ }
+diff --git a/js/whatsapp.js b/js/whatsapp.js
+index 9d875cb..139b139 100644
+--- a/js/whatsapp.js
++++ b/js/whatsapp.js
+@@ -1,5 +1,5 @@
+ import { NUMEROS_WHATSAPP } from './config.js';
+-import { formatarMoeda, normalizarListaFavoritos } from './domain.js';
++import { formatarMoeda, normalizarListaFavoritos, normalizarProduto } from './domain.js';
+ 
+ function obterNumero(chave) {
+   const numero = NUMEROS_WHATSAPP[chave];
+@@ -59,6 +59,19 @@ export function montarMensagemOrcamento(favoritos) {
+   ].join('\n');
+ }
+ 
++export function montarMensagemConsultaProduto(produto) {
++  const item = normalizarProduto(produto);
++  if (!item) return '';
++
++  return [
++    'Olá! Vim pelo site da Happy Kids Brinquedos e gostaria de consultar a disponibilidade deste produto:',
++    '',
++    `• ${item.nome} (Ref: ${item.codigo}) — ${formatarMoeda(item.preco)}`,
++    '',
++    'Aguardo confirmação, obrigado!'
++  ].join('\n');
++}
++
+ export function configurarLinksWhatsApp(raiz = document) {
+   raiz.querySelectorAll('[data-whatsapp]').forEach((link) => {
+     const chave = link.dataset.whatsapp || 'principal';

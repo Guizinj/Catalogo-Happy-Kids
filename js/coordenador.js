@@ -22,7 +22,7 @@ import {
   renderizarListaFavoritos,
   renderizarMaisVendidos,
   renderizarProdutos
-} from './ui.js';
+} from './ui.js?v=1.0.1';
 import {
   configurarBloqueioRolagemModais,
   configurarFaq,
@@ -45,7 +45,7 @@ import {
   removerFavorito,
   verificarFavorito
 } from './storage.js';
-import { configurarLinksWhatsApp } from './whatsapp.js';
+import { configurarLinksWhatsApp } from './whatsapp.js?v=1.0.1';
 
 const catalogo = criarControladorCatalogo({
   fontesDeDados: {

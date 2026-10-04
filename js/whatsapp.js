@@ -1,5 +1,5 @@
 import { NUMEROS_WHATSAPP } from './config.js';
-import { formatarMoeda, normalizarListaFavoritos } from './domain.js';
+import { formatarMoeda, normalizarListaFavoritos, normalizarProduto } from './domain.js';
 
 function obterNumero(chave) {
   const numero = NUMEROS_WHATSAPP[chave];
@@ -54,6 +54,19 @@ export function montarMensagemOrcamento(favoritos) {
     ...linhas,
     '',
     '*Total estimado: ' + formatarMoeda(total) + '*',
+    '',
+    'Aguardo confirmação, obrigado!'
+  ].join('\n');
+}
+
+export function montarMensagemConsultaProduto(produto) {
+  const item = normalizarProduto(produto);
+  if (!item) return '';
+
+  return [
+    'Olá! Vim pelo site da Happy Kids Brinquedos e gostaria de consultar a disponibilidade deste produto:',
+    '',
+    `• ${item.nome} (Ref: ${item.codigo}) — ${formatarMoeda(item.preco)}`,
     '',
     'Aguardo confirmação, obrigado!'
   ].join('\n');

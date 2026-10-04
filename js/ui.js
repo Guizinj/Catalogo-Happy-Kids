@@ -9,7 +9,11 @@ import {
 import { configurarGestosGaleria } from './gestos.js';
 import { fecharModalERolar } from './modais.js';
 import { configurarVisualizadorImagens } from './visualizador-imagens.js';
-import { criarUrlWhatsApp, montarMensagemOrcamento } from './whatsapp.js';
+import {
+  criarUrlWhatsApp,
+  montarMensagemConsultaProduto,
+  montarMensagemOrcamento
+} from './whatsapp.js?v=1.0.1';
 
 let temporizadorToast;
 
@@ -402,6 +406,7 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
   const botaoAmpliarImagem = document.getElementById('btn-ampliar-imagem');
   const containerMiniaturas = document.getElementById('miniaturas');
   const botaoFavoritar = document.getElementById('btn-favoritar-modal');
+  const linkConsultar = document.getElementById('btn-consultar-produto');
   const parcela = document.getElementById('modal-parcela');
 
   if (
@@ -410,6 +415,7 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
     !botaoAmpliarImagem ||
     !containerMiniaturas ||
     !botaoFavoritar ||
+    !linkConsultar ||
     !parcela
   ) {
     return;
@@ -543,7 +549,14 @@ export function atualizarModalProdutoUI(produtoSelecionado, verificarFavorito) {
     produto.descricao || 'Descrição não informada.';
 
   const jaEhFavorito = verificarFavorito(produto.codigo);
-  botaoFavoritar.textContent = jaEhFavorito ? 'Remover dos Favoritos' : 'Adicionar aos Favoritos';
   botaoFavoritar.classList.toggle('esta-favoritado', jaEhFavorito);
-  botaoFavoritar.setAttribute('aria-label', botaoFavoritar.textContent + ': ' + produto.nome);
+  botaoFavoritar.setAttribute('aria-pressed', String(jaEhFavorito));
+  botaoFavoritar.setAttribute(
+    'aria-label',
+    (jaEhFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos') + ': ' + produto.nome
+  );
+  botaoFavoritar.title = jaEhFavorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos';
+
+  linkConsultar.href = criarUrlWhatsApp('principal', montarMensagemConsultaProduto(produto));
+  linkConsultar.setAttribute('aria-label', 'Consultar ' + produto.nome + ' no WhatsApp');
 }
