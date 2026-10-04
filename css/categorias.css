@@ -6,7 +6,7 @@
   overflow: hidden;
   border: 1px solid #f7dfcd;
   border-radius: 22px;
-  background: linear-gradient(120deg, #fff9f3 0%, #ffffff 55%, #f5fcfa 100%);
+  background:#fff9f3;
   box-shadow: 0 8px 24px rgba(68, 38, 14, 0.07);
   scroll-margin-top: 120px;
 }
