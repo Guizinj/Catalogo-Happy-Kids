@@ -42,13 +42,12 @@ export async function buscarTodosOsProdutos(pagina = 0, limite = LIMITE_POR_PAGI
 export async function buscarProdutosMaisVendidos(limite = 10) {
   const limiteNormalizado = Math.max(1, Number.parseInt(limite, 10) || 10);
 
-  const consulta = aplicarOrdenacao(
-    supabase
+  const consulta = supabase
       .from('produtos')
       .select(CAMPOS_PRODUTO_PUBLICOS)
       .eq('estoque', true)
       .eq('mais_vendido', true)
-  );
+      .order('codigo', {ascending: false});
 
   const { data, error } = await consulta.limit(limiteNormalizado);
 
