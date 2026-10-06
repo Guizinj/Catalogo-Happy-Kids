@@ -32,7 +32,7 @@ O banner do desktop usa `imagens/banner-desktop-hq.jpg`, derivado de `imagens/ba
 - Node.js apenas para testes, validação de sintaxe e formatação.
 - Prettier `3.6.2` como dependência de desenvolvimento.
 
-Não existe etapa de compilação: em produção, a hospedagem entrega os arquivos estáticos diretamente ao navegador.
+Não existe compilação de framework: `npm run build` valida o JavaScript, executa os testes e copia os arquivos públicos para `dist/`. Em produção, a hospedagem entrega esses arquivos estáticos diretamente ao navegador. Use Node.js 22 ou superior para preparar a publicação.
 
 ## Estrutura do projeto
 
@@ -97,6 +97,7 @@ Comandos disponíveis:
 
 ```powershell
 npm run check         # valida a sintaxe de todos os módulos JavaScript
+npm run build         # valida, testa e gera a pasta dist para publicação
 npm test              # executa os testes automatizados
 npm run format        # organiza HTML, CSS, JS, JSON e Markdown
 npm run format:check  # confere a formatação sem modificar arquivos
@@ -152,6 +153,19 @@ No modal do produto, a imagem principal pode ser aberta em tela cheia. O visuali
 - Telefones públicos usados nos links `wa.me`.
 
 Nunca coloque `service_role`, senha de banco, token administrativo, chave secret ou webhook privado no repositório. Como o catálogo acessa o Supabase pelo navegador, RLS e as permissões do Storage são obrigatórias.
+
+## Deploy em domínio próprio
+
+1. Instale as ferramentas com `npm ci` (ou `npm.cmd ci` no PowerShell).
+2. Execute `npm run build` (ou `npm.cmd run build`).
+3. Envie **o conteúdo de `dist/`** para a raiz pública da hospedagem, como `public_html/`, `www/` ou o diretório indicado pelo provedor. O `index.html` deve ficar diretamente nessa raiz.
+4. Aponte o DNS do domínio para a hospedagem conforme as instruções do provedor e habilite HTTPS.
+
+A pasta gerada contém `index.html`, `css/`, `js/` e `imagens/`. Preserve os nomes e a estrutura das pastas. Não envie a raiz inteira do repositório: `.git/`, `.rollback/`, `node_modules/`, testes e documentação não fazem parte do site público. A pasta `dist/` é recriada a cada build; faça alterações nos arquivos de origem.
+
+O servidor de produção não precisa executar Node.js, PHP ou um backend próprio. Ele precisa servir HTML, CSS, JavaScript (incluindo módulos ES) e imagens com os tipos MIME corretos. Os dados continuam sendo consultados no Supabase configurado em `js/config.js`; não são necessárias variáveis de ambiente para a configuração atual.
+
+Confira o domínio publicado, pois DNS, HTTPS e cabeçalhos dependem da hospedagem. Os arquivos CSS e JS mantêm os nomes originais: configure revalidação de cache (por exemplo, `Cache-Control: no-cache`) para HTML, CSS e JS, evitando versões antigas após atualizações. A configuração desses cabeçalhos depende do servidor usado.
 
 ## Antes de publicar
 
