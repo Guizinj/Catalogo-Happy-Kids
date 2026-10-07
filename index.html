@@ -5,16 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Catálogo digital da Happy Kids Brinquedos. Encontre presentes, salve favoritos e consulte disponibilidade pelo WhatsApp."
+      content="Na Happy Kids você encontra brinquedos, bonecas, jogos, educativos, carrinhos e muito mais para todas as idades. Lojas em Caruaru e Garanhuns."
     />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Happy Kids Brinquedos",
+        "alternateName": "Happy Kids",
+        "url": "https://happykidsbrinquedos.com.br/"
+      }
+    </script>
     <meta name="theme-color" content="#b84b00" />
-    <title>Catálogo de Brinquedos</title>
+    <title>Happy Kids Brinquedos | Brinquedos em Caruaru e Garanhuns</title>
     <link rel="stylesheet" href="css/header.css?v=1.1.0" />
     <link rel="stylesheet" href="css/buscar.css?v=1.1.0" />
     <link rel="stylesheet" href="css/cta.css?v=1.1.0" />
     <link rel="stylesheet" href="css/dialog-magic.css?v=1.1.0" />
     <link rel="stylesheet" href="css/dialog-favorite.css?v=1.1.0" />
-    <link rel="stylesheet" href="css/dialog-menu.css?v=1.1.5" />
+    <link rel="stylesheet" href="css/dialog-menu.css?v=1.1.6" />
     <link rel="stylesheet" href="css/dialog-produto.css?v=1.2.3" />
     <link rel="stylesheet" href="css/root.css?v=1.1.0" />
     <link rel="stylesheet" href="css/base.css?v=1.1.0" />
@@ -25,7 +34,7 @@
     <link rel="stylesheet" href="css/footer.css?v=1.1.0" />
     <link rel="stylesheet" href="css/faqajuda.css?v=1.1.0" />
     <link rel="stylesheet" href="css/lojas.css?v=1.1.0" />
-    <link rel="icon" href="imagens/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="imagens/favicon.png" type="image/svg+xml" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -390,7 +399,7 @@
                 <span class="material-symbols-outlined">schedule</span>
                 <div>
                   <strong>Horário:</strong>
-                  <p>Seg. a Sex. das 9h às 19h | Sáb. 9h às 14h</p>
+                  <p>Seg. a Sex. das 08:30h às 19h | Sáb. 9h às 14h</p>
                 </div>
               </div>
             </div>
@@ -1220,18 +1229,14 @@
           </div>
 
           <div class="modal-produto-direita">
-            <h2 id="modal-nome">Nome do Produto</h2>
-            <p id="modal-preco" class="preco">R$ 0,00</p>
-            <p id="modal-parcela" class="modal-parcelamento">ou até 10x sem juros</p>
+            <h2 id="modal-nome"></h2>
+            <p id="modal-preco" class="preco"></p>
+            <p id="modal-parcela" class="modal-parcelamento"></p>
             <p id="modal-categoria" class="modal-categoria" hidden></p>
 
             <div class="modal-descricao-secao">
               <h4>Descrição do Produto</h4>
-              <p id="modal-descricao">
-                Esta é uma descrição detalhada do produto. Aqui você pode incluir especificações
-                técnicas, materiais, tamanhos disponíveis e outras informações importantes que não
-                cabem no card principal.
-              </p>
+              <p id="modal-descricao"></p>
             </div>
 
             <div class="modal-acoes">
@@ -1371,7 +1376,7 @@
                 A criança já tem o brinquedo? Não se preocupe! Você tem até
                 <strong>15 dias</strong> após o recebimento para solicitar a troca do produto sem
                 complicações.
-                <strong>OBS: A embalagem precisa està intacta!</strong>
+                <strong>OBS: A embalagem precisa estar intacta!</strong>
               </p>
             </div>
           </details>
@@ -1383,7 +1388,7 @@
             </summary>
             <div class="faq-resposta">
               <p>
-                Aceitamos <strong>Pix</strong> (com desconto ou aprovação imediata), Dinehiro em
+                Aceitamos <strong>Pix</strong> (com desconto ou aprovação imediata), Dinheiro em
                 espécie e Cartões de Crédito. <strong> Com parcelamento sem juros</strong>.
               </p>
             </div>
@@ -1457,7 +1462,7 @@
 
             <div class="card-loja-info">
               <p class="endereco-loja">
-                <strong>Av. Agamenon Magalhães, 1060</strong> — Maurucio de Nassau<br />
+                <strong>Av. Agamenon Magalhães, 1060</strong> — Maurício de Nassau<br />
                 Caruaru - PE, CEP: 55014-000
               </p>
               <p class="horario-loja">
@@ -1543,6 +1548,6 @@
       </div>
     </dialog>
 
-    <script type="module" src="js/coordenador.js?v=1.3.1"></script>
+    <script type="module" src="js/coordenador.js?v=1.3.2"></script>
   </body>
 </html>

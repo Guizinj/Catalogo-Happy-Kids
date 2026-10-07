@@ -350,6 +350,18 @@ test('consulta por categoria usa igualdade e só filtra subcategoria quando sele
 });
 
 test('accordion abre e fecha sem consultar produtos ou fechar o menu', async () => {
+  const rolagens = [];
+  let limitesCategoria = { top: 350, bottom: 650 };
+  const areaRolavel = {
+    scrollTop: 120,
+    getBoundingClientRect: () => ({ top: 100, bottom: 500 }),
+    scrollTo: (opcoes) => rolagens.push(opcoes)
+  };
+  const item = { getBoundingClientRect: () => limitesCategoria };
+  const estilosAnteriores = globalThis.getComputedStyle;
+  const windowAnterior = globalThis.window;
+  globalThis.getComputedStyle = () => ({ paddingTop: '15px' });
+  globalThis.window = { matchMedia: () => ({ matches: true }) };
   const sublistas = {
     'subcategorias-jogos': { hidden: true },
     'subcategorias-bebes': { hidden: true }
@@ -360,6 +372,7 @@ test('accordion abre e fecha sem consultar produtos ou fechar o menu', async () 
       ['aria-controls', id]
     ]);
     return {
+      closest: () => item,
       getAttribute: (nome) => atributos.get(nome),
       setAttribute: (nome, valor) => atributos.set(nome, valor)
     };
@@ -370,6 +383,7 @@ test('accordion abre e fecha sem consultar produtos ou fechar o menu', async () 
   const consultasAntes = chamadasSupabase.length;
   let fechamentos = 0;
   const lista = {
+    closest: () => areaRolavel,
     addEventListener: (_tipo, callback) => {
       aoClicar = callback;
     },
@@ -397,12 +411,17 @@ test('accordion abre e fecha sem consultar produtos ou fechar o menu', async () 
   await clicar(jogos);
   assert.equal(jogos.getAttribute('aria-expanded'), 'true');
   assert.equal(sublistas['subcategorias-jogos'].hidden, false);
+  assert.deepEqual(rolagens, [{ top: 355, behavior: 'instant' }]);
+  limitesCategoria = { top: 150, bottom: 350 };
   await clicar(bebes);
   assert.equal(sublistas['subcategorias-jogos'].hidden, true);
   assert.equal(sublistas['subcategorias-bebes'].hidden, false);
   await clicar(bebes);
   assert.equal(bebes.getAttribute('aria-expanded'), 'false');
   assert.equal(sublistas['subcategorias-bebes'].hidden, true);
+  assert.equal(rolagens.length, 1);
   assert.equal(chamadasSupabase.length, consultasAntes);
   assert.equal(fechamentos, 0);
+  globalThis.getComputedStyle = estilosAnteriores;
+  globalThis.window = windowAnterior;
 });

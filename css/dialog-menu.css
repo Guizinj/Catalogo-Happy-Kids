@@ -133,6 +133,7 @@
 /* 2. CORPO ROLÁVEL DAS CATEGORIAS */
 .corpo-menu-scroll {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 15px 15px;
   overscroll-behavior: contain;

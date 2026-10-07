@@ -161,6 +161,8 @@ Se adicionar uma marca ao HTML, use em `value` exatamente o conteúdo existente 
 
 As categorias e subcategorias ficam na lista `.lista-modal-categoria` em `index.html`. Os valores de `data-categoria` e `data-subcategoria` devem corresponder exatamente aos valores salvos no banco. Abrir uma categoria não consulta produtos. `Ver todos` consulta apenas a categoria e inclui produtos com `subcategorias` vazia; escolher uma subcategoria filtra também pela presença dela no array.
 
+Ao abrir uma categoria fora da área visível, o menu ajusta a rolagem interna para mostrar seu título e as primeiras opções. Listas maiores continuam acessíveis por rolagem, com cabeçalho e rodapé fixos. Preserve `min-height: 0` em `.corpo-menu-scroll` para que a lista caiba na altura disponível.
+
 Ao renomear uma categoria ou subcategoria, atualize também os produtos no Supabase. Caso contrário, a opção poderá ficar sem resultados.
 
 ## 7. Alterar telefones e mensagens do WhatsApp

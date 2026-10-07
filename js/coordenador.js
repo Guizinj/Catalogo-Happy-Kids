@@ -236,6 +236,23 @@ export function configurarFiltroCategoria() {
         botao.setAttribute('aria-expanded', String(expandido));
         document.getElementById(botao.getAttribute('aria-controls')).hidden = !expandido;
       });
+      if (abrir) {
+        const areaRolavel = listaCategorias.closest('.corpo-menu-scroll');
+        const item = botaoAccordion.closest('.item-categoria-modal');
+        if (areaRolavel && item) {
+          const area = areaRolavel.getBoundingClientRect();
+          const categoria = item.getBoundingClientRect();
+          const espaco = parseFloat(getComputedStyle(areaRolavel).paddingTop) || 0;
+          if (categoria.top < area.top + espaco || categoria.bottom > area.bottom - espaco) {
+            areaRolavel.scrollTo({
+              top: areaRolavel.scrollTop + categoria.top - area.top - espaco,
+              behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                ? 'instant'
+                : 'smooth'
+            });
+          }
+        }
+      }
       return;
     }
 
@@ -280,7 +297,8 @@ function configurarCarrosselCategorias() {
   const rolar = (direcao) => {
     const card = carrossel.querySelector('li');
     if (!card) return;
-    const distancia = card.getBoundingClientRect().width + parseFloat(getComputedStyle(carrossel).gap);
+    const distancia =
+      card.getBoundingClientRect().width + parseFloat(getComputedStyle(carrossel).gap);
     carrossel.scrollBy({
       left: distancia * 3 * direcao,
       behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'

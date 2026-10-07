@@ -195,6 +195,7 @@ Os dialogs usam `showModal()` e `close()`, permitindo que o navegador controle o
 - [ ] Filtro mágico com e sem marca.
 - [ ] Todas as categorias retornam ao catálogo corretamente.
 - [ ] Accordion abre e fecha sem consulta; `Ver todos` e subcategorias filtram, fecham o menu e reiniciam a página.
+- [ ] Abrir as últimas categorias ajusta a rolagem interna; título e primeiras opções ficam visíveis, e a última subcategoria pode ser alcançada sem sobrepor o rodapé, inclusive em celular na horizontal.
 - [ ] `Carregar mais` preserva categoria e subcategoria; uma seleção nova ignora respostas antigas.
 
 ### Mais vendidos
