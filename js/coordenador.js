@@ -7,6 +7,7 @@ import {
   buscarTodosOsProdutos
 } from './api.js';
 import { configurarCarrosselMaisVendidos } from './carrossel.js';
+import { criarControladorAvisoFavoritos } from './aviso-favoritos.js?v=1.0.1';
 import { configurarDestaques } from './destaques.js?v=1.0.4';
 import { criarControladorCatalogo, possuiConsultaAtiva } from './catalogo.js';
 import {
@@ -57,6 +58,23 @@ const catalogo = criarControladorCatalogo({
 });
 let produtosAtuais = [];
 let produtosMaisVendidos = [];
+let exibirAvisoFavoritos = () => false;
+
+/** Ponto único de exibição após adicionar um favorito pelo card ou pelos detalhes. */
+function abrirFavoritosAposAdicionar(modalProduto = null) {
+  const modalFavoritos = document.getElementById('dialog-favorite');
+  if (!modalFavoritos) return;
+
+  setTimeout(() => {
+    if (modalProduto?.open) modalProduto.close();
+
+    const abrirLista = () => {
+      if (!modalFavoritos.open) modalFavoritos.showModal();
+    };
+
+    if (!exibirAvisoFavoritos(abrirLista)) abrirLista();
+  }, 250);
+}
 
 function sincronizarInterfaceFavoritos() {
   const favoritos = obterFavoritos();
@@ -469,7 +487,6 @@ function encontrarProdutoPorCodigo(codigo) {
 }
 
 function configurarModalProduto() {
-  const modalFavoritos = document.getElementById('dialog-favorite');
   const modalProduto = document.getElementById('modal-produto');
   const botaoFechar = document.getElementById('btn-fechar-modal');
   const botaoFavoritar = document.getElementById('btn-favoritar-modal');
@@ -515,12 +532,7 @@ function configurarModalProduto() {
 
     atualizarModalProdutoUI(produtoAtualNoModal, verificarFavorito);
 
-    if (resultado.foiAdicionado && modalProduto && modalFavoritos) {
-      setTimeout(() => {
-        if (modalProduto.open) modalProduto.close();
-        modalFavoritos.showModal();
-      }, 250);
-    }
+    if (resultado.foiAdicionado) abrirFavoritosAposAdicionar(modalProduto);
   });
 
   botaoFechar?.addEventListener('click', () => modalProduto?.close());
@@ -539,9 +551,7 @@ function configurarCliqueNosCards() {
     const resultado = favoritarComFeedback(produto);
 
     if (resultado.sucesso && resultado.foiAdicionado) {
-      setTimeout(() => {
-        document.getElementById('dialog-favorite')?.showModal();
-      }, 250);
+      abrirFavoritosAposAdicionar();
     }
   });
 }
@@ -608,6 +618,7 @@ function configurarBotaoConsultar() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  exibirAvisoFavoritos = criarControladorAvisoFavoritos();
   configurarDestaques();
   configurarBloqueioRolagemModais();
   configurarLinksWhatsApp();

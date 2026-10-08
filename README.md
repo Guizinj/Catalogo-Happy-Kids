@@ -13,6 +13,7 @@ Catálogo público de brinquedos da Happy Kids. O cliente pode navegar pelos pro
 - Carrossel horizontal de **Mais vendidos**, alimentado pela coluna booleana `mais_vendido`.
 - Modal do produto com galeria de até três imagens e visualização ampliada em tela cheia.
 - Favoritos persistidos no `localStorage`, com quantidade de 1 a 99.
+- Aviso sobre navegação anônima na primeira adição aos favoritos, pelo card ou pelos detalhes.
 - Total estimado e mensagem pronta para consultar a loja pelo WhatsApp.
 - FAQ, localização das lojas e atalhos de atendimento.
 

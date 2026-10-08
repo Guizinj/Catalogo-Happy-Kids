@@ -197,6 +197,26 @@ location.reload();
 
 O código aceita quantidade de 1 a 99. Na abertura da loja, ele consulta novamente os produtos favoritados para atualizar preço e outros dados públicos sem apagar a quantidade escolhida.
 
+### Aviso na primeira adição
+
+O aviso aparece depois da primeira adição bem-sucedida aos favoritos, tanto pelo coração do card quanto pelos detalhes do produto. Ao fechar por **Entendi**, pelo **X**, por Escape ou pelo fundo, a lista de favoritos é aberta normalmente. O aviso não aparece ao entrar no site, abrir detalhes, remover um favorito ou somente abrir a lista.
+
+- Texto e estrutura: `#modal-aviso-favoritos` no `index.html`.
+- Aparência: regras `.dialog-aviso-favoritos` em `css/dialog-favorite.css`.
+- Registro de exibição: `js/aviso-favoritos.js`, na chave `happyKidsAvisoFavoritosVisto` do `localStorage`.
+- Momento de exibição: função `abrirFavoritosAposAdicionar` em `js/coordenador.js`.
+
+O aviso é mostrado para todos, sem tentar detectar navegação anônima. Não se repete enquanto o registro estiver salvo. Se esse registro não puder ser salvo, o controle em memória evita repetições na mesma página. Uma nova sessão anônima ou a exclusão dos dados do site permite que apareça novamente.
+
+O botão **Como seus favoritos são salvos**, no cabeçalho da lista, reabre o mesmo aviso a qualquer momento, inclusive com a lista vazia. Ao fechar, a lista é reaberta e o foco retorna ao botão, mantendo os itens, as quantidades e a rolagem. Consultar o aviso por esse botão também registra que ele já foi visto, evitando uma exibição automática repetida na próxima adição.
+
+Para testar o aviso de novo sem apagar os favoritos:
+
+```js
+localStorage.removeItem('happyKidsAvisoFavoritosVisto');
+location.reload();
+```
+
 ## 9. Solução de problemas
 
 ### A loja inteira não carrega
