@@ -22,7 +22,6 @@ export function criarControladorAvisoFavoritos() {
     if (!lista?.open || modal.open) return;
 
     // Mantém apenas um dialog aberto e preserva a lista e sua rolagem.
-    lista.close();
     abrirAviso(() => {
       if (!lista.open) lista.showModal();
       botaoSobre.focus({ preventScroll: true });
