@@ -183,16 +183,16 @@
   margin-top: 4px;
   padding: 12px 20px;
   border-radius: 14px;
-  background: #bd2f5d;
+  background: var(--logo-verde);
   color: #ffffff;
   font-family: var(--fonte-titulos);
   font-size: 17px;
   font-weight: 600;
-  transition: background 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 #btn-entendi-aviso-favoritos:hover {
-  background: #a6244d;
+  transform: scale(1.02)
 }
 
 .dialog-aviso-favoritos button:focus-visible {
