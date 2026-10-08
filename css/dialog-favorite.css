@@ -60,6 +60,7 @@
   font-weight: 700;
   line-height: 1.4;
   text-align: left;
+  text-decoration: underline;
 }
 
 #btn-sobre-favoritos svg {
@@ -70,17 +71,6 @@
   stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
-}
-
-#btn-sobre-favoritos:hover span {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-#btn-sobre-favoritos:focus-visible {
-  outline: 2px solid #242424;
-  outline-offset: 3px;
-  border-radius: 4px;
 }
 
 .btn-fechar-fav {
@@ -195,10 +185,6 @@
   transform: scale(1.02)
 }
 
-.dialog-aviso-favoritos button:focus-visible {
-  outline: 3px solid #17675e;
-  outline-offset: 3px;
-}
 
 /* =======================================================
    ESTILO DO ESTADO VAZIO (FAVORITOS)
