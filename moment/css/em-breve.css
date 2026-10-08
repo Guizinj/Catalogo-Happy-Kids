@@ -143,10 +143,10 @@ h1 > span {
   gap: 11px;
   padding: 16px 23px;
   border-radius: 16px;
-  background: var(--logo-rosa);
+  background: var(--logo-laranja);
   box-shadow:
-    0 6px 0 #b62b56,
-    0 10px 22px #d73d6f20;
+    0 6px 0 #bf4900,
+    0 10px 22px #f66a0920;
   color: white;
   font-size: 14px;
   font-weight: 800;
@@ -167,15 +167,15 @@ h1 > span {
   line-height: 1;
 }
 .instagram-button:hover {
-  background: #c83160;
+  background: #df5900;
   transform: translateY(-2px);
   box-shadow:
-    0 8px 0 #b62b56,
-    0 12px 24px #d73d6f25;
+    0 8px 0 #bf4900,
+    0 12px 24px #f66a0925;
 }
 .instagram-button:active {
   transform: translateY(4px);
-  box-shadow: 0 2px 0 #b62b56;
+  box-shadow: 0 2px 0 #bf4900;
 }
 .instagram-button:focus-visible {
   outline: 3px solid #254943;
