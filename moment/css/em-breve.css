@@ -1,0 +1,334 @@
+﻿* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  isolation: isolate;
+  background: #fff9f0;
+  color: #254943;
+  font-family: var(--fonte-textos);
+  -webkit-font-smoothing: antialiased;
+}
+.color-band {
+  height: 7px;
+  flex-shrink: 0;
+  background: linear-gradient(
+    to right,
+    var(--logo-rosa) 0% 25%,
+    var(--logo-laranja) 25% 50%,
+    var(--logo-azul) 50% 75%,
+    var(--logo-verde) 75% 100%
+  );
+}
+.background-shape {
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+}
+.background-shape-pink {
+  width: min(44vw, 540px);
+  height: min(44vw, 540px);
+  border-radius: 44% 56% 64% 36%;
+  background: #fbe5e9;
+  top: 18%;
+  left: -23%;
+  transform: rotate(-20deg);
+}
+.background-shape-green {
+  width: min(50vw, 620px);
+  height: min(50vw, 620px);
+  border-radius: 58% 42% 35% 65%;
+  background: #e7f0dc;
+  bottom: -24%;
+  right: -23%;
+  transform: rotate(25deg);
+}
+.brand {
+  padding: 38px 24px 26px;
+  text-align: center;
+}
+.brand img {
+  display: block;
+  width: min(270px, 70vw);
+  height: auto;
+  margin: 0 auto;
+}
+.brand > span {
+  display: block;
+  margin-top: 13px;
+  font-size: 13px;
+  color: #64736a;
+  font-weight: 700;
+}
+main {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 12px 24px 28px;
+}
+.coming-soon {
+  position: relative;
+  width: min(100%, 800px);
+  padding: 30px 64px 32px;
+  text-align: center;
+  border: 1px solid #f1e8dc;
+  border-radius: 38px;
+  background: #fffefd;
+  box-shadow: 0 18px 70px #7b563b08;
+}
+.brand-symbol {
+  width: 168px;
+  margin: 0 auto 16px;
+  aspect-ratio: 720 / 504;
+  overflow: hidden;
+  clip-path: polygon(0 0, 90% 0, 90% 42%, 100% 42%, 100% 100%, 0 100%);
+}
+.brand-symbol img {
+  display: block;
+  width: 286.6667%;
+  max-width: none;
+  height: auto;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 8px 13px;
+  border-radius: 30px;
+  background: #edf6ee;
+  color: #467442;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+}
+.eyebrow > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--logo-verde);
+}
+h1 {
+  margin: 0;
+  font-family: var(--fonte-titulos);
+  font-size: clamp(48px, 7vw, 76px);
+  font-weight: 600;
+  letter-spacing: -2px;
+  line-height: 1.04;
+}
+h1 > span {
+  color: var(--logo-rosa);
+}
+.message {
+  margin: 23px 0 0;
+  color: #63736d;
+  font-size: 17px;
+  line-height: 1.7;
+}
+.invitation {
+  margin: 22px 0 17px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #52655e;
+  line-height: 1.6;
+}
+.instagram-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 11px;
+  padding: 16px 23px;
+  border-radius: 16px;
+  background: var(--logo-rosa);
+  box-shadow:
+    0 6px 0 #b62b56,
+    0 10px 22px #d73d6f20;
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+.instagram-button svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.instagram-button > span[aria-hidden] {
+  margin-left: 8px;
+  font-size: 21px;
+  line-height: 1;
+}
+.instagram-button:hover {
+  background: #c83160;
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 0 #b62b56,
+    0 12px 24px #d73d6f25;
+}
+.instagram-button:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #b62b56;
+}
+.instagram-button:focus-visible {
+  outline: 3px solid #254943;
+  outline-offset: 7px;
+}
+.instagram-handle {
+  display: block;
+  margin-top: 19px;
+  color: #7b827b;
+  font-size: 12px;
+}
+.doodle {
+  position: absolute;
+  pointer-events: none;
+}
+.doodle-star {
+  top: 100px;
+  left: 85px;
+  color: #f7bc47;
+  font-size: 53px;
+  transform: rotate(12deg);
+}
+.doodle-loop {
+  width: 28px;
+  height: 28px;
+  border: 6px solid var(--logo-azul);
+  border-radius: 50%;
+  top: 168px;
+  right: 92px;
+  transform: rotate(-15deg);
+}
+.doodle-plus {
+  left: 68px;
+  bottom: 132px;
+  font-family: var(--fonte-titulos);
+  font-size: 46px;
+  font-weight: 500;
+  color: var(--logo-laranja);
+  transform: rotate(-13deg);
+}
+.little-colors {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 30px;
+}
+.little-colors i {
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+  background: var(--logo-rosa);
+  transform: rotate(-10deg);
+}
+.little-colors i:nth-child(2) {
+  background: var(--logo-laranja);
+  transform: rotate(10deg);
+}
+.little-colors i:nth-child(3) {
+  background: var(--logo-azul);
+}
+.little-colors i:nth-child(4) {
+  background: var(--logo-verde);
+  transform: rotate(10deg);
+}
+footer {
+  padding: 0 20px 26px;
+  text-align: center;
+  font-size: 12px;
+  color: #747c70;
+}
+footer span {
+  margin-left: 3px;
+  color: var(--logo-rosa);
+  font-size: 17px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (max-width: 600px) {
+  .brand {
+    padding-top: 29px;
+    padding-bottom: 23px;
+  }
+  .brand img {
+    width: 230px;
+    max-width: 75vw;
+  }
+  .brand > span {
+    font-size: 11px;
+  }
+  main {
+    padding: 4px 16px 24px;
+  }
+  .coming-soon {
+    padding: 28px 20px;
+    border-radius: 28px;
+  }
+  .brand-symbol {
+    width: 138px;
+    margin-bottom: 20px;
+  }
+  h1 {
+    font-size: clamp(43px, 12vw, 64px);
+    letter-spacing: -1.5px;
+  }
+  .message {
+    font-size: 15px;
+    margin-top: 20px;
+  }
+  .desktop-break {
+    display: none;
+  }
+  .invitation {
+    max-width: 250px;
+    margin: 22px auto 17px;
+  }
+  .instagram-button {
+    width: 100%;
+    max-width: 290px;
+    padding: 15px 12px;
+    font-size: 13px;
+    gap: 9px;
+  }
+  .doodle-star {
+    top: 58px;
+    left: 19px;
+    font-size: 35px;
+  }
+  .doodle-loop {
+    top: 112px;
+    right: 23px;
+    width: 19px;
+    height: 19px;
+    border-width: 4px;
+  }
+  .doodle-plus {
+    display: none;
+  }
+  footer {
+    font-size: 11px;
+    padding-bottom: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .instagram-button {
+    transition: none;
+  }
+}
